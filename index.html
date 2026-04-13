@@ -3,108 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Geopolítico Interactivo | Centro de Mando</title>
+    <title>Centro de Mando Geopolítico V2</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: #fff;}
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #121212; color: #fff;}
         #header { padding: 15px 20px; background-color: #1e1e1e; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center;}
-        #header h1 { margin: 0; font-size: 24px; letter-spacing: 1px;}
-        .leyenda { font-size: 14px; display: flex; gap: 15px; }
-        .leyenda-item { display: flex; align-items: center; gap: 5px; }
+        #header h1 { margin: 0; font-size: 24px;}
+        
+        /* Sistema de Leyendas */
+        .leyenda { font-size: 13px; display: flex; gap: 15px; flex-wrap: wrap;}
+        .leyenda-item { display: flex; align-items: center; gap: 6px; }
         .punto { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
         .punto.rojo { background-color: #ff3333; }
         .punto.naranja { background-color: #ff9933; }
         .punto.amarillo { background-color: #ffcc00; }
+        .linea-leyenda { width: 20px; height: 3px; border-top: 2px dashed #fff; display: inline-block; margin-top: 4px;}
+        .cuadrado-actor { width: 10px; height: 10px; background-color: #4da6ff; border: 1px solid #fff; border-radius: 2px; box-shadow: 0 0 5px #4da6ff; display: inline-block;}
+
         #map { height: calc(100vh - 65px); width: 100%; }
         
-        /* Estilos del Popup y la Cronología */
-        .leaflet-popup-content-wrapper { background-color: #2a2a2a; color: #fff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.8); min-width: 300px;}
+        /* Icono personalizado para los extremos de las relaciones */
+        .nodo-relacion {
+            background-color: #4da6ff;
+            border: 2px solid #fff;
+            border-radius: 3px; 
+            box-shadow: 0 0 8px #4da6ff;
+        }
+
+        /* Estilos del Popup */
+        .leaflet-popup-content-wrapper { background-color: #2a2a2a; color: #fff; border-radius: 8px;}
         .leaflet-popup-tip { background-color: #2a2a2a; }
         .popup-title { font-weight: bold; margin-bottom: 10px; font-size: 16px; border-bottom: 1px solid #444; padding-bottom: 8px;}
-        
-        /* Contenedor con barra de desplazamiento para el historial */
-        .timeline-container { max-height: 200px; overflow-y: auto; padding-right: 5px;}
-        .timeline-container::-webkit-scrollbar { width: 6px; }
-        .timeline-container::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
-        
-        .timeline-item { border-left: 2px solid #555; padding-left: 10px; margin-bottom: 15px; position: relative;}
-        .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background-color: #aaa; border-radius: 50%;}
-        .timeline-item:first-child::before { background-color: #007bff; box-shadow: 0 0 8px #007bff;} /* Destaca la más reciente */
-        
-        .item-date { font-size: 11px; color: #ffcc00; font-weight: bold; margin-bottom: 3px;}
-        .item-title { font-size: 13px; line-height: 1.4; margin-bottom: 5px;}
-        .item-source { font-size: 11px; color: #888;}
-        .item-link { color: #4da6ff; text-decoration: none; font-size: 11px; font-weight: bold;}
+        .relacion-actores { display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: #ffcc00; margin-bottom: 10px; font-size: 14px;}
+        .timeline-item { border-left: 2px solid #555; padding-left: 10px; margin-bottom: 10px;}
+        .item-date { font-size: 11px; color: #ffcc00; font-weight: bold;}
+        .item-title { font-size: 13px; margin: 5px 0;}
+        .item-link { color: #4da6ff; text-decoration: none; font-size: 11px;}
         .item-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
     <div id="header">
-        <h1>🌐 Centro de Mando Geopolítico</h1>
+        <h1>🌐 Centro de Mando V2</h1>
         <div class="leyenda">
-            <div class="leyenda-item"><span class="punto rojo"></span> Conflicto</div>
-            <div class="leyenda-item"><span class="punto naranja"></span> Crisis</div>
-            <div class="leyenda-item"><span class="punto amarillo"></span> Tensión</div>
+            <div class="leyenda-item"><span class="punto rojo"></span> Crisis</div>
+            <div class="leyenda-item"><span class="linea-leyenda"></span> Tensión Bilateral</div>
+            <div class="leyenda-item"><span class="cuadrado-actor"></span> Actor Implicado</div>
         </div>
     </div>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map').setView([25, 0], 2.5);
-
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-            subdomains: 'abcd',
-            maxZoom: 19
-        }).addTo(map);
+        const map = L.map('map').setView([30, 0], 2.5);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
 
         const colorMapa = { "rojo": "#ff3333", "naranja": "#ff9933", "amarillo": "#ffcc00" };
 
-        function formatearFecha(fechaIn) {
-            if (!fechaIn) return "";
-            const partes = fechaIn.split('-');
-            if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
-            return fechaIn;
-        }
+        // Definimos el nuevo icono cuadrado azul claro
+        const iconoNodo = L.divIcon({
+            className: 'nodo-relacion',
+            iconSize: [12, 12],
+            iconAnchor: [6, 6] // Para que quede perfectamente centrado en la coordenada
+        });
 
         fetch('/api/noticias')
             .then(response => response.json())
-            .then(crises => {
-                crises.forEach(crisis => {
+            .then(data => {
+                
+                // 1. DIBUJAR PUNTOS DE CRISIS
+                data.crisis.forEach(crisis => {
                     const marcador = L.circleMarker([crisis.lat, crisis.lng], {
-                        radius: 9,
-                        fillColor: colorMapa[crisis.nivel_actual] || "#ffffff",
-                        color: "#fff",
-                        weight: 2,
-                        opacity: 1,
-                        fillOpacity: 0.9
+                        radius: 8, fillColor: colorMapa[crisis.nivel_actual] || "#fff", color: "#fff", weight: 1, opacity: 1, fillOpacity: 0.9
                     }).addTo(map);
 
-                    // Construimos el HTML del historial de noticias
-                    let historialHTML = '';
+                    let historial = '';
                     crisis.actualizaciones.forEach(act => {
-                        historialHTML += `
-                            <div class="timeline-item">
-                                <div class="item-date">${formatearFecha(act.fecha)}</div>
-                                <div class="item-title">${act.titular}</div>
-                                <div class="item-source">${act.fuente} | <a href="${act.url}" target="_blank" class="item-link">Leer más ➔</a></div>
-                            </div>
-                        `;
+                        historial += `<div class="timeline-item"><div class="item-date">${act.fecha}</div><div class="item-title">${act.titular}</div><a href="${act.url}" target="_blank" class="item-link">Leer más</a></div>`;
                     });
+                    marcador.bindPopup(`<div class="popup-title">📍 ${crisis.titulo_principal}</div>${historial}`);
+                });
 
-                    // Ensamblamos el popup completo
-                    const contenidoPopup = `
-                        <div class="popup-title">📍 ${crisis.titulo_principal}</div>
-                        <div class="timeline-container">
-                            ${historialHTML}
+                // 2. DIBUJAR LÍNEAS DE RELACIÓN Y NODOS
+                data.relaciones.forEach(rel => {
+                    const coordOrigen = [rel.origen.lat, rel.origen.lng];
+                    const coordDestino = [rel.destino.lat, rel.destino.lng];
+                    const colorLinea = colorMapa[rel.nivel] || "#ffffff";
+
+                    // Crear la línea punteada
+                    const linea = L.polyline([coordOrigen, coordDestino], {
+                        color: colorLinea,
+                        weight: 3,
+                        dashArray: '10, 10',
+                        opacity: 0.8
+                    }).addTo(map);
+
+                    // Crear los nodos (iconos) en los extremos
+                    const nodoOrigen = L.marker(coordOrigen, {icon: iconoNodo}).addTo(map);
+                    const nodoDestino = L.marker(coordDestino, {icon: iconoNodo}).addTo(map);
+
+                    // Ponerle un popup a la línea y a los nodos
+                    const contenidoLinea = `
+                        <div class="popup-title">⚖️ Tensión ${rel.tipo.toUpperCase()}</div>
+                        <div class="relacion-actores">
+                            <span>${rel.origen.nombre}</span> ➔ <span>${rel.destino.nombre}</span>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="item-date">${rel.fecha}</div>
+                            <div class="item-title">${rel.titular}</div>
+                            <div style="font-size: 11px; color: #888; margin-bottom: 5px;">Fuente: ${rel.fuente}</div>
+                            <a href="${rel.url}" target="_blank" class="item-link">Leer noticia completa ➔</a>
                         </div>
                     `;
-                    marcador.bindPopup(contenidoPopup);
+                    
+                    // Vinculamos exactamente el mismo popup a los 3 elementos
+                    linea.bindPopup(contenidoLinea);
+                    nodoOrigen.bindPopup(contenidoLinea);
+                    nodoDestino.bindPopup(contenidoLinea);
                 });
             })
-            .catch(err => console.error("Error cargando crisis:", err));
+            .catch(err => console.error("Error cargando datos:", err));
     </script>
 </body>
 </html>
