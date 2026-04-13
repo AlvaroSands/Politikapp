@@ -1,24 +1,52 @@
 {
   "crisis": [
     {
-      "id_crisis": "oriente-medio-furia-epica",
-      "titulo_principal": "Guerra y Escalada Regional en Oriente Medio",
+      "id_crisis": "bloqueo-estrecho-ormuz",
+      "titulo_principal": "Crisis Naval en el Estrecho de Ormuz",
+      "lat": 26.56, "lng": 56.25, "nivel_actual": "rojo",
+      "actualizaciones": [
+        { "fecha": "2026-04-12", "titular": "Fracasa el intento de desescalada en Omán; alerta máxima por bloqueo de petroleros", "fuente": "Al Jazeera", "url": "#" },
+        { "fecha": "2026-04-08", "titular": "La Guardia Revolucionaria de Irán intercepta cargueros comerciales en el estrecho", "fuente": "Reuters", "url": "#" }
+      ]
+    },
+    {
+      "id_crisis": "oriente-medio-gaza",
+      "titulo_principal": "Guerra en Gaza y Escalada Regional",
       "lat": 31.5, "lng": 34.4666, "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-04-14", "titular": "Nuevos bombardeos en el sur del Líbano y despliegue de artillería en la frontera", "fuente": "Al Jazeera", "url": "#" },
-        { "fecha": "2026-04-10", "titular": "Fracasa la enésima ronda de negociaciones para el alto el fuego en El Cairo", "fuente": "Reuters", "url": "#" },
-        { "fecha": "2026-03-25", "titular": "Intercepción de enjambres de drones suicidas sobre el espacio aéreo jordano", "fuente": "BBC World", "url": "#" },
-        { "fecha": "2026-02-15", "titular": "Inicio de la 'Operación Furia Épica': Ofensiva terrestre ampliada", "fuente": "CNN", "url": "#" }
+        { "fecha": "2026-04-01", "titular": "Intercambio de fuego cruzado tras fracasar la última ronda de negociaciones en Egipto", "fuente": "BBC World", "url": "#" }
       ]
     },
     {
       "id_crisis": "guerra-este-ucrania",
-      "titulo_principal": "Guerra de Desgaste en Europa del Este",
+      "titulo_principal": "Guerra de Desgaste en el Este de Europa",
       "lat": 48.14, "lng": 37.75, "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-04-13", "titular": "Rusia intensifica los ataques a la red eléctrica: apagones masivos en Kharkiv", "fuente": "Descifrando la Guerra", "url": "#" },
-        { "fecha": "2026-04-02", "titular": "Ucrania responde con ataques masivos de drones contra refinerías en territorio ruso", "fuente": "El País", "url": "#" },
-        { "fecha": "2026-03-15", "titular": "Fuerzas rusas consolidan avances tácticos tras la caída de posiciones clave", "fuente": "France 24", "url": "#" }
+        { "fecha": "2026-03-25", "titular": "Rusia intensifica los bombardeos sobre la infraestructura energética ucraniana", "fuente": "Descifrando la Guerra", "url": "#" }
+      ]
+    },
+    {
+      "id_crisis": "violencia-haiti",
+      "titulo_principal": "Colapso Institucional y Control Criminal",
+      "lat": 18.5392, "lng": -72.3364, "nivel_actual": "rojo",
+      "actualizaciones": [
+        { "fecha": "2026-04-05", "titular": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición", "fuente": "France 24", "url": "#" }
+      ]
+    },
+    {
+      "id_crisis": "conflicto-mar-rojo-huties",
+      "titulo_principal": "Crisis de Seguridad Naval en el Mar Rojo",
+      "lat": 15.3, "lng": 41.8, "nivel_actual": "rojo",
+      "actualizaciones": [
+        { "fecha": "2026-03-18", "titular": "Impacto de misiles hutíes obliga a desviar nuevas rutas comerciales navieras", "fuente": "El País", "url": "#" }
+      ]
+    },
+    {
+      "id_crisis": "conflicto-ecuador",
+      "titulo_principal": "Estado de Excepción y Guerra contra el Crimen",
+      "lat": -2.1961, "lng": -79.8862, "nivel_actual": "rojo",
+      "actualizaciones": [
+        { "fecha": "2026-03-30", "titular": "El ejército ecuatoriano asalta las principales cárceles bajo control de organizaciones criminales", "fuente": "EFE", "url": "#" }
       ]
     },
     {
@@ -26,163 +54,39 @@
       "titulo_principal": "Cerco Militar en el Estrecho de Taiwán",
       "lat": 23.6978, "lng": 120.9605, "nivel_actual": "amarillo",
       "actualizaciones": [
-        { "fecha": "2026-04-12", "titular": "Récord histórico: 45 cazas del Ejército Popular de Liberación cruzan la línea media", "fuente": "ABC", "url": "#" },
-        { "fecha": "2026-03-20", "titular": "Taiwán realiza simulacros antimisiles de máxima alerta en respuesta a maniobras chinas", "fuente": "Reuters", "url": "#" }
+        { "fecha": "2026-04-10", "titular": "Récord histórico: cazas del Ejército Popular de Liberación cruzan la línea media", "fuente": "ABC", "url": "#" }
       ]
     },
     {
       "id_crisis": "crisis-sahel-exodo",
-      "titulo_principal": "Insurgencia y Golpes de Estado en el Sahel",
+      "titulo_principal": "Desestabilización y Conflicto en el Sahel",
       "lat": 14.4974, "lng": -1.4197, "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-04-05", "titular": "La junta militar de Níger rompe el último acuerdo de cooperación en seguridad con occidente", "fuente": "France 24", "url": "#" },
-        { "fecha": "2026-03-10", "titular": "Avance de grupos insurgentes provoca el desplazamiento de 200.000 personas en Burkina Faso", "fuente": "Al Jazeera", "url": "#" }
-      ]
-    },
-    {
-      "id_crisis": "conflicto-mar-rojo-huties",
-      "titulo_principal": "Bloqueo Naval y Ataques en el Mar Rojo",
-      "lat": 15.3, "lng": 41.8, "nivel_actual": "rojo",
-      "actualizaciones": [
-        { "fecha": "2026-04-08", "titular": "Impacto directo de un misil balístico antibuque hutí contra un petrolero comercial", "fuente": "Bloomberg", "url": "#" },
-        { "fecha": "2026-03-01", "titular": "Operación Aspides de la UE entra en combate directo para defender convoyes", "fuente": "Política Exterior", "url": "#" }
-      ]
-    },
-    {
-      "id_crisis": "guerra-civil-sudan",
-      "titulo_principal": "Guerra Civil y Crisis Humanitaria en Sudán",
-      "lat": 15.5007, "lng": 32.5599, "nivel_actual": "rojo",
-      "actualizaciones": [
-        { "fecha": "2026-04-11", "titular": "Alerta máxima de la ONU por riesgo de hambruna catastrófica inminente en Darfur", "fuente": "BBC World", "url": "#" },
-        { "fecha": "2026-02-18", "titular": "Las Fuerzas de Apoyo Rápido (RSF) intensifican el asedio con artillería en Jartum", "fuente": "France 24", "url": "#" }
-      ]
-    },
-    {
-      "id_crisis": "violencia-haiti",
-      "titulo_principal": "Estado Fallido y Control de Pandillas en Haití",
-      "lat": 18.5392, "lng": -72.3364, "nivel_actual": "rojo",
-      "actualizaciones": [
-        { "fecha": "2026-04-10", "titular": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición", "fuente": "CNN", "url": "#" },
-        { "fecha": "2026-03-03", "titular": "Estado de emergencia tras fuga de miles de presos en asaltos coordinados de pandillas", "fuente": "El País", "url": "#" }
-      ]
-    },
-    {
-      "id_crisis": "conflicto-narcotrafico-ecuador",
-      "titulo_principal": "Conflicto Armado Interno en Ecuador",
-      "lat": -2.1961, "lng": -79.8862, "nivel_actual": "rojo",
-      "actualizaciones": [
-        { "fecha": "2026-03-30", "titular": "El ejército asalta las principales cárceles bajo control de organizaciones criminales", "fuente": "El Universo", "url": "#" },
-        { "fecha": "2026-03-05", "titular": "El presidente prorroga el estado de excepción para mantener a militares en las calles", "fuente": "EFE", "url": "#" }
-      ]
-    },
-    {
-      "id_crisis": "guerra-civil-myanmar",
-      "titulo_principal": "Colapso de la Junta Militar de Myanmar",
-      "lat": 19.745, "lng": 96.129, "nivel_actual": "rojo",
-      "actualizaciones": [
-        { "fecha": "2026-04-12", "titular": "Rebeldes capturan la última base militar fronteriza que conectaba con Tailandia", "fuente": "Al Jazeera", "url": "#" },
-        { "fecha": "2026-02-10", "titular": "La junta militar anuncia el servicio militar obligatorio ante las masivas deserciones", "fuente": "Reuters", "url": "#" }
+        { "fecha": "2026-04-05", "titular": "La junta militar de Níger rompe el último acuerdo de cooperación en seguridad con occidente", "fuente": "France 24", "url": "#" }
       ]
     }
   ],
   "relaciones": [
+    {
+      "id_relacion": "choque-eeuu-iran",
+      "origen": { "nombre": "EE.UU.", "lat": 38.8951, "lng": -77.0364 },
+      "destino": { "nombre": "Irán", "lat": 35.6892, "lng": 51.3890 },
+      "tipo": "militar",
+      "nivel": "rojo",
+      "fecha": "2026-04-13",
+      "titular": "EE.UU. despliega fuerza naval y amenaza con forzar la apertura del Estrecho de Ormuz tras el bloqueo iraní",
+      "fuente": "Wall Street Journal",
+      "url": "#"
+    },
     {
       "id_relacion": "tension-espana-israel",
       "origen": { "nombre": "España", "lat": 40.4168, "lng": -3.7038 },
       "destino": { "nombre": "Israel", "lat": 31.7683, "lng": 35.2137 },
       "tipo": "diplomática",
       "nivel": "naranja",
-      "fecha": "2026-04-13",
-      "titular": "Israel advierte a España de 'graves consecuencias' tras la propuesta de reconocimiento de Palestina",
+      "fecha": "2026-04-10",
+      "titular": "Israel llama a consultas a su embajadora tras el cruce de declaraciones sobre la crisis en Gaza",
       "fuente": "El Mundo",
-      "url": "#"
-    },
-    {
-      "id_relacion": "guerra-comercial-ue-china",
-      "origen": { "nombre": "Unión Europea", "lat": 50.8503, "lng": 4.3517 },
-      "destino": { "nombre": "China", "lat": 39.9042, "lng": 116.4074 },
-      "tipo": "comercial",
-      "nivel": "naranja",
-      "fecha": "2026-04-05",
-      "titular": "China impone aranceles punitivos al brandy europeo en represalia por las sanciones a sus vehículos eléctricos",
-      "fuente": "Bloomberg",
-      "url": "#"
-    },
-    {
-      "id_relacion": "tension-eeuu-china",
-      "origen": { "nombre": "EE.UU.", "lat": 38.8951, "lng": -77.0364 },
-      "destino": { "nombre": "China", "lat": 39.9042, "lng": 116.4074 },
-      "tipo": "tecnológica",
-      "nivel": "naranja",
-      "fecha": "2026-03-28",
-      "titular": "Washington amplía el veto a la exportación de microchips avanzados alegando 'espionaje sistemático'",
-      "fuente": "Wall Street Journal",
-      "url": "#"
-    },
-    {
-      "id_relacion": "choque-rusia-francia",
-      "origen": { "nombre": "Francia", "lat": 48.8566, "lng": 2.3522 },
-      "destino": { "nombre": "Rusia", "lat": 55.7558, "lng": 37.6173 },
-      "tipo": "militar",
-      "nivel": "rojo",
-      "fecha": "2026-03-15",
-      "titular": "Moscú advierte a París que considerará 'objetivos legítimos' cualquier despliegue de tropas francesas en Ucrania",
-      "fuente": "Le Monde",
-      "url": "#"
-    },
-    {
-      "id_relacion": "tension-argentina-colombia",
-      "origen": { "nombre": "Argentina", "lat": -34.6037, "lng": -58.3816 },
-      "destino": { "nombre": "Colombia", "lat": 4.7110, "lng": -74.0721 },
-      "tipo": "diplomática",
-      "nivel": "amarillo",
-      "fecha": "2026-03-27",
-      "titular": "Colombia expulsa a diplomáticos argentinos tras los insultos cruzados entre Milei y Petro",
-      "fuente": "Infobae",
-      "url": "#"
-    },
-    {
-      "id_relacion": "crisis-venezuela-guyana",
-      "origen": { "nombre": "Venezuela", "lat": 10.4806, "lng": -66.9036 },
-      "destino": { "nombre": "Guyana", "lat": 6.8013, "lng": -58.1551 },
-      "tipo": "territorial",
-      "nivel": "naranja",
-      "fecha": "2026-04-02",
-      "titular": "Venezuela promulga la ley para anexar el Esequibo mientras Guyana acude al Consejo de Seguridad",
-      "fuente": "BBC News",
-      "url": "#"
-    },
-    {
-      "id_relacion": "choque-filipinas-china",
-      "origen": { "nombre": "Filipinas", "lat": 14.5995, "lng": 120.9842 },
-      "destino": { "nombre": "China", "lat": 39.9042, "lng": 116.4074 },
-      "tipo": "militar",
-      "nivel": "naranja",
-      "fecha": "2026-03-24",
-      "titular": "Buques guardacostas chinos atacan con cañones de agua a barcos de reabastecimiento filipinos",
-      "fuente": "Reuters",
-      "url": "#"
-    },
-    {
-      "id_relacion": "amenaza-iran-israel",
-      "origen": { "nombre": "Irán", "lat": 35.6892, "lng": 51.3890 },
-      "destino": { "nombre": "Israel", "lat": 31.7683, "lng": 35.2137 },
-      "tipo": "militar",
-      "nivel": "rojo",
-      "fecha": "2026-04-12",
-      "titular": "Irán amenaza directamente con un ataque de represalia 'inminente' tras el bombardeo en Damasco",
-      "fuente": "Al Jazeera",
-      "url": "#"
-    },
-    {
-      "id_relacion": "ruptura-coreas",
-      "origen": { "nombre": "Corea del N.", "lat": 39.0392, "lng": 125.7625 },
-      "destino": { "nombre": "Corea del S.", "lat": 37.5665, "lng": 126.9780 },
-      "tipo": "militar",
-      "nivel": "naranja",
-      "fecha": "2026-02-18",
-      "titular": "Kim Jong Un declara a Corea del Sur como su 'enemigo principal' y dinamita las carreteras fronterizas",
-      "fuente": "Yonhap",
       "url": "#"
     },
     {
@@ -192,8 +96,30 @@
       "tipo": "diplomática",
       "nivel": "rojo",
       "fecha": "2026-04-06",
-      "titular": "México rompe relaciones tras el histórico asalto policial a su embajada en Quito para detener a Glas",
+      "titular": "México rompe relaciones tras el histórico asalto policial a su embajada en Quito",
       "fuente": "CNN en Español",
+      "url": "#"
+    },
+    {
+      "id_relacion": "tension-venezuela-guyana",
+      "origen": { "nombre": "Venezuela", "lat": 10.4806, "lng": -66.9036 },
+      "destino": { "nombre": "Guyana", "lat": 6.8013, "lng": -58.1551 },
+      "tipo": "territorial",
+      "nivel": "naranja",
+      "fecha": "2026-04-02",
+      "titular": "Guyana acude al Consejo de Seguridad ante la movilización militar venezolana en el Esequibo",
+      "fuente": "BBC News",
+      "url": "#"
+    },
+    {
+      "id_relacion": "guerra-comercial-ue-china",
+      "origen": { "nombre": "Unión Europea", "lat": 50.8503, "lng": 4.3517 },
+      "destino": { "nombre": "China", "lat": 39.9042, "lng": 116.4074 },
+      "tipo": "comercial",
+      "nivel": "amarillo",
+      "fecha": "2026-03-20",
+      "titular": "Pekín responde con sanciones tras los nuevos aranceles europeos a vehículos e importaciones tecnológicas",
+      "fuente": "Bloomberg",
       "url": "#"
     }
   ]
