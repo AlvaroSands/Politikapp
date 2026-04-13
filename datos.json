@@ -1,0 +1,147 @@
+[
+  {
+    "id_crisis": "oriente-medio-furia-epica",
+    "titulo_principal": "Escalada Regional en Oriente Medio",
+    "lat": 35.6892, "lng": 51.3890, "nivel_actual": "rojo",
+    "actualizaciones": [
+      { "fecha": "2026-04-13", "titular": "Ataque aéreo israelí en el sur del Líbano deja múltiples bajas en posiciones de Hezbolá", "fuente": "Al Jazeera", "url": "https://www.aljazeera.com/" },
+      { "fecha": "2026-04-12", "titular": "Firma del acuerdo de alto el fuego temporal mediado por Qatar", "fuente": "Política Exterior", "url": "https://www.politicaexterior.com/" },
+      { "fecha": "2026-03-20", "titular": "Intercepción masiva de drones sobre el espacio aéreo jordano", "fuente": "BBC World", "url": "https://www.bbc.com/" },
+      { "fecha": "2026-02-15", "titular": "Inicio de la 'Operación Furia Épica': Ataques cruzados con misiles", "fuente": "Al Jazeera", "url": "https://www.aljazeera.com/" }
+    ]
+  },
+  {
+    "id_crisis": "guerra-este-ucrania",
+    "titulo_principal": "Ofensiva Rusa en el Frente Oriental",
+    "lat": 50.0000, "lng": 36.2333, "nivel_actual": "rojo",
+    "actualizaciones": [
+      { "fecha": "2026-04-10", "titular": "Ucrania despliega nuevas reservas en la línea de Kupyansk", "fuente": "Descifrando la Guerra", "url": "https://www.descifrandolaguerra.es/" },
+      { "fecha": "2026-03-28", "titular": "Ataques con drones impactan infraestructura energética en Belgorod", "fuente": "BBC World", "url": "https://www.bbc.com/" },
+      { "fecha": "2026-03-15", "titular": "Fuerzas rusas rompen las líneas de defensa ucranianas en Kharkiv", "fuente": "El País", "url": "https://elpais.com/" },
+      { "fecha": "2026-02-28", "titular": "Petición urgente de munición de artillería a la Unión Europea", "fuente": "France 24", "url": "https://www.france24.com/es/" }
+    ]
+  },
+  {
+    "id_crisis": "tension-estrecho-taiwan",
+    "titulo_principal": "Tensión Militar en el Estrecho de Taiwán",
+    "lat": 24.0000, "lng": 119.0000, "nivel_actual": "amarillo",
+    "actualizaciones": [
+      { "fecha": "2026-04-08", "titular": "Taiwán denuncia un récord de incursiones aéreas de cazas en su espacio aéreo", "fuente": "ABC", "url": "https://www.abc.es/" },
+      { "fecha": "2026-03-12", "titular": "Maniobras navales del EPL con fuego real al este de la isla", "fuente": "CNN en Español", "url": "https://cnnespanol.cnn.com/" },
+      { "fecha": "2026-02-20", "titular": "Paso de destructores estadounidenses por el estrecho eleva quejas de Pekín", "fuente": "Reuters", "url": "https://www.reuters.com/" }
+    ]
+  },
+  {
+    "id_crisis": "crisis-sahel-exodo",
+    "titulo_principal": "Desestabilización y Conflicto en el Sahel",
+    "lat": 13.5116, "lng": 2.1254, "nivel_actual": "rojo",
+    "actualizaciones": [
+      { "fecha": "2026-04-05", "titular": "Cierre de fronteras aéreas en Níger y Burkina Faso ante amenaza militar", "fuente": "France 24", "url": "https://www.france24.com/es/" },
+      { "fecha": "2026-03-22", "titular": "El conflicto armado desborda provocando un éxodo masivo hacia Senegal", "fuente": "Al Jazeera", "url": "https://www.aljazeera.com/" },
+      { "fecha": "2026-02-28", "titular": "La junta militar de Níger expulsa a misiones diplomáticas occidentales", "fuente": "Le Monde Diplomatique", "url": "https://mondiplo.com/" }
+    ]
+  },
+  {
+    "id_crisis": "conflicto-mar-rojo-huties",
+    "titulo_principal": "Crisis de Seguridad Naval en el Mar Rojo",
+    "lat": 15.3000, "lng": 41.8000, "nivel_actual": "rojo",
+    "actualizaciones": [
+      { "fecha": "2026-04-02", "titular": "Fuerza naval europea intercepta enjambre de drones dirigido a cargueros", "fuente": "El País", "url": "https://elpais.com/" },
+      { "fecha": "2026-03-10", "titular": "Desvío masivo de rutas comerciales por el Cabo de Buena Esperanza", "fuente": "El Economista", "url": "https://www.eleconomista.com.mx/" },
+      { "fecha": "2026-02-25", "titular": "Tensión máxima tras el impacto de misiles hutíes en un carguero petrolero", "fuente": "Reuters", "url": "https://www.reuters.com/" }
+    ]
+  },
+  {
+    "id_crisis": "crisis-institucional-venezuela",
+    "titulo_principal": "Crisis Política y Tensión Fronteriza en Venezuela",
+    "lat": 10.4806, "lng": -66.9036, "nivel_actual": "naranja",
+    "actualizaciones": [
+      { "fecha": "2026-04-13", "titular": "Venezuela acumula tropas en la frontera con Guyana por la región del Esequibo", "fuente": "CNN en Español", "url": "https://cnnespanol.cnn.com/" },
+      { "fecha": "2026-03-15", "titular": "Denuncias internacionales tras el arresto de líderes opositores clave", "fuente": "ABC", "url": "https://www.abc.es/" },
+      { "fecha": "2026-02-20", "titular": "Crisis institucional: Se anuncian reestructuraciones drásticas", "fuente": "El País", "url": "https://elpais.com/" }
+    ]
+  },
+  {
+    "id_crisis": "guerra-comercial-ue-china",
+    "titulo_principal": "Guerra Arancelaria Unión Europea - China",
+    "lat": 50.8503, "lng": 4.3517, "nivel_actual": "naranja",
+    "actualizaciones": [
+      { "fecha": "2026-04-05", "titular": "Pekín responde con sanciones a la importación de productos agrícolas europeos", "fuente": "El Economista", "url": "https://www.eleconomista.com.mx/" },
+      { "fecha": "2026-03-10", "titular": "La Unión Europea impone aranceles históricos a los vehículos eléctricos chinos", "fuente": "Política Exterior", "url": "https://www.politicaexterior.com/" }
+    ]
+  },
+  {
+    "id_crisis": "guerra-civil-sudan",
+    "titulo_principal": "Guerra Civil Abierta en Sudán",
+    "lat": 15.5007, "lng": 32.5599, "nivel_actual": "rojo",
+    "actualizaciones": [
+      { "fecha": "2026-04-11", "titular": "Alerta de la ONU por hambruna inminente en la región de Darfur", "fuente": "BBC World", "url": "https://www.bbc.com/" },
+      { "fecha": "2026-03-05", "titular": "Colapso de las negociaciones de paz en Jeddah mediadas por EEUU", "fuente": "Al Jazeera", "url": "https://www.aljazeera.com/" },
+      { "fecha": "2026-02-18", "titular": "Fuerzas rebeldes intensifican el asedio en la capital, Jartum", "fuente": "France 24", "url": "https://www.france24.com/es/" }
+    ]
+  },
+  {
+    "id_crisis": "violencia-haiti-aeropuerto",
+    "titulo_principal": "Colapso Estatal y Violencia en Haití",
+    "lat": 18.5392, "lng": -72.3364, "nivel_actual": "rojo",
+    "actualizaciones": [
+      { "fecha": "2026-04-09", "titular": "Despliegue de la misión policial multinacional liderada por Kenia", "fuente": "CNN en Español", "url": "https://cnnespanol.cnn.com/" },
+      { "fecha": "2026-03-20", "titular": "Escalada de violencia paraliza el aeropuerto internacional de Puerto Príncipe", "fuente": "El País", "url": "https://elpais.com/" },
+      { "fecha": "2026-03-02", "titular": "Fuga masiva de prisión tras asalto coordinado de pandillas", "fuente": "Reuters", "url": "https://www.reuters.com/" }
+    ]
+  },
+  {
+    "id_crisis": "misiles-corea-del-norte",
+    "titulo_principal": "Pruebas Balísticas de Corea del Norte",
+    "lat": 39.0392, "lng": 125.7625, "nivel_actual": "amarillo",
+    "actualizaciones": [
+      { "fecha": "2026-04-02", "titular": "Corea del Norte desafía a la ONU lanzando misiles de medio alcance", "fuente": "Reuters", "url": "https://www.reuters.com/" },
+      { "fecha": "2026-02-10", "titular": "Pyongyang declara la ruptura final de los protocolos de reunificación", "fuente": "ABC", "url": "https://www.abc.es/" }
+    ]
+  },
+  {
+    "id_crisis": "tensión-diplomatica-argentina-espana",
+    "titulo_principal": "Crisis Diplomática Iberoamericana",
+    "lat": -34.6037, "lng": -58.3816, "nivel_actual": "naranja",
+    "actualizaciones": [
+      { "fecha": "2026-03-25", "titular": "Crisis diplomática entre Argentina y España tras fuertes declaraciones", "fuente": "El País", "url": "https://elpais.com/" },
+      { "fecha": "2026-03-22", "titular": "Llamadas a consultas de embajadores en Madrid y Buenos Aires", "fuente": "Política Exterior", "url": "https://www.politicaexterior.com/" }
+    ]
+  },
+  {
+    "id_crisis": "guerra-civil-myanmar",
+    "titulo_principal": "Avance Rebelde en Myanmar",
+    "lat": 16.8409, "lng": 96.1735, "nivel_actual": "rojo",
+    "actualizaciones": [
+      { "fecha": "2026-04-13", "titular": "El ejército de Myanmar pierde el control de ciudades fronterizas clave", "fuente": "Al Jazeera", "url": "https://www.aljazeera.com/" },
+      { "fecha": "2026-03-01", "titular": "Grupos étnicos armados consolidan control sobre el comercio fronterizo", "fuente": "Descifrando la Guerra", "url": "https://www.descifrandolaguerra.es/" }
+    ]
+  },
+  {
+    "id_crisis": "tension-kosovo-serbia",
+    "titulo_principal": "Fricciones Fronterizas en los Balcanes",
+    "lat": 42.6629, "lng": 21.1655, "nivel_actual": "amarillo",
+    "actualizaciones": [
+      { "fecha": "2026-04-09", "titular": "Tensión en la frontera de Kosovo por inusual despliegue de tropas serbias", "fuente": "Le Monde Diplomatique", "url": "https://mondiplo.com/" },
+      { "fecha": "2026-02-15", "titular": "La OTAN refuerza sus patrullas en la región norte ante protestas locales", "fuente": "France 24", "url": "https://www.france24.com/es/" }
+    ]
+  },
+  {
+    "id_crisis": "disputa-mar-china-meridional",
+    "titulo_principal": "Choques Navales en el Mar de China Meridional",
+    "lat": 14.5995, "lng": 120.9842, "nivel_actual": "amarillo",
+    "actualizaciones": [
+      { "fecha": "2026-04-06", "titular": "Maniobras navales conjuntas de EEUU y Japón elevan la tensión regional", "fuente": "CNN en Español", "url": "https://cnnespanol.cnn.com/" },
+      { "fecha": "2026-03-02", "titular": "China advierte a Filipinas tras usar cañones de agua contra pesqueros", "fuente": "Reuters", "url": "https://www.reuters.com/" }
+    ]
+  },
+  {
+    "id_crisis": "conflicto-narcos-ecuador",
+    "titulo_principal": "Guerra Interna contra el Narcotráfico",
+    "lat": -0.1807, "lng": -78.4678, "nivel_actual": "rojo",
+    "actualizaciones": [
+      { "fecha": "2026-03-30", "titular": "Fuerzas Armadas ecuatorianas toman el control de las prisiones principales", "fuente": "El País", "url": "https://elpais.com/" },
+      { "fecha": "2026-03-05", "titular": "Declaración de estado de excepción tras asaltos coordinados de carteles", "fuente": "CNN en Español", "url": "https://cnnespanol.cnn.com/" }
+    ]
+  }
+]
