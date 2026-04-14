@@ -2,11 +2,23 @@
   "crisis": [
     {
       "id_crisis": "bloqueo-estrecho-ormuz",
-      "titulo_principal": "Crisis Naval en el Estrecho de Ormuz",
+      "titulo_principal": "Guerra de Irán y Bloqueo Naval",
       "lat": 26.56,
       "lng": 56.25,
       "nivel_actual": "rojo",
       "actualizaciones": [
+        {
+          "fecha": "2026-04-14",
+          "titular": "Dos petroleros sancionados atraviesan el estrecho de Ormuz pese al bloqueo militar de EE UU",
+          "fuente": "La Sexta",
+          "url": "https://www.lasexta.com/noticias/internacional/"
+        },
+        {
+          "fecha": "2026-04-13",
+          "titular": "Trump amenaza con 'eliminar' los buques iraníes que desafíen el bloqueo de EEUU en Ormuz",
+          "fuente": "El País",
+          "url": "https://elpais.com/internacional/"
+        },
         {
           "fecha": "2026-04-12",
           "titular": "Fracasa el intento de desescalada en Omán; alerta máxima por bloqueo de petroleros",
@@ -43,6 +55,12 @@
       "lng": 37.75,
       "nivel_actual": "rojo",
       "actualizaciones": [
+        {
+          "fecha": "2026-04-14",
+          "titular": "Rusia y Ucrania se acusan mutuamente de violar la tregua pascual casi 2.500 veces",
+          "fuente": "Público",
+          "url": "https://www.publico.es/internacional"
+        },
         {
           "fecha": "2026-03-25",
           "titular": "Rusia intensifica los bombardeos sobre la infraestructura energética ucraniana",
@@ -112,30 +130,20 @@
       ]
     },
     {
-      "id_crisis": "bloqueo-estrecho-ormuz",
-      "titulo_principal": "Guerra de Irán y Bloqueo Naval",
-      "lat": 26.56, "lng": 56.25, "nivel_actual": "rojo",
-      "actualizaciones": [
-        { "fecha": "2026-04-14", "titular": "Dos petroleros sancionados atraviesan el estrecho de Ormuz pese al bloqueo militar de EE UU", "fuente": "La Sexta", "url": "https://www.lasexta.com/noticias/internacional/" },
-        { "fecha": "2026-04-13", "titular": "Trump amenaza con 'eliminar' los buques iraníes que desafíen el bloqueo de EEUU en Ormuz", "fuente": "El País", "url": "https://elpais.com/internacional/" }
-      ]
-    },
-    {
       "id_crisis": "cambio-politico-hungria",
       "titulo_principal": "Caída Histórica de Orbán en Hungría",
-      "lat": 47.4979, "lng": 19.0402, "nivel_actual": "amarillo",
+      "lat": 47.4979,
+      "lng": 19.0402,
+      "nivel_actual": "amarillo",
       "actualizaciones": [
-        { "fecha": "2026-04-14", "titular": "Magyar entierra 16 años del ultraderechista Orbán en Hungría con una incontestable victoria", "fuente": "Público", "url": "https://www.publico.es/internacional" }
+        {
+          "fecha": "2026-04-14",
+          "titular": "Magyar entierra 16 años del ultraderechista Orbán en Hungría con una incontestable victoria",
+          "fuente": "Público",
+          "url": "https://www.publico.es/internacional"
+        }
       ]
     },
-    {
-      "id_crisis": "guerra-este-ucrania",
-      "titulo_principal": "Guerra de Desgaste en el Este de Europa",
-      "lat": 48.14, "lng": 37.75, "nivel_actual": "rojo",
-      "actualizaciones": [
-        { "fecha": "2026-04-14", "titular": "Rusia y Ucrania se acusan mutuamente de violar la tregua pascual casi 2.500 veces", "fuente": "Público", "url": "https://www.publico.es/internacional" }
-      ]
-    }
     {
       "id_crisis": "crisis-sahel-exodo",
       "titulo_principal": "Desestabilización y Conflicto en el Sahel",
@@ -354,8 +362,16 @@
     },
     {
       "id_relacion": "diplomacia-espana-china",
-      "origen": { "nombre": "España", "lat": 40.4168, "lng": -3.7038 },
-      "destino": { "nombre": "China", "lat": 39.9042, "lng": 116.4074 },
+      "origen": {
+        "nombre": "España",
+        "lat": 40.4168,
+        "lng": -3.7038
+      },
+      "destino": {
+        "nombre": "China",
+        "lat": 39.9042,
+        "lng": 116.4074
+      },
       "tipo": "diplomática",
       "nivel": "amarillo",
       "fecha": "2026-04-14",
@@ -365,15 +381,23 @@
     },
     {
       "id_relacion": "choque-eeuu-vaticano",
-      "origen": { "nombre": "EE.UU.", "lat": 38.8951, "lng": -77.0364 },
-      "destino": { "nombre": "Vaticano", "lat": 41.9029, "lng": 12.4534 },
+      "origen": {
+        "nombre": "EE.UU.",
+        "lat": 38.8951,
+        "lng": -77.0364
+      },
+      "destino": {
+        "nombre": "Vaticano",
+        "lat": 41.9029,
+        "lng": 12.4534
+      },
       "tipo": "diplomática",
       "nivel": "naranja",
       "fecha": "2026-04-13",
       "titular": "El papa León XIV responde al presidente de EE UU: 'No tengo miedo a Trump. Seguiré hablando contra la guerra'",
       "fuente": "El País",
       "url": "https://elpais.com/internacional/"
-    }
+    },
     {
       "id_relacion": "tension-espana-israel",
       "origen": {
