@@ -3,74 +3,323 @@
     {
       "id_crisis": "bloqueo-estrecho-ormuz",
       "titulo_principal": "Crisis Naval en el Estrecho de Ormuz",
-      "lat": 26.56, "lng": 56.25, "nivel_actual": "rojo",
+      "lat": 26.56,
+      "lng": 56.25,
+      "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-04-12", "titular": "Fracasa el intento de desescalada en Omán; alerta máxima por bloqueo de petroleros", "fuente": "Al Jazeera", "url": "#" },
-        { "fecha": "2026-04-08", "titular": "La Guardia Revolucionaria de Irán intercepta cargueros comerciales en el estrecho", "fuente": "Reuters", "url": "#" }
+        {
+          "fecha": "2026-04-12",
+          "titular": "Fracasa el intento de desescalada en Omán; alerta máxima por bloqueo de petroleros",
+          "fuente": "Al Jazeera",
+          "url": "#"
+        },
+        {
+          "fecha": "2026-04-08",
+          "titular": "La Guardia Revolucionaria de Irán intercepta cargueros comerciales en el estrecho",
+          "fuente": "Reuters",
+          "url": "#"
+        }
       ]
     },
     {
       "id_crisis": "oriente-medio-gaza",
       "titulo_principal": "Guerra en Gaza y Escalada Regional",
-      "lat": 31.5, "lng": 34.4666, "nivel_actual": "rojo",
+      "lat": 31.5,
+      "lng": 34.4666,
+      "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-04-01", "titular": "Intercambio de fuego cruzado tras fracasar la última ronda de negociaciones en Egipto", "fuente": "BBC World", "url": "#" }
+        {
+          "fecha": "2026-04-01",
+          "titular": "Intercambio de fuego cruzado tras fracasar la última ronda de negociaciones en Egipto",
+          "fuente": "BBC World",
+          "url": "#"
+        }
       ]
     },
     {
       "id_crisis": "guerra-este-ucrania",
       "titulo_principal": "Guerra de Desgaste en el Este de Europa",
-      "lat": 48.14, "lng": 37.75, "nivel_actual": "rojo",
+      "lat": 48.14,
+      "lng": 37.75,
+      "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-03-25", "titular": "Rusia intensifica los bombardeos sobre la infraestructura energética ucraniana", "fuente": "Descifrando la Guerra", "url": "#" }
+        {
+          "fecha": "2026-03-25",
+          "titular": "Rusia intensifica los bombardeos sobre la infraestructura energética ucraniana",
+          "fuente": "Descifrando la Guerra",
+          "url": "#"
+        }
       ]
     },
     {
       "id_crisis": "violencia-haiti",
       "titulo_principal": "Colapso Institucional y Control Criminal",
-      "lat": 18.5392, "lng": -72.3364, "nivel_actual": "rojo",
+      "lat": 18.5392,
+      "lng": -72.3364,
+      "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-04-05", "titular": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición", "fuente": "France 24", "url": "#" }
+        {
+          "fecha": "2026-04-05",
+          "titular": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición",
+          "fuente": "France 24",
+          "url": "#"
+        }
       ]
     },
     {
       "id_crisis": "conflicto-mar-rojo-huties",
       "titulo_principal": "Crisis de Seguridad Naval en el Mar Rojo",
-      "lat": 15.3, "lng": 41.8, "nivel_actual": "rojo",
+      "lat": 15.3,
+      "lng": 41.8,
+      "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-03-18", "titular": "Impacto de misiles hutíes obliga a desviar nuevas rutas comerciales navieras", "fuente": "El País", "url": "#" }
+        {
+          "fecha": "2026-03-18",
+          "titular": "Impacto de misiles hutíes obliga a desviar nuevas rutas comerciales navieras",
+          "fuente": "El País",
+          "url": "#"
+        }
       ]
     },
     {
       "id_crisis": "conflicto-ecuador",
       "titulo_principal": "Estado de Excepción y Guerra contra el Crimen",
-      "lat": -2.1961, "lng": -79.8862, "nivel_actual": "rojo",
+      "lat": -2.1961,
+      "lng": -79.8862,
+      "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-03-30", "titular": "El ejército ecuatoriano asalta las principales cárceles bajo control de organizaciones criminales", "fuente": "EFE", "url": "#" }
+        {
+          "fecha": "2026-03-30",
+          "titular": "El ejército ecuatoriano asalta las principales cárceles bajo control de organizaciones criminales",
+          "fuente": "EFE",
+          "url": "#"
+        }
       ]
     },
     {
       "id_crisis": "tension-estrecho-taiwan",
       "titulo_principal": "Cerco Militar en el Estrecho de Taiwán",
-      "lat": 23.6978, "lng": 120.9605, "nivel_actual": "amarillo",
+      "lat": 23.6978,
+      "lng": 120.9605,
+      "nivel_actual": "amarillo",
       "actualizaciones": [
-        { "fecha": "2026-04-10", "titular": "Récord histórico: cazas del Ejército Popular de Liberación cruzan la línea media", "fuente": "ABC", "url": "#" }
+        {
+          "fecha": "2026-04-10",
+          "titular": "Récord histórico: cazas del Ejército Popular de Liberación cruzan la línea media",
+          "fuente": "ABC",
+          "url": "#"
+        }
       ]
     },
     {
       "id_crisis": "crisis-sahel-exodo",
       "titulo_principal": "Desestabilización y Conflicto en el Sahel",
-      "lat": 14.4974, "lng": -1.4197, "nivel_actual": "rojo",
+      "lat": 14.4974,
+      "lng": -1.4197,
+      "nivel_actual": "rojo",
       "actualizaciones": [
-        { "fecha": "2026-04-05", "titular": "La junta militar de Níger rompe el último acuerdo de cooperación en seguridad con occidente", "fuente": "France 24", "url": "#" }
+        {
+          "fecha": "2026-04-05",
+          "titular": "La junta militar de Níger rompe el último acuerdo de cooperación en seguridad con occidente",
+          "fuente": "France 24",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id_crisis": "crisis-iran-eeuu",
+      "titulo_principal": "Conflicto Irán-EEUU",
+      "lat": 32.4279,
+      "lng": 53.688,
+      "nivel_actual": "rojo",
+      "actualizaciones": [
+        {
+          "fecha": "2024-05-15",
+          "titular": "EEUU ha enviado a Irán 15 puntos para poner fin a la guerra. También ha enviado un plan B tan explosivo como desconcertante por el aire",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/magnet/eeuu-ha-enviado-a-iran-15-puntos-para-poner-fin-a-guerra-se-niegan-a-firmarlo-tiene-plan-b-explosivo-como-desconcertante"
+        }
+      ]
+    },
+    {
+      "id_crisis": "crisis-cierre-ormuz",
+      "titulo_principal": "Cierre del Estrecho de Ormuz",
+      "lat": 26.25,
+      "lng": 56.5,
+      "nivel_actual": "rojo",
+      "actualizaciones": [
+        {
+          "fecha": "2026-03-17",
+          "titular": "El cierre de Ormuz está desangrando a Europa a 1.000 millones de euros diarios: el plan de España es liberar 115 millones de barriles",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/energia/europa-se-desangra-a-ritmo-1-000-millones-al-dia-crisis-ormuz-expone-nuestra-mayor-debilidad-estructural"
+        }
+      ]
+    },
+    {
+      "id_crisis": "crisis-hidrica-iran-001",
+      "titulo_principal": "Conflicto Hídrico en Oriente Medio",
+      "lat": 32.0,
+      "lng": 54.0,
+      "nivel_actual": "rojo",
+      "actualizaciones": [
+        {
+          "fecha": "2026-03-24",
+          "titular": "Una idea inquietante está a punto de explotar en la guerra de Oriente: quién le está robando la lluvia a Irán para quedarse sin agua",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/magnet/idea-inquietante-esta-a-punto-explotar-guerra-oriente-quien-le-esta-robando-lluvia-a-iran-para-quedarse-agua"
+        }
+      ]
+    },
+    {
+      "id_crisis": "ormuz-2026-03-16",
+      "titulo_principal": "Tensión y Falta de Apoyo Aliado en el Estrecho de Ormuz",
+      "lat": 26.5,
+      "lng": 56.2,
+      "nivel_actual": "naranja",
+      "actualizaciones": [
+        {
+          "fecha": "2026-03-16",
+          "titular": "EEUU ha pedido ayuda a todos sus aliados en Ormuz. La respuesta que ha recibido la anticipó España antes que nadie: \"no\"",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/magnet/no-aliados-ha-llevado-a-eeuu-a-pedir-ayuda-a-china-para-poner-fin-a-guerra-iran-le-ha-dado-respuesta-llegan-tarde"
+        }
+      ]
+    },
+    {
+      "id_crisis": "crisis-iran-energia-2024",
+      "titulo_principal": "Caos Energético en Irán",
+      "lat": 32.4279,
+      "lng": 53.688,
+      "nivel_actual": "naranja",
+      "actualizaciones": [
+        {
+          "fecha": "2024-04-09",
+          "titular": "China ya había ganado la guerra de las baterías. El caos energético en Irán solo le está entregando el trono mundial",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/energia/china-habia-ganado-guerra-baterias-caos-energetico-iran-solo-le-esta-entregando-trono-mundial"
+        }
+      ]
+    },
+    {
+      "id_crisis": "mediterranean-floating-bomb-2024",
+      "titulo_principal": "Bomba flotante rusa en el Mediterráneo",
+      "lat": 35.0,
+      "lng": 18.0,
+      "nivel_actual": "rojo",
+      "actualizaciones": [
+        {
+          "fecha": "2026-03-19",
+          "titular": "Hay una bomba rusa flotando en el Mediterráneo que viene de Ucrania. Y Europa tiembla porque puede explotar en cualquier momento",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/magnet/hay-bomba-rusa-flotando-mediterraneo-que-viene-ucrania-europa-tiembla-porque-puede-explotar-cualquier-momento"
+        }
+      ]
+    },
+    {
+      "id_crisis": "conflicto-iran-energia",
+      "titulo_principal": "Impacto global del conflicto con Irán en la industria energética",
+      "lat": 26.5,
+      "lng": 56.5,
+      "nivel_actual": "rojo",
+      "actualizaciones": [
+        {
+          "fecha": "2026-03-27",
+          "titular": "Da igual si la guerra con Irán termina mañana: el destrozo a la industria del gas y el petróleo tardará años en repararse",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/energia/firmar-paz-no-arreglara-estrecho-ormuz-destrozo-logistico-energetico-que-tardaremos-anos-pagar"
+        }
+      ]
+    },
+    {
+      "id_crisis": "crisis-energetica-global-china-prep",
+      "titulo_principal": "Estrategia de China ante la Crisis Energética Global",
+      "lat": 39.9042,
+      "lng": 116.4074,
+      "nivel_actual": "naranja",
+      "actualizaciones": [
+        {
+          "fecha": "2026-03-24",
+          "titular": "China lleva años preparándose pacientemente para una gran crisis energética global. Y ahora recoge sus frutos",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/energia/china-lleva-anos-preparandose-pacientemente-para-gran-crisis-energetica-global-ahora-recoge-sus-frutos"
+        }
+      ]
+    },
+    {
+      "id_crisis": "crisis-global-petroleo-2024",
+      "titulo_principal": "Crisis Global del Petróleo",
+      "lat": 40.707,
+      "lng": -74.011,
+      "nivel_actual": "rojo",
+      "actualizaciones": [
+        {
+          "fecha": "2026-03-25",
+          "titular": "El misterio de Wall Street: la mayor crisis del petróleo no les está haciendo pestañear ni un segundo en bolsa",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/energia/misterio-wall-street-mayor-crisis-petroleo-no-les-esta-haciendo-pestanear-segundo-bolsa"
+        }
+      ]
+    },
+    {
+      "id_crisis": "energia_europa_vulnerabilidad_geopolitica",
+      "titulo_principal": "Crisis de Dependencia Energética Europea",
+      "lat": 50.0,
+      "lng": 10.0,
+      "nivel_actual": "rojo",
+      "actualizaciones": [
+        {
+          "fecha": "2026-04-01",
+          "titular": "Europa huyó del gas de Rusia para echarse en brazos de EEUU. La Tercera Guerra del Golfo demuestra que fue una trampa",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/energia/europa-huyo-gas-rusia-para-echarse-brazos-eeuu-tercera-guerra-golfo-demuestra-que-fue-trampa"
+        }
+      ]
+    },
+    {
+      "id_crisis": "crisis-ormuz-global",
+      "titulo_principal": "Crisis del Estrecho de Ormuz",
+      "lat": 26.5,
+      "lng": 56.0,
+      "nivel_actual": "naranja",
+      "actualizaciones": [
+        {
+          "fecha": "2026-03-18",
+          "titular": "El salvavidas de las renovables: España tiene la energía mayorista más barata de Europa en plena crisis de Ormuz",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/energia/espana-ha-encontrado-salvavidas-inesperado-crisis-ormuz-como-nuestra-luz-hoy-envidia-europa"
+        }
+      ]
+    },
+    {
+      "id_crisis": "iran-energia-europa",
+      "titulo_principal": "Guerra en Irán y crisis energética en Europa",
+      "lat": 32.4279,
+      "lng": 53.688,
+      "nivel_actual": "rojo",
+      "actualizaciones": [
+        {
+          "fecha": "2026-04-01",
+          "titular": "Toda Europa entra en pánico por el precio de la luz ante la guerra en Irán. En España está pasando justo lo contrario",
+          "fuente": "Xataka.com",
+          "url": "https://www.xataka.com/energia/toda-europa-entra-panico-precio-luz-guerra-iran-espana-esta-pasando-justo-contrario"
+        }
       ]
     }
   ],
   "relaciones": [
     {
       "id_relacion": "choque-eeuu-iran",
-      "origen": { "nombre": "EE.UU.", "lat": 38.8951, "lng": -77.0364 },
-      "destino": { "nombre": "Irán", "lat": 35.6892, "lng": 51.3890 },
+      "origen": {
+        "nombre": "EE.UU.",
+        "lat": 38.8951,
+        "lng": -77.0364
+      },
+      "destino": {
+        "nombre": "Irán",
+        "lat": 35.6892,
+        "lng": 51.389
+      },
       "tipo": "militar",
       "nivel": "rojo",
       "fecha": "2026-04-13",
@@ -80,8 +329,16 @@
     },
     {
       "id_relacion": "tension-espana-israel",
-      "origen": { "nombre": "España", "lat": 40.4168, "lng": -3.7038 },
-      "destino": { "nombre": "Israel", "lat": 31.7683, "lng": 35.2137 },
+      "origen": {
+        "nombre": "España",
+        "lat": 40.4168,
+        "lng": -3.7038
+      },
+      "destino": {
+        "nombre": "Israel",
+        "lat": 31.7683,
+        "lng": 35.2137
+      },
       "tipo": "diplomática",
       "nivel": "naranja",
       "fecha": "2026-04-10",
@@ -91,8 +348,16 @@
     },
     {
       "id_relacion": "tension-ecuador-mexico",
-      "origen": { "nombre": "Ecuador", "lat": -0.2298, "lng": -78.5249 },
-      "destino": { "nombre": "México", "lat": 19.4326, "lng": -99.1332 },
+      "origen": {
+        "nombre": "Ecuador",
+        "lat": -0.2298,
+        "lng": -78.5249
+      },
+      "destino": {
+        "nombre": "México",
+        "lat": 19.4326,
+        "lng": -99.1332
+      },
       "tipo": "diplomática",
       "nivel": "rojo",
       "fecha": "2026-04-06",
@@ -102,8 +367,16 @@
     },
     {
       "id_relacion": "tension-venezuela-guyana",
-      "origen": { "nombre": "Venezuela", "lat": 10.4806, "lng": -66.9036 },
-      "destino": { "nombre": "Guyana", "lat": 6.8013, "lng": -58.1551 },
+      "origen": {
+        "nombre": "Venezuela",
+        "lat": 10.4806,
+        "lng": -66.9036
+      },
+      "destino": {
+        "nombre": "Guyana",
+        "lat": 6.8013,
+        "lng": -58.1551
+      },
       "tipo": "territorial",
       "nivel": "naranja",
       "fecha": "2026-04-02",
@@ -113,14 +386,136 @@
     },
     {
       "id_relacion": "guerra-comercial-ue-china",
-      "origen": { "nombre": "Unión Europea", "lat": 50.8503, "lng": 4.3517 },
-      "destino": { "nombre": "China", "lat": 39.9042, "lng": 116.4074 },
+      "origen": {
+        "nombre": "Unión Europea",
+        "lat": 50.8503,
+        "lng": 4.3517
+      },
+      "destino": {
+        "nombre": "China",
+        "lat": 39.9042,
+        "lng": 116.4074
+      },
       "tipo": "comercial",
       "nivel": "amarillo",
       "fecha": "2026-03-20",
       "titular": "Pekín responde con sanciones tras los nuevos aranceles europeos a vehículos e importaciones tecnológicas",
       "fuente": "Bloomberg",
       "url": "#"
+    },
+    {
+      "id_relacion": "china-taiwan-tension-20260316",
+      "origen": {
+        "nombre": "China",
+        "lat": 39.9042,
+        "lng": 116.4074
+      },
+      "destino": {
+        "nombre": "Taiwán",
+        "lat": 23.6978,
+        "lng": 120.9605
+      },
+      "tipo": "militar",
+      "nivel": "rojo",
+      "fecha": "2026-03-16",
+      "titular": "El mismo día que EEUU envió sus marines a Irán, Taiwán despertó con un déjà vu: China la ha rodeado con 26 aviones y 7 buques de guerra",
+      "fuente": "Xataka.com",
+      "url": "https://www.xataka.com/magnet/dia-que-eeuu-enviaba-sus-marines-a-iran-taiwan-desperto-deja-vu-china-ha-rodeado-26-aviones-7-buques-guerra"
+    },
+    {
+      "id_relacion": "id-unico",
+      "origen": {
+        "nombre": "Irán",
+        "lat": 32.4279,
+        "lng": 53.688
+      },
+      "destino": {
+        "nombre": "Qatar",
+        "lat": 25.3548,
+        "lng": 51.1839
+      },
+      "tipo": "militar",
+      "nivel": "rojo",
+      "fecha": "2026-03-19",
+      "titular": "Llevamos meses esquivando la crisis energética definitiva. El misil de Irán a la mayor planta de gas de Qatar amenaza con detonarla",
+      "fuente": "Xataka.com",
+      "url": "https://www.xataka.com/energia/llevamos-meses-esquivando-crisis-energetica-definitiva-misil-iran-a-mayor-planta-gas-qatar-amenaza-detonarla"
+    },
+    {
+      "id_relacion": "iran-turkey-energy-redline-20260326",
+      "origen": {
+        "nombre": "Irán",
+        "lat": 32.4279,
+        "lng": 53.688
+      },
+      "destino": {
+        "nombre": "Turquía",
+        "lat": 38.9637,
+        "lng": 35.2433
+      },
+      "tipo": "comercial",
+      "nivel": "rojo",
+      "fecha": "2026-03-26",
+      "titular": "Irán acaba de cruzar la gran línea roja energética. Turquía es la primera víctima de un apagón que ya mira a Europa",
+      "fuente": "Xataka.com",
+      "url": "https://www.xataka.com/energia/iran-acaba-cruzar-gran-linea-roja-energetica-turquia-primera-victima-apagon-que-mira-a-europa"
+    },
+    {
+      "id_relacion": "CHN-TWN-20260323",
+      "origen": {
+        "nombre": "China",
+        "lat": 35.8617,
+        "lng": 104.1954
+      },
+      "destino": {
+        "nombre": "Taiwán",
+        "lat": 23.6978,
+        "lng": 120.9605
+      },
+      "tipo": "militar",
+      "nivel": "rojo",
+      "fecha": "2026-03-23",
+      "titular": "La guerra en Irán le ha dado una oportunidad inédita a China. Y se la acaba de trasladar a Taiwán para que se lo piense dos veces",
+      "fuente": "Xataka.com",
+      "url": "https://www.xataka.com/magnet/guerra-iran-le-acaba-dar-oportunidad-inedita-a-china-se-acaba-trasladar-a-taiwan-se-piense-dos-veces"
+    },
+    {
+      "id_relacion": "eeuu-espana-bases-militares-20260409",
+      "origen": {
+        "nombre": "Estados Unidos",
+        "lat": 37.0902,
+        "lng": -95.7129
+      },
+      "destino": {
+        "nombre": "España",
+        "lat": 40.4637,
+        "lng": -3.7492
+      },
+      "tipo": "militar",
+      "nivel": "rojo",
+      "fecha": "2026-04-09",
+      "titular": "Hay una lista de países donde EEUU quiere cerrar sus bases. Y el primero está marcado en rojo desde su “no a la guerra”: España",
+      "fuente": "Xataka.com",
+      "url": "https://www.xataka.com/magnet/hay-lista-paises-donde-eeuu-quiere-cerrar-sus-bases-primero-esta-marcado-rojo-su-no-a-guerra-espana"
+    },
+    {
+      "id_relacion": "ukraine-russia-pipeline-repair-tension",
+      "origen": {
+        "nombre": "Ucrania",
+        "lat": 48.3794,
+        "lng": 31.1656
+      },
+      "destino": {
+        "nombre": "Rusia",
+        "lat": 61.524,
+        "lng": 105.3188
+      },
+      "tipo": "comercial",
+      "nivel": "naranja",
+      "fecha": "2026-03-19",
+      "titular": "Ucrania se negaba a arreglar un oleoducto ruso bombardeado. La UE le ha dado 90.000 millones de razones para hacerlo",
+      "fuente": "Xataka.com",
+      "url": "https://www.xataka.com/energia/ucrania-se-negaba-rotundo-a-arreglar-oleoducto-ruso-bombardeado-union-europea-le-ha-dado-90-000-millones-razones-para-cambiar-opinion"
     }
   ]
 }
