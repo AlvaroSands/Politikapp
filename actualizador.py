@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 CLAVE_API = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=CLAVE_API)
-modelo_ia = genai.GenerativeModel('gemini-1.5-flash')
+modelo_ia = genai.GenerativeModel('gemini-2.5-flash')
 ARCHIVO_DATOS = "datos.json"
 
 Fuentes_RSS = [
