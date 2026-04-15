@@ -5,7 +5,9 @@ import json
 
 app = FastAPI()
 
-@app.get("/api/noticias")
+# ¡AQUÍ ESTÁ LA MAGIA! Hemos cambiado "/api/noticias" por "/datos.json"
+# para que el servidor le dé al mapa exactamente lo que está pidiendo.
+@app.get("/datos.json")
 async def api_noticias():
     # El motor web solo lee la base de datos, ¡súper rápido y seguro!
     try:

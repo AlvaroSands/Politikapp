@@ -3,127 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centro de Mando Geopolítico V2</title>
+    <title>Centro de Mando Geopolítico</title>
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #121212; color: #fff;}
-        #header { padding: 15px 20px; background-color: #1e1e1e; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center;}
-        #header h1 { margin: 0; font-size: 24px;}
-        
-        /* Sistema de Leyendas */
-        .leyenda { font-size: 13px; display: flex; gap: 15px; flex-wrap: wrap;}
-        .leyenda-item { display: flex; align-items: center; gap: 6px; }
-        .punto { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-        .punto.rojo { background-color: #ff3333; }
-        .punto.naranja { background-color: #ff9933; }
-        .punto.amarillo { background-color: #ffcc00; }
-        .linea-leyenda { width: 20px; height: 3px; border-top: 2px dashed #fff; display: inline-block; margin-top: 4px;}
-        .cuadrado-actor { width: 10px; height: 10px; background-color: #4da6ff; border: 1px solid #fff; border-radius: 2px; box-shadow: 0 0 5px #4da6ff; display: inline-block;}
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; overflow: hidden; }
+        #map { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
-        #map { height: calc(100vh - 65px); width: 100%; }
-        
-        /* Icono personalizado para los extremos de las relaciones */
-        .nodo-relacion {
-            background-color: #4da6ff;
-            border: 2px solid #fff;
-            border-radius: 3px; 
-            box-shadow: 0 0 8px #4da6ff;
+        .panel-cristal {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            z-index: 1000;
         }
 
-        /* Estilos del Popup */
-        .leaflet-popup-content-wrapper { background-color: #2a2a2a; color: #fff; border-radius: 8px;}
-        .leaflet-popup-tip { background-color: #2a2a2a; }
-        .popup-title { font-weight: bold; margin-bottom: 10px; font-size: 16px; border-bottom: 1px solid #444; padding-bottom: 8px;}
-        .relacion-actores { display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: #ffcc00; margin-bottom: 10px; font-size: 14px;}
-        .timeline-item { border-left: 2px solid #555; padding-left: 10px; margin-bottom: 10px;}
-        .item-date { font-size: 11px; color: #ffcc00; font-weight: bold;}
-        .item-title { font-size: 13px; margin: 5px 0;}
-        .item-link { color: #4da6ff; text-decoration: none; font-size: 11px;}
-        .item-link:hover { text-decoration: underline; }
+        .top-bar { top: 20px; left: 20px; right: 20px; height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 25px; }
+        .titulo { font-family: 'Share Tech Mono', monospace; font-size: 1.5rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
+        .stats { display: flex; gap: 30px; font-family: 'Share Tech Mono', monospace; font-size: 1rem; color: #94a3b8; }
+        .stats span { color: #ef4444; font-weight: bold; font-size: 1.2rem;}
+
+        .sidebar { top: 100px; left: 20px; bottom: 20px; width: 380px; padding: 25px; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; }
+        .sidebar h2 { font-family: 'Share Tech Mono', monospace; margin: 0 0 5px 0; color: #f1f5f9; font-size: 1.4rem; line-height: 1.2;}
+        .sidebar h3 { font-family: 'Share Tech Mono', monospace; margin: 20px 0 10px 0; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; font-size: 1rem; }
+        .tipo-badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
+        
+        .badge-rojo { background-color: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+        .badge-naranja { background-color: rgba(249, 115, 22, 0.2); color: #f97316; border: 1px solid #f97316; }
+        .badge-amarillo { background-color: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid #eab308; }
+
+        .tarjeta-crisis { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 0 8px 8px 0; font-size: 0.9rem; margin-bottom: 10px; transition: transform 0.2s; }
+        .tarjeta-crisis:hover { transform: translateX(5px); background: rgba(0,0,0,0.8); }
+        .tarjeta-crisis a { text-decoration: none; color: inherit; display: block; }
+        .tarjeta-crisis .fecha { font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; margin-bottom: 8px; }
+        .tarjeta-crisis .titular { color: #f8fafc; font-weight: 600; margin-bottom: 10px; line-height: 1.4; }
+        .tarjeta-crisis .fuente { color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .mensaje-inicial { text-align: center; color: #64748b; margin-top: 50%; font-style: italic; }
+
+        .contenedor-icono { background: transparent; border: none; }
+        
+        .marcador-latiente { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #fff; animation: latido 2s infinite; cursor: pointer; position: absolute; top: 0; left: 0; }
+        .marcador-rojo { background-color: #ef4444; box-shadow: 0 0 15px #ef4444, 0 0 30px #ef4444; }
+        .marcador-naranja { background-color: #f97316; box-shadow: 0 0 15px #f97316, 0 0 30px #f97316; }
+        .marcador-amarillo { background-color: #eab308; box-shadow: 0 0 15px #eab308, 0 0 30px #eab308; }
+        
+        @keyframes latido { 0% { transform: scale(0.9); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.6; } 100% { transform: scale(0.9); opacity: 1; } }
+
+        .leaflet-tooltip { background: rgba(15, 23, 42, 0.9); border: 1px solid #38bdf8; color: #fff; border-radius: 4px; font-family: 'Share Tech Mono', monospace; }
+        .leaflet-tooltip-top:before { border-top-color: #38bdf8; }
     </style>
 </head>
 <body>
 
-    <div id="header">
-        <h1>🌐 Centro de Mando V2</h1>
-        <div class="leyenda">
-            <div class="leyenda-item"><span class="punto rojo"></span> Crisis</div>
-            <div class="leyenda-item"><span class="linea-leyenda"></span> Tensión Bilateral</div>
-            <div class="leyenda-item"><span class="cuadrado-actor"></span> Actor Implicado</div>
+    <div id="map"></div>
+
+    <div class="panel-cristal top-bar">
+        <div class="titulo">INTEL-GEO COMMAND CENTER</div>
+        <div class="stats">
+            <div>CRISIS: <span id="contador-crisis">0</span></div>
+            <div>TENSIONES: <span id="contador-tensiones">0</span></div>
         </div>
     </div>
-    <div id="map"></div>
+
+    <div class="panel-cristal sidebar" id="panel-info">
+        <div class="mensaje-inicial">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" style="margin-bottom: 15px;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg><br>
+            Esperando selección...<br>Haz clic en un punto o ruta para ver la inteligencia recabada.
+        </div>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map').setView([30, 0], 2.5);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+        const map = L.map('map', { zoomControl: false }).setView([30.0, 10.0], 3);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        const colorMapa = { "rojo": "#ff3333", "naranja": "#ff9933", "amarillo": "#ffcc00" };
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+            maxZoom: 19
+        }).addTo(map);
 
-        // Definimos el nuevo icono cuadrado azul claro
-        const iconoNodo = L.divIcon({
-            className: 'nodo-relacion',
-            iconSize: [12, 12],
-            iconAnchor: [6, 6] // Para que quede perfectamente centrado en la coordenada
-        });
+        const panelInfo = document.getElementById('panel-info');
+        const contCrisis = document.getElementById('contador-crisis');
+        const contTensiones = document.getElementById('contador-tensiones');
+        const coloresMap = { 'rojo': '#ef4444', 'naranja': '#f97316', 'amarillo': '#eab308' };
 
-        fetch('/api/noticias')
-            .then(response => response.json())
-            .then(data => {
+        function cargarEnPanel(datos, tipo) {
+            let html = '';
+            let nivel = (datos.nivel_actual || datos.nivel || 'rojo').toLowerCase();
+            let colorHex = coloresMap[nivel] || '#fff';
+            let badgeClase = `badge-${nivel}`;
+
+            if (tipo === 'crisis') {
+                html += `<h2>${datos.titulo_principal}</h2>`;
+                html += `<div class="tipo-badge ${badgeClase}">ZONA DE CRISIS MILITAR/ESTATAL</div>`;
+                html += `<h3>HISTORIAL DE EVENTOS</h3>`;
                 
-                // 1. DIBUJAR PUNTOS DE CRISIS
-                data.crisis.forEach(crisis => {
-                    const marcador = L.circleMarker([crisis.lat, crisis.lng], {
-                        radius: 8, fillColor: colorMapa[crisis.nivel_actual] || "#fff", color: "#fff", weight: 1, opacity: 1, fillOpacity: 0.9
-                    }).addTo(map);
-
-                    let historial = '';
-                    crisis.actualizaciones.forEach(act => {
-                        historial += `<div class="timeline-item"><div class="item-date">${act.fecha}</div><div class="item-title">${act.titular}</div><a href="${act.url}" target="_blank" class="item-link">Leer más</a></div>`;
-                    });
-                    marcador.bindPopup(`<div class="popup-title">📍 ${crisis.titulo_principal}</div>${historial}`);
-                });
-
-                // 2. DIBUJAR LÍNEAS DE RELACIÓN Y NODOS
-                data.relaciones.forEach(rel => {
-                    const coordOrigen = [rel.origen.lat, rel.origen.lng];
-                    const coordDestino = [rel.destino.lat, rel.destino.lng];
-                    const colorLinea = colorMapa[rel.nivel] || "#ffffff";
-
-                    // Crear la línea punteada
-                    const linea = L.polyline([coordOrigen, coordDestino], {
-                        color: colorLinea,
-                        weight: 3,
-                        dashArray: '10, 10',
-                        opacity: 0.8
-                    }).addTo(map);
-
-                    // Crear los nodos (iconos) en los extremos
-                    const nodoOrigen = L.marker(coordOrigen, {icon: iconoNodo}).addTo(map);
-                    const nodoDestino = L.marker(coordDestino, {icon: iconoNodo}).addTo(map);
-
-                    // Ponerle un popup a la línea y a los nodos
-                    const contenidoLinea = `
-                        <div class="popup-title">⚖️ Tensión ${rel.tipo.toUpperCase()}</div>
-                        <div class="relacion-actores">
-                            <span>${rel.origen.nombre}</span> ➔ <span>${rel.destino.nombre}</span>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="item-date">${rel.fecha}</div>
-                            <div class="item-title">${rel.titular}</div>
-                            <div style="font-size: 11px; color: #888; margin-bottom: 5px;">Fuente: ${rel.fuente}</div>
-                            <a href="${rel.url}" target="_blank" class="item-link">Leer noticia completa ➔</a>
+                (datos.actualizaciones || []).forEach(act => {
+                    html += `
+                        <div class="tarjeta-crisis" style="border-left: 4px solid ${colorHex};">
+                            <a href="${act.url}" target="_blank">
+                                <div class="fecha" style="color: ${colorHex};">${act.fecha}</div>
+                                <div class="titular">${act.titular}</div>
+                                <div class="fuente">FUENTE: ${act.fuente}</div>
+                            </a>
                         </div>
                     `;
-                    
-                    // Vinculamos exactamente el mismo popup a los 3 elementos
-                    linea.bindPopup(contenidoLinea);
-                    nodoOrigen.bindPopup(contenidoLinea);
-                    nodoDestino.bindPopup(contenidoLinea);
                 });
+            } else if (tipo === 'relacion') {
+                html += `<h2>Tensión: ${datos.origen.nombre} - ${datos.destino.nombre}</h2>`;
+                html += `<div class="tipo-badge ${badgeClase}">TIPO: ${(datos.tipo || 'DESCONOCIDO').toUpperCase()}</div>`;
+                html += `<h3>ÚLTIMO CABLE DIPLOMÁTICO</h3>`;
+                html += `
+                    <div class="tarjeta-crisis" style="border-left: 4px solid ${colorHex};">
+                        <a href="${datos.url}" target="_blank">
+                            <div class="fecha" style="color: ${colorHex};">${datos.fecha}</div>
+                            <div class="titular">${datos.titular}</div>
+                            <div class="fuente">FUENTE: ${datos.fuente}</div>
+                        </a>
+                    </div>
+                `;
+            }
+            panelInfo.innerHTML = html;
+        }
+
+        fetch('datos.json')
+            .then(response => response.json())
+            .then(data => {
+                contCrisis.innerText = data.crisis ? data.crisis.length : 0;
+                contTensiones.innerText = data.relaciones ? data.relaciones.length : 0;
+
+                // A. PINTAR CRISIS
+                if (data.crisis) {
+                    data.crisis.forEach(crisis => {
+                        try {
+                            let nivel = (crisis.nivel_actual || 'rojo').toLowerCase();
+                            const customIcon = L.divIcon({
+                                className: 'contenedor-icono', 
+                                html: `<div class="marcador-latiente marcador-${nivel}"></div>`,
+                                iconSize: [16, 16],
+                                iconAnchor: [8, 8]
+                            });
+
+                            const marker = L.marker([crisis.lat, crisis.lng], {icon: customIcon}).addTo(map);
+                            marker.bindTooltip(crisis.titulo_principal);
+                            marker.on('click', () => cargarEnPanel(crisis, 'crisis'));
+                        } catch (e) { console.error("Error pintando crisis:", e, crisis); }
+                    });
+                }
+
+                // B. PINTAR RELACIONES
+                if (data.relaciones) {
+                    data.relaciones.forEach(rel => {
+                        try {
+                            const latlngs = [
+                                [rel.origen.lat, rel.origen.lng],
+                                [rel.destino.lat, rel.destino.lng]
+                            ];
+                            let nivel = (rel.nivel || 'rojo').toLowerCase();
+                            const colorLinea = coloresMap[nivel] || '#ffffff';
+
+                            // 1. Dibujar el "cable" (Línea)
+                            const polyline = L.polyline(latlngs, {
+                                color: colorLinea,
+                                weight: 2,
+                                opacity: 0.6,
+                                dashArray: '5, 10'
+                            }).addTo(map);
+                            polyline.bindTooltip(`${rel.origen.nombre} ⚡ ${rel.destino.nombre}`);
+                            polyline.on('click', () => cargarEnPanel(rel, 'relacion'));
+
+                            // 2. Dibujar NODO DE ORIGEN
+                            const nodoOrigen = L.circleMarker([rel.origen.lat, rel.origen.lng], {
+                                radius: 4,
+                                color: colorLinea,
+                                fillColor: colorLinea,
+                                fillOpacity: 1,
+                                weight: 2
+                            }).addTo(map);
+                            nodoOrigen.bindTooltip(rel.origen.nombre);
+                            nodoOrigen.on('click', () => cargarEnPanel(rel, 'relacion'));
+
+                            // 3. Dibujar NODO DE DESTINO
+                            const nodoDestino = L.circleMarker([rel.destino.lat, rel.destino.lng], {
+                                radius: 4,
+                                color: colorLinea,
+                                fillColor: colorLinea,
+                                fillOpacity: 1,
+                                weight: 2
+                            }).addTo(map);
+                            nodoDestino.bindTooltip(rel.destino.nombre);
+                            nodoDestino.on('click', () => cargarEnPanel(rel, 'relacion'));
+
+                        } catch (e) { console.error("Error pintando relacion:", e, rel); }
+                    });
+                }
             })
-            .catch(err => console.error("Error cargando datos:", err));
+            .catch(error => console.error('Error Crítico: No se pudo cargar datos.json', error));
     </script>
 </body>
 </html>
