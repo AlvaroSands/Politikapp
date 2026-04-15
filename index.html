@@ -57,6 +57,35 @@
 
         .leaflet-tooltip { background: rgba(15, 23, 42, 0.9); border: 1px solid #38bdf8; color: #fff; border-radius: 4px; font-family: 'Share Tech Mono', monospace; }
         .leaflet-tooltip-top:before { border-top-color: #38bdf8; }
+        /* =========================================
+           MODO MÓVIL (AGENTE DE CAMPO)
+           ========================================= */
+        @media (max-width: 768px) {
+            /* 1. Comprimir la barra superior */
+            .top-bar { top: 10px; left: 10px; right: 10px; height: auto; flex-direction: column; padding: 10px; gap: 5px; border-radius: 8px; }
+            .titulo { font-size: 1.1rem; text-align: center; }
+            .stats { font-size: 0.85rem; gap: 15px; }
+
+            /* 2. Convertir el panel lateral en una bandeja inferior */
+            .sidebar { 
+                top: auto; 
+                bottom: 0; 
+                left: 0; 
+                right: 0; 
+                width: 100%; 
+                height: 40%; /* Ocupa el 40% inferior de la pantalla */
+                border-radius: 20px 20px 0 0; /* Bordes redondeados solo arriba */
+                padding: 15px; 
+                box-sizing: border-box;
+                border-left: none;
+                border-right: none;
+                border-bottom: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+
+            /* 3. Subir los botones de Zoom del mapa para que no queden tapados */
+            .leaflet-control-container .leaflet-bottom { bottom: 42%; }
+        }
     </style>
 </head>
 <body>
