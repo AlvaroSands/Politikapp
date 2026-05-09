@@ -321,17 +321,16 @@ def ejecutar_actualizacion():
                 nuevas += 1
             else:
                 # Intentar asignar a crisis existente
-                id_crisis = clasificar_crisis(titulo)
-                nueva_act = {"fecha": hoy, "titular": titulo, "fuente": nombre_fuente, "url": enlace}
+                crisis_id = clasificar_crisis(titulo)
 
-                if id_crisis:
+                if crisis_id:
                     nueva_tl = {"when": hoy, "what": titulo, "source": nombre_fuente, "url": enlace}
                     for c in db["crisis"]:
-                        if id_crisis(c) == id_crisis:
+                        if id_crisis(c) == crisis_id:
                             timeline = c.setdefault("timeline", c.pop("actualizaciones", []))
                             timeline.insert(0, nueva_tl)
                             c["timeline"] = timeline[:20]
-                            print(f"     📎 Actualiza crisis: {id_crisis}")
+                            print(f"     📎 Actualiza crisis: {crisis_id}")
                             nuevas += 1
                             break
                 # Si no encaja en ninguna crisis conocida, ignorar (evita ruido)
