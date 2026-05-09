@@ -1,148 +1,216 @@
+"""
+Actualizador geopolítico sin dependencias de IA externa.
+Clasificación por palabras clave + coordenadas de países conocidos.
+Ejecutar manualmente o programar con cron.
+"""
 import feedparser
-import google.generativeai as genai
 import json
 import os
+import re
 import time
-from dotenv import load_dotenv
+from datetime import date
 
-# --- CONFIGURACIÓN ---
-load_dotenv()
-CLAVE_API = os.getenv("GEMINI_API_KEY")
-genai.configure(api_key=CLAVE_API)
-modelo_ia = genai.GenerativeModel('gemini-2.5-flash')
 ARCHIVO_DATOS = "datos.json"
 
-Fuentes_RSS = [
-    "https://feeds.bbci.co.uk/news/world/rss.xml",                  
-    "https://www.aljazeera.com/xml/rss/all.xml",                    
-    "https://www.france24.com/es/rss",                              
-    "https://elpais.com/rss/internacional/el-pais.xml"            
+FUENTES_RSS = [
+    "https://feeds.bbci.co.uk/news/world/rss.xml",
+    "https://www.aljazeera.com/xml/rss/all.xml",
+    "https://www.france24.com/es/rss",
+    "https://elpais.com/rss/internacional/el-pais.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
 ]
 
-def cargar_base_datos():
+# Coordenadas de países frecuentes
+PAISES = {
+    "ukraine": {"nombre": "Ucrania",  "lat": 48.38, "lng": 31.17},
+    "russia":  {"nombre": "Rusia",    "lat": 55.76, "lng": 37.62},
+    "rusia":   {"nombre": "Rusia",    "lat": 55.76, "lng": 37.62},
+    "ucrania": {"nombre": "Ucrania",  "lat": 48.38, "lng": 31.17},
+    "iran":    {"nombre": "Irán",     "lat": 35.69, "lng": 51.39},
+    "irán":    {"nombre": "Irán",     "lat": 35.69, "lng": 51.39},
+    "israel":  {"nombre": "Israel",   "lat": 31.77, "lng": 35.21},
+    "gaza":    {"nombre": "Gaza",     "lat": 31.50, "lng": 34.47},
+    "china":   {"nombre": "China",    "lat": 39.90, "lng": 116.41},
+    "taiwan":  {"nombre": "Taiwán",   "lat": 23.70, "lng": 120.96},
+    "taiwán":  {"nombre": "Taiwán",   "lat": 23.70, "lng": 120.96},
+    "usa":     {"nombre": "EE.UU.",   "lat": 38.90, "lng": -77.04},
+    "us ":     {"nombre": "EE.UU.",   "lat": 38.90, "lng": -77.04},
+    "trump":   {"nombre": "EE.UU.",   "lat": 38.90, "lng": -77.04},
+    "america": {"nombre": "EE.UU.",   "lat": 38.90, "lng": -77.04},
+    "eeuu":    {"nombre": "EE.UU.",   "lat": 38.90, "lng": -77.04},
+    "north korea": {"nombre": "Corea del Norte", "lat": 39.04, "lng": 125.76},
+    "corea":   {"nombre": "Corea del Norte", "lat": 39.04, "lng": 125.76},
+    "sudan":   {"nombre": "Sudán",    "lat": 15.55, "lng": 32.53},
+    "sudán":   {"nombre": "Sudán",    "lat": 15.55, "lng": 32.53},
+    "mali":    {"nombre": "Mali",     "lat": 17.57,  "lng": -3.99},
+    "mali":    {"nombre": "Mali",     "lat": 17.57,  "lng": -3.99},
+    "niger":   {"nombre": "Níger",    "lat": 17.61,  "lng": 8.08},
+    "india":   {"nombre": "India",    "lat": 20.59,  "lng": 78.96},
+    "pakistan":{"nombre": "Pakistán", "lat": 30.38,  "lng": 69.35},
+    "venezuela":{"nombre":"Venezuela","lat": 10.48,  "lng": -66.90},
+    "haiti":   {"nombre": "Haití",    "lat": 18.54,  "lng": -72.34},
+    "ecuador": {"nombre": "Ecuador",  "lat": -2.20,  "lng": -79.89},
+    "hungary": {"nombre": "Hungría",  "lat": 47.50,  "lng": 19.04},
+    "hungría": {"nombre": "Hungría",  "lat": 47.50,  "lng": 19.04},
+}
+
+# Patrones de relaciones bilaterales (pares de países en un titular)
+PATRON_BILATERAL = re.compile(
+    r'\b(ukraine|russia|iran|israel|china|taiwan|usa|north korea|india|pakistan|sudan|venezuela|eeuu|ucrania|rusia|irán|taiwán|sudán)\b',
+    re.IGNORECASE
+)
+
+# Mapa de crisis a keywords para detectar a qué crisis existente pertenece una noticia
+CRISIS_KEYWORDS = {
+    "ucrania-este-2026":       ["ukraine", "ucrania", "russia", "rusia", "zelenski", "zelenskyy", "kiev", "kyiv", "kharkiv", "bakhmut", "donbas"],
+    "iran-ormuz-2026":         ["iran", "irán", "ormuz", "hormuz", "hormuz", "strait", "persian gulf"],
+    "oriente-medio-gaza":      ["gaza", "hamas", "west bank", "rafah", "cisjordania", "netanyahu", "idf"],
+    "sudan-guerra-civil-2026": ["sudan", "sudán", "rsf", "jartum", "khartoum", "darfur"],
+    "sahel-mali-yihadistas-2026": ["mali", "sahel", "jnim", "burkina", "niger", "niamey", "bamako", "aes"],
+    "india-pakistan-sindoor-2026": ["india", "pakistan", "sindoor", "kashmir", "cachemira", "indus"],
+    "corea-norte-misiles-2026": ["north korea", "corea", "pyongyang", "kim jong", "missile", "misil"],
+    "tension-estrecho-taiwan":  ["taiwan", "taiwán", "strait", "estrecho", "pla"],
+    "violencia-haiti":          ["haiti", "haití", "gang", "banda"],
+    "conflicto-ecuador":        ["ecuador", "noboa", "crimen organizado"],
+    "conflicto-mar-rojo-huties":["houthi", "huti", "hutí", "red sea", "mar rojo", "yemen"],
+    "crisis-energetica-europa": ["energy", "energía", "gas", "oil", "petróleo", "europa", "europe"],
+}
+
+# Palabras que indican tensión entre dos actores (para detectar relación bilateral)
+KEYWORDS_BILATERAL = [
+    "sanctions", "sanciones", "tariffs", "aranceles", "expel", "expulsa",
+    "ambassador", "embajador", "threatens", "amenaza", "deploys", "despliega",
+    "ceasefire", "alto el fuego", "agreement", "acuerdo", "tensions", "tensiones",
+    "clash", "choque", "confrontation", "confrontación", "negotiations", "negociaciones"
+]
+
+# Niveles de alerta por keywords
+KEYWORDS_ROJO    = ["war", "guerra", "attack", "ataque", "killed", "muertos", "strike", "ceasefire violation", "bombing", "bombardeo"]
+KEYWORDS_NARANJA = ["tension", "tensión", "deploy", "threat", "amenaza", "sanctions", "sanciones", "military", "naval"]
+KEYWORDS_AMARILLO= ["talks", "negotiations", "agreement", "diplomat", "summit", "cumbre", "trade", "comercio"]
+
+
+def cargar_db():
     if os.path.exists(ARCHIVO_DATOS):
         with open(ARCHIVO_DATOS, "r", encoding="utf-8") as f:
             try:
                 datos = json.load(f)
-                # Asegurar la nueva estructura si el archivo es antiguo
-                if isinstance(datos, list): 
+                if isinstance(datos, list):
                     return {"crisis": datos, "relaciones": []}
                 return datos
             except json.JSONDecodeError:
                 pass
     return {"crisis": [], "relaciones": []}
 
-def guardar_base_datos(datos):
+
+def guardar_db(datos):
     with open(ARCHIVO_DATOS, "w", encoding="utf-8") as f:
         json.dump(datos, f, ensure_ascii=False, indent=2)
 
-def analizar_con_ia_avanzada(titulo_noticia, db_actual):
-    contexto = ", ".join([f"ID: '{c['id_crisis']}'" for c in db_actual["crisis"]])
-    
-    prompt = f"""
-    Analiza esta noticia geopolítica: "{titulo_noticia}"
-    
-    Determina si describe una "Tensión Bilateral" directa entre dos países específicos (ej. sanciones mutuas, retirada de embajadores, amenazas directas de un país a otro).
-    
-    Responde ÚNICAMENTE en JSON puro con esta estructura:
-    {{
-        "es_relacion_bilateral": true/false,
-        
-        "datos_relacion": {{
-            "origen": {{"nombre": "País A", "lat": 0.0, "lng": 0.0}},
-            "destino": {{"nombre": "País B", "lat": 0.0, "lng": 0.0}},
-            "tipo": "diplomatica/comercial/militar",
-            "nivel": "rojo/naranja/amarillo",
-            "titular_traducido": "Traducción de la noticia"
-        }},
-        
-        "datos_crisis": {{
-            "es_nueva_crisis": true/false,
-            "id_crisis": "id-existente-o-nuevo",
-            "titulo_principal": "Título si es nueva",
-            "nivel_actual": "rojo/naranja/amarillo",
-            "lat": 0.0, "lng": 0.0,
-            "titular_traducido": "Traducción de la noticia"
-        }}
-    }}
-    Nota: Si es_relacion_bilateral es true, ignora datos_crisis. Si es false, ignora datos_relacion y revisa si pertenece a alguna de estas crisis actuales: [{contexto}].
-    """
-    try:
-        respuesta = modelo_ia.generate_content(prompt)
-        texto = respuesta.text.replace("```json", "").replace("```", "").strip()
-        return json.loads(texto)
-    except Exception as e:
-        print(f"  ❌ Error IA: {e}")
-        return None
+
+def inferir_nivel(texto):
+    t = texto.lower()
+    if any(k in t for k in KEYWORDS_ROJO):
+        return "rojo"
+    if any(k in t for k in KEYWORDS_NARANJA):
+        return "naranja"
+    return "amarillo"
+
+
+def detectar_paises_en_texto(texto):
+    t = texto.lower()
+    encontrados = []
+    for clave, datos in PAISES.items():
+        if clave in t and datos not in encontrados:
+            encontrados.append(datos)
+    return encontrados
+
+
+def es_bilateral(titulo):
+    paises_encontrados = detectar_paises_en_texto(titulo)
+    tiene_keyword = any(k in titulo.lower() for k in KEYWORDS_BILATERAL)
+    return len(paises_encontrados) >= 2 and tiene_keyword, paises_encontrados
+
+
+def clasificar_crisis(titulo):
+    t = titulo.lower()
+    for id_crisis, keywords in CRISIS_KEYWORDS.items():
+        if any(k in t for k in keywords):
+            return id_crisis
+    return None
+
 
 def ejecutar_actualizacion():
-    print("🚀 Iniciando Motor Analítico V2 (Puntos y Relaciones)...")
-    db = cargar_base_datos()
-    
-    # Extraer URLs guardadas para no repetir
-    urls_guardadas = [act.get("url") for c in db["crisis"] for act in c.get("actualizaciones", [])]
-    urls_guardadas += [r.get("url") for r in db["relaciones"]]
-            
+    print("🚀 Iniciando Actualizador Geopolítico (sin IA externa)...")
+    db = cargar_db()
+
+    urls_vistas = set()
+    urls_vistas.update(act.get("url", "") for c in db["crisis"] for act in c.get("actualizaciones", []))
+    urls_vistas.update(r.get("url", "") for r in db["relaciones"])
+
     nuevas = 0
+    hoy = date.today().isoformat()
 
-    for url in Fuentes_RSS:
-        print(f"\n📡 Escaneando: {url}")
-        feed = feedparser.parse(url)
-        
-        for entrada in feed.entries[:3]:
-            enlace = entrada.link
-            if enlace in urls_guardadas: continue
-                
-            print(f"  🧠 Analizando: {entrada.title[:40]}...")
-            analisis = analizar_con_ia_avanzada(entrada.title, db)
-            
-            if not analisis: continue
+    for rss_url in FUENTES_RSS:
+        print(f"\n📡 Escaneando: {rss_url}")
+        try:
+            feed = feedparser.parse(rss_url)
+        except Exception as e:
+            print(f"  ⚠️  Error al leer feed: {e}")
+            continue
 
-            fuente = feed.feed.title if hasattr(feed.feed, 'title') else "Internacional"
-            fecha_hoy = time.strftime('%Y-%m-%d')
+        nombre_fuente = getattr(feed.feed, "title", "Internacional")
 
-            if analisis.get("es_relacion_bilateral"):
-                print("     ⚡ ¡NUEVA LÍNEA DE TENSIÓN DETECTADA!")
-                rel = analisis["datos_relacion"]
+        for entrada in feed.entries[:5]:
+            enlace = getattr(entrada, "link", "")
+            titulo = getattr(entrada, "title", "")
+
+            if not titulo or enlace in urls_vistas:
+                continue
+
+            print(f"  ✎ Analizando: {titulo[:55]}...")
+            nivel = inferir_nivel(titulo)
+
+            # ¿Es una relación bilateral?
+            bilateral, paises = es_bilateral(titulo)
+            if bilateral and len(paises) >= 2:
+                origen, destino = paises[0], paises[1]
                 db["relaciones"].append({
-                    "id_relacion": f"rel-{int(time.time())}",
-                    "origen": rel["origen"],
-                    "destino": rel["destino"],
-                    "tipo": rel["tipo"],
-                    "nivel": rel["nivel"],
-                    "fecha": fecha_hoy,
-                    "titular": rel["titular_traducido"],
-                    "fuente": fuente,
+                    "id_relacion": f"rel-auto-{int(time.time())}",
+                    "origen":  {"nombre": origen["nombre"], "lat": origen["lat"], "lng": origen["lng"]},
+                    "destino": {"nombre": destino["nombre"], "lat": destino["lat"], "lng": destino["lng"]},
+                    "tipo": "diplomática",
+                    "nivel": nivel,
+                    "fecha": hoy,
+                    "titular": titulo,
+                    "fuente": nombre_fuente,
                     "url": enlace
                 })
+                print(f"     ⚡ Relación: {origen['nombre']} ↔ {destino['nombre']} [{nivel}]")
                 nuevas += 1
             else:
-                cri = analisis["datos_crisis"]
-                nueva_act = {"fecha": fecha_hoy, "titular": cri["titular_traducido"], "fuente": fuente, "url": enlace}
-                
-                if cri["es_nueva_crisis"]:
-                    print(f"     🔥 Nueva crisis puntual: {cri['titulo_principal']}")
-                    db["crisis"].append({
-                        "id_crisis": cri["id_crisis"], "titulo_principal": cri["titulo_principal"],
-                        "lat": cri["lat"], "lng": cri["lng"], "nivel_actual": cri["nivel_actual"],
-                        "actualizaciones": [nueva_act]
-                    })
-                else:
-                    print(f"     📎 Actualizando crisis: {cri['id_crisis']}")
+                # Intentar asignar a crisis existente
+                id_crisis = clasificar_crisis(titulo)
+                nueva_act = {"fecha": hoy, "titular": titulo, "fuente": nombre_fuente, "url": enlace}
+
+                if id_crisis:
                     for c in db["crisis"]:
-                        if c["id_crisis"] == cri["id_crisis"]:
+                        if c["id_crisis"] == id_crisis:
                             c["actualizaciones"].insert(0, nueva_act)
+                            print(f"     📎 Actualiza crisis: {id_crisis}")
+                            nuevas += 1
                             break
-                nuevas += 1
-                
-            urls_guardadas.append(enlace)
-            time.sleep(2)
+                # Si no encaja en ninguna crisis conocida, ignorar (evita ruido)
+
+            urls_vistas.add(enlace)
+            time.sleep(0.5)
 
     if nuevas > 0:
-        guardar_base_datos(db)
-        print(f"🎉 Éxito: {nuevas} nuevos eventos/relaciones añadidos.")
+        guardar_db(db)
+        print(f"\n🎉 {nuevas} nuevos eventos añadidos a datos.json")
     else:
-        print("🤷‍♂️ Sin novedades.")
+        print("\n🤷  Sin novedades en los feeds.")
+
 
 if __name__ == "__main__":
     ejecutar_actualizacion()

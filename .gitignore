@@ -1,3 +1,16 @@
-.env
+# Entorno virtual
 entorno_mapa/
+
+# Variables de entorno (credenciales)
+.env
+
+# Python
 __pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# Importador (script local)
+importador_masivo.py
