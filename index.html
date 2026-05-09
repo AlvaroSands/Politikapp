@@ -694,7 +694,6 @@ const REGIONS = {
 const ST = {
   data: null,
   historial: {},
-  markers: [],
   popup: null,
   filters: { armed:true, diplo:true, econ:true, cyber:true, intel:true },
   sevMin: 1,
@@ -742,8 +741,9 @@ map.on('load', () => {
     } catch(e) {}
   }
 
-  map.addSource('arcs', { type:'geojson', data:emptyFC() });
-  map.addSource('heat', { type:'geojson', data:emptyFC() });
+  map.addSource('arcs',      { type:'geojson', data:emptyFC() });
+  map.addSource('heat',      { type:'geojson', data:emptyFC() });
+  map.addSource('crisis-pts',{ type:'geojson', data:emptyFC() });
 
   map.addLayer({ id:'heatmap', type:'heatmap', source:'heat', maxzoom:7, paint:{
     'heatmap-weight':1,
@@ -784,15 +784,64 @@ map.on('load', () => {
     });
   }
 
+  const crisisColor = ['match',['get','type'],
+    'armed','#e05050','diplo','#4aa3d9','econ','#d9a441','cyber','#4ad9a4','intel','#a44ad9','#64748b'];
+
+  // Anillo pulsante (animado desde animArcs)
+  map.addLayer({ id:'crisis-rings', type:'circle', source:'crisis-pts', paint:{
+    'circle-radius': 8,
+    'circle-color': 'transparent',
+    'circle-stroke-width': 1.5,
+    'circle-stroke-color': crisisColor,
+    'circle-stroke-opacity': 0
+  }});
+
+  // Punto base
+  map.addLayer({ id:'crisis-dots', type:'circle', source:'crisis-pts', paint:{
+    'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 4,5, 8,7],
+    'circle-color': crisisColor,
+    'circle-stroke-width': 1.5,
+    'circle-stroke-color': 'rgba(255,255,255,0.35)'
+  }});
+
+  // Punto seleccionado (encima)
+  map.addLayer({ id:'crisis-sel', type:'circle', source:'crisis-pts',
+    filter:['==',['get','id'],'__none__'],
+    paint:{
+      'circle-radius': ['interpolate',['linear'],['zoom'], 1,7, 4,9, 8,12],
+      'circle-color': crisisColor,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': 'white'
+    }
+  });
+
+  // Área de click ampliada (invisible)
+  map.addLayer({ id:'crisis-hit', type:'circle', source:'crisis-pts',
+    paint:{'circle-radius':18,'circle-opacity':0,'circle-stroke-opacity':0}
+  });
+
+  map.on('click','crisis-hit', e => {
+    if (!e.features.length) return;
+    const id = e.features[0].properties.id;
+    const c = (ST.data?.crisis||[]).find(x => x.id === id);
+    if (c) selectEvent(c);
+  });
+  map.on('mouseenter','crisis-hit', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave','crisis-hit', () => { if (!map.queryRenderedFeatures(undefined,{layers:['arcs-hit']}).length) map.getCanvas().style.cursor = ''; });
+
   animArcs();
   loadData();
   setInterval(loadData, 60000);
-  if (!_mob) map.on('move', updateGlobeMarkers);
 });
 
 function animArcs() {
   ST.arcOff -= 0.3;
   try { map.setPaintProperty('arcs-flow','line-dash-offset',ST.arcOff); } catch(e) {}
+  const t = (Date.now() % 2600) / 2600;
+  try {
+    map.setPaintProperty('crisis-rings','circle-radius', 5 + t * 20);
+    map.setPaintProperty('crisis-rings','circle-stroke-opacity', Math.max(0, 0.75*(1-t)));
+  } catch(e) {}
   requestAnimationFrame(animArcs);
 }
 function arcColorExpr() {
@@ -851,40 +900,17 @@ function renderAll() {
   renderTimeline();
 }
 
-/* ── MARKERS ─────────────────────────────────────────────────── */
+/* ── MARKERS (WebGL circle layers — sincronizados con el globo) ── */
 function renderMarkers() {
-  ST.markers.forEach(m => m.remove());
-  ST.markers = [];
-  visibleCrisis().forEach(c => {
-    const el = document.createElement('div');
-    el.className = 'mk-wrap';
-    el.dataset.type = c.type;
-    el.dataset.id = c.id;
-    if (ST.selected && ST.selected.id === c.id) el.classList.add('selected');
-    el.innerHTML = `<div class="mk-rings"><div class="mk-ring"></div><div class="mk-ring"></div><div class="mk-ring"></div></div><div class="mk-core"></div>`;
-    el.addEventListener('click', () => selectEvent(c));
-    const mk = new maplibregl.Marker({ element:el, anchor:'center' })
-      .setLngLat([c.lng, c.lat])
-      .addTo(map);
-    ST.markers.push(mk);
-  });
-  updateGlobeMarkers();
-}
-
-function updateGlobeMarkers() {
-  if (_mob) return;
-  const ctr = map.getCenter();
-  const lat1 = ctr.lat * Math.PI / 180;
-  const lng1 = ctr.lng;
-  ST.markers.forEach(mk => {
-    const ll = mk.getLngLat();
-    const lat2 = ll.lat * Math.PI / 180;
-    const dLng = (ll.lng - lng1) * Math.PI / 180;
-    // dot > 0.17 → ocultar más allá de ~80° del centro para evitar
-    // marcadores distorsionados en el horizonte del globo
-    const dot = Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(dLng);
-    mk.getElement().style.display = dot > 0.17 ? '' : 'none';
-  });
+  const features = visibleCrisis().map(c => ({
+    type:'Feature',
+    geometry:{ type:'Point', coordinates:[c.lng, c.lat] },
+    properties:{ id:c.id, type:c.type, severity:c.severity }
+  }));
+  try { map.getSource('crisis-pts').setData({type:'FeatureCollection',features}); } catch(e) {}
+  // Actualizar capa de selección
+  const selId = ST.selected ? ST.selected.id : '__none__';
+  try { map.setFilter('crisis-sel',['==',['get','id'], selId]); } catch(e) {}
 }
 
 /* ── ARCS ────────────────────────────────────────────────────── */
@@ -958,7 +984,7 @@ function selectEvent(c) {
   ST.selected = c;
   renderFeed();
   renderDetail(c);
-  renderMarkers();
+  try { map.setFilter('crisis-sel',['==',['get','id'], c.id]); } catch(e) {}
   if (isMobile()) {
     mobRenderFeed();
     mobRenderDetail(c);
@@ -1171,7 +1197,7 @@ function mobUpdateCounts() {
 
 function mobSelectEvent(c) {
   ST.selected = c;
-  renderMarkers();
+  try { map.setFilter('crisis-sel',['==',['get','id'], c.id]); } catch(e) {}
   mobRenderFeed();
   mobRenderDetail(c);
   mobSwitchSheetTab('detail');
