@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from datetime import datetime
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -16,9 +17,12 @@ scheduler = BackgroundScheduler()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    scheduler.add_job(ejecutar_actualizacion, "interval", hours=3, id="actualizador")
+    scheduler.add_job(
+        ejecutar_actualizacion, "interval", hours=3, id="actualizador",
+        next_run_time=datetime.now()
+    )
     scheduler.start()
-    logger.info("Scheduler iniciado — actualizador RSS cada 3 horas")
+    logger.info("Scheduler iniciado — actualizador RSS ahora y cada 3 horas")
     yield
     scheduler.shutdown()
 

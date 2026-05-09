@@ -734,6 +734,7 @@ async function loadData() {
     const data = await r.json();
     ST.data = data;
     renderAll();
+    mobRenderAll();
     document.getElementById('last-sync').textContent = new Date().toLocaleTimeString('es-ES');
     document.getElementById('ses-id').textContent = 'GEO-' + new Date().getFullYear() + '-' + String(new Date().getMonth()+1).padStart(2,'0');
   } catch(e) { console.error('Error cargando datos:', e); }
@@ -845,7 +846,15 @@ function selectEvent(c) {
   renderFeed();
   renderDetail(c);
   renderMarkers();
-  switchTab('detail');
+  if (isMobile()) {
+    mobRenderFeed();
+    mobRenderDetail(c);
+    mobSwitchSheetTab('detail');
+    openSheet();
+    setMobNavActive('mob-btn-detail');
+  } else {
+    switchTab('detail');
+  }
   map.flyTo({ center:[c.lng,c.lat], zoom:Math.max(map.getZoom(),3.5), duration:700 });
 }
 
@@ -1161,13 +1170,6 @@ document.querySelectorAll('#mob-drawer .region-btn').forEach(b => {
     closeDrawer();
   });
 });
-
-/* Hook into renderAll to also update mobile panels */
-const _origLoadData = loadData;
-async function loadData() {
-  await _origLoadData();
-  mobRenderAll();
-}
 
 /* Resize handler: re-init map size */
 window.addEventListener('resize', () => map.resize());
