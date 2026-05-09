@@ -834,7 +834,10 @@ async function loadData() {
 
 function visibleCrisis() {
   if (!ST.data) return [];
-  return (ST.data.crisis||[]).filter(c => ST.filters[c.type] && c.severity >= ST.sevMin);
+  return (ST.data.crisis||[]).filter(c =>
+    ST.filters[c.type] && c.severity >= ST.sevMin &&
+    c.lat != null && c.lng != null && !(c.lat === 20 && c.lng === 0)
+  );
 }
 
 function renderAll() {

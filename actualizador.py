@@ -482,6 +482,9 @@ def registrar_candidato(titulo, fuente, url, pendientes, ids_existentes):
             return None
 
     paises = detectar_paises_en_texto(titulo)
+    if not paises:
+        return None  # sin país reconocido no puede ser crisis geopolítica
+
     id_tent = slugify(titulo)
 
     # Evitar duplicados con crisis ya existentes
@@ -508,13 +511,14 @@ def promover_candidato(cand, db):
     tipo    = cand["tipo"]
     paises  = cand["paises"]
 
-    if paises:
-        lat      = paises[0]["lat"]
-        lng      = paises[0]["lng"]
-        location = paises[0]["nombre"]
-        actors   = list({p["nombre"] for p in paises[:3]})
-    else:
-        lat, lng, location, actors = 20.0, 0.0, "Global", []
+    if not paises:
+        print(f"  ⏭️  Candidato sin país reconocido, omitido: {titulo[:60]}")
+        return None
+
+    lat      = paises[0]["lat"]
+    lng      = paises[0]["lng"]
+    location = paises[0]["nombre"]
+    actors   = list({p["nombre"] for p in paises[:3]})
 
     severidad = inferir_severidad(titulo, cand["menciones"])
     n_fuentes = len(cand["fuentes"])
