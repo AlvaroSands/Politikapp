@@ -872,16 +872,18 @@ function renderMarkers() {
 }
 
 function updateGlobeMarkers() {
-  if (_mob) return; // mercator siempre correcto
+  if (_mob) return;
   const ctr = map.getCenter();
-  const φ1 = ctr.lat * Math.PI / 180;
-  const λ1 = ctr.lng;
+  const lat1 = ctr.lat * Math.PI / 180;
+  const lng1 = ctr.lng;
   ST.markers.forEach(mk => {
     const ll = mk.getLngLat();
-    const φ2 = ll.lat * Math.PI / 180;
-    const Δλ = (ll.lng - λ1) * Math.PI / 180;
-    const dot = Math.sin(φ1) * Math.sin(φ2) + Math.cos(φ1) * Math.cos(φ2) * Math.cos(Δλ);
-    mk.getElement().style.display = dot > 0 ? '' : 'none';
+    const lat2 = ll.lat * Math.PI / 180;
+    const dLng = (ll.lng - lng1) * Math.PI / 180;
+    // dot > 0.17 → ocultar más allá de ~80° del centro para evitar
+    // marcadores distorsionados en el horizonte del globo
+    const dot = Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(dLng);
+    mk.getElement().style.display = dot > 0.17 ? '' : 'none';
   });
 }
 
