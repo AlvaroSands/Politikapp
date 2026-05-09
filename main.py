@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from datetime import datetime
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from actualizador import ejecutar_actualizacion
 import uvicorn
@@ -64,6 +64,38 @@ async def pagina_principal():
 async def pagina_analisis():
     with open("analisis.html", "r", encoding="utf-8") as f:
         return f.read()
+
+
+@app.get("/sitemap.xml")
+async def sitemap():
+    from datetime import date
+    hoy = date.today().isoformat()
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://geopolitikapp.com/</loc>
+    <lastmod>{hoy}</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://geopolitikapp.com/analisis</loc>
+    <lastmod>{hoy}</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>"""
+    return Response(content=xml, media_type="application/xml")
+
+
+@app.get("/robots.txt", response_class=PlainTextResponse)
+async def robots():
+    return """User-agent: *
+Allow: /
+Allow: /analisis
+
+Sitemap: https://geopolitikapp.com/sitemap.xml
+"""
 
 
 if __name__ == "__main__":
