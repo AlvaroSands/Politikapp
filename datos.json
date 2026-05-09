@@ -1,676 +1,294 @@
 {
   "crisis": [
     {
-      "id_crisis": "ucrania-este-2026",
-      "titulo_principal": "Guerra de Desgaste en Ucrania",
-      "lat": 48.14,
-      "lng": 37.75,
-      "nivel_actual": "rojo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-05-08",
-          "titular": "Trump anuncia alto el fuego de tres días (9-11 mayo) con intercambio de 1.000 prisioneros por bando",
-          "fuente": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/5/8/trump-announces-three-day-ceasefire-in-russia-ukraine-war"
-        },
-        {
-          "fecha": "2026-05-08",
-          "titular": "Ucrania habría frenado las ganancias territoriales rusas: Rusia perdió 116 km² netos en abril",
-          "fuente": "Al Jazeera / Institute for the Study of War",
-          "url": "https://www.aljazeera.com/news/2026/5/8/ukraine-may-have-turned-tide-of-russian-territorial-gains-says-think-tank"
-        },
-        {
-          "fecha": "2026-05-08",
-          "titular": "Rusia y Ucrania se intercambian fuego pese al alto el fuego del Día de la Victoria; más de 140 ataques nocturnos",
-          "fuente": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/5/8/russia-ukraine-trade-fire-despite-victory-day-ceasefire"
-        },
-        {
-          "fecha": "2026-05-06",
-          "titular": "Rusia insta a los diplomáticos a abandonar Kiev ante posibles bombardeos masivos",
-          "fuente": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/5/6/russia-tells-diplomats-to-leave-kyiv-in-case-moscow-launches-mass-strikes"
-        },
-        {
-          "fecha": "2026-05-05",
-          "titular": "Rusia mata a 27 personas en ataques sobre Ucrania; instalación de Naftogaz impactada",
-          "fuente": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/5/5/russian-attack-kills-five-at-ukraines-naftogaz-gas-facility"
-        },
-        {
-          "fecha": "2026-04-14",
-          "titular": "Rusia y Ucrania se acusan mutuamente de violar la tregua pascual casi 2.500 veces",
-          "fuente": "Público",
-          "url": "https://www.publico.es/internacional"
-        },
-        {
-          "fecha": "2026-03-25",
-          "titular": "Rusia intensifica los bombardeos sobre la infraestructura energética ucraniana",
-          "fuente": "Descifrando la Guerra",
-          "url": "#"
-        }
+      "id": "ucrania-este-2026",
+      "type": "armed",
+      "severity": 5,
+      "title": "Guerra de Desgaste en Ucrania",
+      "location": "Donbás · Ucrania oriental",
+      "lat": 48.14, "lng": 37.75,
+      "actors": ["Ucrania", "Rusia", "OTAN", "UE"],
+      "summary": "Frente activo de ~1.000 km con intercambios de artillería y drones diarios. Alto el fuego negociado por Trump de 3 días (9-11 mayo) con intercambio de 1.000 prisioneros. Rusia perdió 116 km² netos en abril según el ISW.",
+      "timeline": [
+        {"when": "2026-05-08", "what": "Trump anuncia alto el fuego de tres días (9-11 mayo) con intercambio de 1.000 prisioneros por bando", "source": "Al Jazeera", "url": "https://www.aljazeera.com/news/2026/5/8/trump-announces-three-day-ceasefire-in-russia-ukraine-war"},
+        {"when": "2026-05-08", "what": "Ucrania habría frenado las ganancias territoriales rusas: Rusia perdió 116 km² netos en abril", "source": "ISW / Al Jazeera", "url": "https://www.aljazeera.com/news/2026/5/8/ukraine-may-have-turned-tide-of-russian-territorial-gains-says-think-tank"},
+        {"when": "2026-05-08", "what": "Rusia y Ucrania intercambian fuego pese al alto el fuego del Día de la Victoria; más de 140 ataques nocturnos", "source": "Al Jazeera", "url": "https://www.aljazeera.com/news/2026/5/8/russia-ukraine-trade-fire-despite-victory-day-ceasefire"},
+        {"when": "2026-05-06", "what": "Rusia insta a los diplomáticos a abandonar Kiev ante posibles bombardeos masivos", "source": "Al Jazeera", "url": "https://www.aljazeera.com/news/2026/5/6/russia-tells-diplomats-to-leave-kyiv-in-case-moscow-launches-mass-strikes"}
       ]
     },
     {
-      "id_crisis": "iran-ormuz-2026",
-      "titulo_principal": "Guerra de Irán y Bloqueo del Estrecho de Ormuz",
-      "lat": 26.56,
-      "lng": 56.25,
-      "nivel_actual": "rojo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-05-08",
-          "titular": "Trump amenaza con bombardeos a 'nivel mucho más alto' si Irán no acepta la moratoria nuclear de 12-15 años",
-          "fuente": "CNBC / Washington Post",
-          "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"
-        },
-        {
-          "fecha": "2026-05-07",
-          "titular": "EEUU e Irán se intercambian fuego en el Estrecho de Ormuz; negociación de memorando de 14 puntos en curso",
-          "fuente": "CNBC",
-          "url": "https://www.cnbc.com/2026/05/07/iran-war-hormuz-strait-ceasefire-trump.html"
-        },
-        {
-          "fecha": "2026-05-06",
-          "titular": "Irán propone reabrir Ormuz antes de tratar el asunto nuclear en una segunda fase de negociaciones",
-          "fuente": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/5/6/has-the-us-accepted-irans-demand-to-settle-hormuz-first-nuclear-later"
-        },
-        {
-          "fecha": "2026-04-14",
-          "titular": "Dos petroleros sancionados atraviesan el estrecho de Ormuz pese al bloqueo militar de EE UU",
-          "fuente": "La Sexta",
-          "url": "https://www.lasexta.com/noticias/internacional/"
-        },
-        {
-          "fecha": "2026-04-13",
-          "titular": "Trump amenaza con 'eliminar' los buques iraníes que desafíen el bloqueo en Ormuz",
-          "fuente": "El País",
-          "url": "https://elpais.com/internacional/"
-        },
-        {
-          "fecha": "2026-03-27",
-          "titular": "Da igual si la guerra con Irán termina mañana: el destrozo a la industria del gas y el petróleo tardará años en repararse",
-          "fuente": "Xataka.com",
-          "url": "https://www.xataka.com/energia/firmar-paz-no-arreglara-estrecho-ormuz-destrozo-logistico-energetico-que-tardaremos-anos-pagar"
-        },
-        {
-          "fecha": "2026-03-17",
-          "titular": "El cierre de Ormuz está desangrando a Europa a 1.000 millones de euros diarios",
-          "fuente": "Xataka.com",
-          "url": "https://www.xataka.com/energia/europa-se-desangra-a-ritmo-1-000-millones-al-dia-crisis-ormuz-expone-nuestra-mayor-debilidad-estructural"
-        }
+      "id": "iran-ormuz-2026",
+      "type": "armed",
+      "severity": 5,
+      "title": "Guerra de Irán y Bloqueo del Estrecho de Ormuz",
+      "location": "Estrecho de Ormuz · Golfo Pérsico",
+      "lat": 26.56, "lng": 56.25,
+      "actors": ["Irán", "EE.UU.", "UE", "Arabia Saudí"],
+      "summary": "Intercambio de fuego entre EE.UU. e Irán en el estrecho. Negociación de moratoria nuclear de 12-15 años. El cierre de Ormuz cuesta a Europa ~1.000 millones € diarios en sobrecostes energéticos.",
+      "timeline": [
+        {"when": "2026-05-08", "what": "Trump amenaza con bombardeos a 'nivel mucho más alto' si Irán no acepta la moratoria nuclear de 12-15 años", "source": "CNBC", "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"},
+        {"when": "2026-05-07", "what": "EE.UU. e Irán intercambian fuego en el Estrecho; negociación de memorando de 14 puntos en curso", "source": "CNBC", "url": "https://www.cnbc.com/2026/05/07/iran-war-hormuz-strait-ceasefire-trump.html"},
+        {"when": "2026-05-06", "what": "Irán propone reabrir Ormuz antes de tratar el asunto nuclear en una segunda fase", "source": "Al Jazeera", "url": "https://www.aljazeera.com/news/2026/5/6/has-the-us-accepted-irans-demand-to-settle-hormuz-first-nuclear-later"},
+        {"when": "2026-04-14", "what": "Dos petroleros sancionados atraviesan el estrecho pese al bloqueo militar de EE.UU.", "source": "La Sexta", "url": "#"}
       ]
     },
     {
-      "id_crisis": "oriente-medio-gaza",
-      "titulo_principal": "Guerra en Gaza y Crisis Humanitaria",
-      "lat": 31.5,
-      "lng": 34.4666,
-      "nivel_actual": "rojo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-05-08",
-          "titular": "72.599 palestinos muertos desde el 7 de octubre de 2023; bloqueo total de ayuda por más de 11 semanas consecutivas",
-          "fuente": "OCHA / Al Jazeera",
-          "url": "https://www.unocha.org/publications/report/occupied-palestinian-territory/gaza-humanitarian-response-situation-report-no-66"
-        },
-        {
-          "fecha": "2026-04-13",
-          "titular": "Seis meses después del alto el fuego: el 90% de la población sigue desplazada, sin agua ni atención médica",
-          "fuente": "MSF / Palinfo",
-          "url": "https://www.msf.org/not-ceasefire-life-gaza-continues-be-suffocated-six-months"
-        },
-        {
-          "fecha": "2026-04-01",
-          "titular": "MSF: 'Esto no es un alto el fuego'; el bloqueo total de ayuda continúa sin respuesta internacional efectiva",
-          "fuente": "Médicos Sin Fronteras",
-          "url": "https://www.msf.org/not-ceasefire-life-gaza-continues-be-suffocated-six-months"
-        },
-        {
-          "fecha": "2026-03-15",
-          "titular": "Intercambio de fuego cruzado tras fracasar la última ronda de negociaciones en Egipto",
-          "fuente": "BBC World",
-          "url": "#"
-        }
+      "id": "oriente-medio-gaza",
+      "type": "armed",
+      "severity": 5,
+      "title": "Guerra en Gaza y Crisis Humanitaria",
+      "location": "Gaza · Levante mediterráneo",
+      "lat": 31.5, "lng": 34.4666,
+      "actors": ["Israel", "Hamás", "Palestina", "Egipto", "ONU"],
+      "summary": "72.599 palestinos muertos desde el 7 de octubre de 2023. Bloqueo total de ayuda humanitaria por más de 11 semanas consecutivas. 90% de la población desplazada sin agua ni atención médica.",
+      "timeline": [
+        {"when": "2026-05-08", "what": "72.599 palestinos muertos desde el 7-O; bloqueo total de ayuda por más de 11 semanas", "source": "OCHA / Al Jazeera", "url": "https://www.unocha.org/publications/report/occupied-palestinian-territory/gaza-humanitarian-response-situation-report-no-66"},
+        {"when": "2026-04-13", "what": "Seis meses después del alto el fuego: el 90% de la población sigue desplazada, sin agua ni atención médica", "source": "MSF", "url": "https://www.msf.org/not-ceasefire-life-gaza-continues-be-suffocated-six-months"},
+        {"when": "2026-04-01", "what": "MSF: 'Esto no es un alto el fuego'; el bloqueo total de ayuda continúa sin respuesta internacional efectiva", "source": "Médicos Sin Fronteras", "url": "https://www.msf.org/not-ceasefire-life-gaza-continues-be-suffocated-six-months"},
+        {"when": "2026-03-15", "what": "Intercambio de fuego cruzado tras fracasar la última ronda de negociaciones en Egipto", "source": "BBC World", "url": "#"}
       ]
     },
     {
-      "id_crisis": "sudan-guerra-civil-2026",
-      "titulo_principal": "Guerra Civil en Sudán: Ataques con Drones y Cuarto Año de Conflicto",
-      "lat": 15.5518,
-      "lng": 32.5324,
-      "nivel_actual": "rojo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-05-08",
-          "titular": "61,7% de la población sudanesa padece inseguridad alimentaria aguda; comandante de las RSF promete pelear 'hasta 2040'",
-          "fuente": "Al Jazeera",
-          "url": "https://www.aljazeera.com/features/2026/5/8/what-would-prolonged-war-mean-for-sudan"
-        },
-        {
-          "fecha": "2026-05-06",
-          "titular": "Sudán acusa a Emiratos Árabes Unidos y Etiopía de estar detrás de los ataques con drones contra el aeropuerto de Jartum",
-          "fuente": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/5/6/sudan-blames-ethiopia-uae-for-recent-drone-attacks-what-we-know"
-        },
-        {
-          "fecha": "2026-05-04",
-          "titular": "Drones atacan el aeropuerto internacional de Jartum y posiciones del SAF; el primer vuelo internacional había aterrizado días antes",
-          "fuente": "US News / Sudan Tribune",
-          "url": "https://www.usnews.com/news/world/articles/2026-05-04/drones-shatter-months-of-relative-calm-in-khartoum-hit-airport"
-        }
+      "id": "sudan-guerra-civil-2026",
+      "type": "armed",
+      "severity": 4,
+      "title": "Guerra Civil en Sudán: Cuarto Año de Conflicto",
+      "location": "Jartum · Darfur · Sudán",
+      "lat": 15.5518, "lng": 32.5324,
+      "actors": ["SAF (Ejército sudanés)", "RSF (Paramilitares)", "UAE", "Etiopía"],
+      "summary": "El 61,7% de la población padece inseguridad alimentaria aguda. Sudán acusa a Emiratos y Etiopía de suministrar drones atacando el aeropuerto de Jartum. El comandante de las RSF promete pelear 'hasta 2040'.",
+      "timeline": [
+        {"when": "2026-05-08", "what": "61,7% de la población sudanesa padece inseguridad alimentaria; RSF promete pelear hasta 2040", "source": "Al Jazeera", "url": "https://www.aljazeera.com/features/2026/5/8/what-would-prolonged-war-mean-for-sudan"},
+        {"when": "2026-05-06", "what": "Sudán acusa a Emiratos y Etiopía de estar detrás de los ataques con drones contra el aeropuerto de Jartum", "source": "Al Jazeera", "url": "https://www.aljazeera.com/news/2026/5/6/sudan-blames-ethiopia-uae-for-recent-drone-attacks-what-we-know"},
+        {"when": "2026-05-04", "what": "Drones atacan el aeropuerto de Jartum y posiciones del ejército; el primer vuelo internacional había aterrizado días antes", "source": "US News", "url": "https://www.usnews.com/news/world/articles/2026-05-04/drones-shatter-months-of-relative-calm-in-khartoum-hit-airport"}
       ]
     },
     {
-      "id_crisis": "sahel-mali-yihadistas-2026",
-      "titulo_principal": "Sahel: Yihadismo Armado y Desestabilización Regional",
-      "lat": 16.35,
-      "lng": -0.07,
-      "nivel_actual": "rojo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-05-01",
-          "titular": "La Alianza de Estados del Sahel (AES) confirma ataques aéreos conjuntos en Mali (Gao, Menaka, Kidal) tras ofensivas yihadistas",
-          "fuente": "Africanews",
-          "url": "https://www.africanews.com/2026/05/01/alliance-of-sahel-states-confirms-joint-airstrikes-in-mali/"
-        },
-        {
-          "fecha": "2026-04-30",
-          "titular": "El ministro de Defensa de Mali, Sadio Camara, muere en un ataque yihadista; funeral de Estado en Bamako",
-          "fuente": "Africanews / The Hill Times",
-          "url": "https://www.hilltimes.com/2026/05/07/the-heart-of-africas-sahel-lost-to-military-juntas-and-poverty/503303/"
-        },
-        {
-          "fecha": "2026-04-25",
-          "titular": "JNIM lanza ataques coordinados en Gao, Menaka y Kidal; ISSP ataca el aeropuerto internacional de Niamey por primera vez",
-          "fuente": "Critical Threats / ACLED",
-          "url": "https://www.criticalthreats.org/analysis/sudan-rsf-saf-ethiopia-tplf-drc-m23-rwanda-mali-jnim-fla-russia-madagascar-france-africa-file-may-7-2026"
-        },
-        {
-          "fecha": "2026-04-05",
-          "titular": "La junta militar de Níger rompe el último acuerdo de cooperación en seguridad con occidente",
-          "fuente": "France 24",
-          "url": "#"
-        }
+      "id": "sahel-mali-yihadistas-2026",
+      "type": "armed",
+      "severity": 4,
+      "title": "Sahel: Yihadismo y Desestabilización Regional",
+      "location": "Triple frontera · Sahel central",
+      "lat": 16.35, "lng": -0.07,
+      "actors": ["JNIM", "ISSP", "AES (Alianza del Sahel)", "Rusia (Wagner)"],
+      "summary": "El ministro de Defensa de Mali muerto en ataque yihadista. JNIM lanza ofensivas coordinadas en Gao, Menaka y Kidal. ISSP ataca por primera vez el aeropuerto internacional de Niamey.",
+      "timeline": [
+        {"when": "2026-05-01", "what": "AES confirma ataques aéreos conjuntos en Mali (Gao, Menaka, Kidal) tras ofensivas yihadistas", "source": "Africanews", "url": "https://www.africanews.com/2026/05/01/alliance-of-sahel-states-confirms-joint-airstrikes-in-mali/"},
+        {"when": "2026-04-30", "what": "El ministro de Defensa de Mali, Sadio Camara, muere en un ataque yihadista; funeral de Estado en Bamako", "source": "Africanews", "url": "#"},
+        {"when": "2026-04-25", "what": "JNIM ataca coordinadamente en Gao, Menaka y Kidal; ISSP golpea el aeropuerto de Niamey por primera vez", "source": "Critical Threats / ACLED", "url": "https://www.criticalthreats.org/analysis/sudan-rsf-saf-ethiopia-tplf-drc-m23-rwanda-mali-jnim-fla-russia-madagascar-france-africa-file-may-7-2026"}
       ]
     },
     {
-      "id_crisis": "india-pakistan-sindoor-2026",
-      "titulo_principal": "India-Pakistán: Aniversario Operación Sindoor y Tensión Hídrica",
-      "lat": 33.7,
-      "lng": 73.1,
-      "nivel_actual": "naranja",
-      "actualizaciones": [
-        {
-          "fecha": "2026-05-07",
-          "titular": "Aniversario de la Operación Sindoor: India mantiene suspendido el Tratado de las Aguas del Indo y lo califica de 'injusto'",
-          "fuente": "DD News / Dawn",
-          "url": "https://ddnews.gov.in/en/op-sindoor-anniversary-india-continues-indus-water-curbs-calls-treaty-unfair/"
-        },
-        {
-          "fecha": "2026-05-05",
-          "titular": "Un año después, el alto el fuego entre India y Pakistán se mantiene pero los motores del conflicto siguen intactos",
-          "fuente": "Washington Post",
-          "url": "https://www.washingtonpost.com/opinions/2026/05/05/year-later-india-pakistan-ceasefire-is-holding-so-far/"
-        }
+      "id": "conflicto-mar-rojo-huties",
+      "type": "armed",
+      "severity": 4,
+      "title": "Crisis Naval en el Mar Rojo: Hutíes",
+      "location": "Mar Rojo · Bab el-Mandeb · Yemen",
+      "lat": 15.3, "lng": 41.8,
+      "actors": ["Hutíes (Yemen)", "EE.UU.", "RU", "Coalición naval"],
+      "summary": "Ataques de misiles hutíes obligan a desviar rutas comerciales globales. Los seguros marítimos han subido un 340%. Vinculado directamente al conflicto de Gaza como 'frente de presión'.",
+      "timeline": [
+        {"when": "2026-03-18", "what": "Misiles hutíes obligan a desviar nuevas rutas comerciales; seguros marítimos suben un 340%", "source": "El País", "url": "#"}
       ]
     },
     {
-      "id_crisis": "corea-norte-misiles-2026",
-      "titulo_principal": "Corea del Norte: Escalada de Tests con Tecnología Militar Rusa",
-      "lat": 39.0392,
-      "lng": 125.7625,
-      "nivel_actual": "naranja",
-      "actualizaciones": [
-        {
-          "fecha": "2026-05-07",
-          "titular": "Rusia mejoró la precisión del misil KN-23 norcoreano de 1.500 m de margen de error a menos de 100 m",
-          "fuente": "Foundation for Defense of Democracies",
-          "url": "https://www.fdd.org/analysis/2026/05/07/russian-security-assistance-is-creating-problems-on-the-korean-peninsula/"
-        },
-        {
-          "fecha": "2026-05-05",
-          "titular": "Corea del Norte ha lanzado más misiles balísticos en 2026 que en todo 2025; Rusia sigue transfiriendo tecnología",
-          "fuente": "AEI / FDD",
-          "url": "https://www.aei.org/articles/korean-peninsula-update-may-5-2026/"
-        }
+      "id": "violencia-haiti",
+      "type": "armed",
+      "severity": 4,
+      "title": "Colapso Institucional en Haití",
+      "location": "Puerto Príncipe · Haití",
+      "lat": 18.5392, "lng": -72.3364,
+      "actors": ["Bandas criminales (G9)", "Misión MSS", "OEA", "EE.UU."],
+      "summary": "Las bandas criminales controlan más del 80% de Puerto Príncipe. La misión multinacional de seguridad (MSS) desplegada con apoyo de Kenia opera con recursos limitados. Consejo de transición con dificultades para instalarse.",
+      "timeline": [
+        {"when": "2026-04-05", "what": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición", "source": "France 24", "url": "#"}
       ]
     },
     {
-      "id_crisis": "tension-estrecho-taiwan",
-      "titulo_principal": "Cerco Militar en el Estrecho de Taiwán",
-      "lat": 23.6978,
-      "lng": 120.9605,
-      "nivel_actual": "amarillo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-05-08",
-          "titular": "Xi insiste ante Trump en que Taiwán es la cuestión 'más importante' en la relación bilateral",
-          "fuente": "AEI China-Taiwan Update",
-          "url": "https://www.aei.org/articles/china-taiwan-update-may-8-2026/"
-        },
-        {
-          "fecha": "2026-04-10",
-          "titular": "Récord histórico: cazas del Ejército Popular de Liberación cruzan la línea media del estrecho",
-          "fuente": "ABC",
-          "url": "#"
-        },
-        {
-          "fecha": "2026-03-23",
-          "titular": "La guerra en Irán le ha dado una oportunidad inédita a China; se la acaba de trasladar a Taiwán",
-          "fuente": "Xataka.com",
-          "url": "https://www.xataka.com/magnet/guerra-iran-le-acaba-dar-oportunidad-inedita-a-china-se-acaba-trasladar-a-taiwan-se-piense-dos-veces"
-        }
+      "id": "conflicto-ecuador",
+      "type": "armed",
+      "severity": 3,
+      "title": "Estado de Excepción: Guerra contra el Crimen en Ecuador",
+      "location": "Guayaquil · Ecuador",
+      "lat": -2.1961, "lng": -79.8862,
+      "actors": ["Gobierno Noboa", "Los Choneros", "Ejército EC"],
+      "summary": "El gobierno de Noboa mantiene el estado de excepción. El ejército asaltó las principales cárceles bajo control de organizaciones criminales vinculadas a carteles mexicanos y albaneses.",
+      "timeline": [
+        {"when": "2026-03-30", "what": "El ejército asalta las principales cárceles bajo control de organizaciones criminales", "source": "EFE", "url": "#"}
       ]
     },
     {
-      "id_crisis": "cambio-politico-hungria",
-      "titulo_principal": "Caída Histórica de Orbán en Hungría",
-      "lat": 47.4979,
-      "lng": 19.0402,
-      "nivel_actual": "amarillo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-04-14",
-          "titular": "Magyar entierra 16 años del ultraderechista Orbán en Hungría con una incontestable victoria electoral",
-          "fuente": "Público",
-          "url": "https://www.publico.es/internacional"
-        }
+      "id": "india-pakistan-sindoor-2026",
+      "type": "diplo",
+      "severity": 3,
+      "title": "India-Pakistán: Tensión Hídrica Post-Sindoor",
+      "location": "Cachemira · río Indo",
+      "lat": 33.7, "lng": 73.1,
+      "actors": ["India", "Pakistán"],
+      "summary": "Un año después de la Operación Sindoor, el alto el fuego se mantiene pero India mantiene suspendido el Tratado de las Aguas del Indo. Pakistán lo califica de 'amenaza existencial' para su agricultura.",
+      "timeline": [
+        {"when": "2026-05-07", "what": "Aniversario de la Operación Sindoor: India mantiene suspendido el Tratado de las Aguas del Indo", "source": "DD News / Dawn", "url": "https://ddnews.gov.in/en/op-sindoor-anniversary-india-continues-indus-water-curbs-calls-treaty-unfair/"},
+        {"when": "2026-05-05", "what": "Un año después, el alto el fuego se mantiene pero los motores del conflicto siguen intactos", "source": "Washington Post", "url": "https://www.washingtonpost.com/opinions/2026/05/05/year-later-india-pakistan-ceasefire-is-holding-so-far/"}
       ]
     },
     {
-      "id_crisis": "conflicto-mar-rojo-huties",
-      "titulo_principal": "Crisis de Seguridad Naval en el Mar Rojo",
-      "lat": 15.3,
-      "lng": 41.8,
-      "nivel_actual": "rojo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-03-18",
-          "titular": "Impacto de misiles hutíes obliga a desviar nuevas rutas comerciales navieras; suben los seguros marítimos un 340%",
-          "fuente": "El País",
-          "url": "#"
-        }
+      "id": "corea-norte-misiles-2026",
+      "type": "diplo",
+      "severity": 3,
+      "title": "Corea del Norte: Escalada con Tecnología Militar Rusa",
+      "location": "Península de Corea · Mar del Japón",
+      "lat": 39.0392, "lng": 125.7625,
+      "actors": ["Corea del Norte", "Rusia", "Corea del Sur", "EE.UU.", "Japón"],
+      "summary": "Rusia transfirió tecnología de guiado a Corea del Norte: el misil KN-23 pasó de 1.500 m de margen de error a menos de 100 m. Más misiles lanzados en 2026 que en todo 2025.",
+      "timeline": [
+        {"when": "2026-05-07", "what": "Rusia mejoró la precisión del misil KN-23 norcoreano de 1.500 m a menos de 100 m de error", "source": "FDD", "url": "https://www.fdd.org/analysis/2026/05/07/russian-security-assistance-is-creating-problems-on-the-korean-peninsula/"},
+        {"when": "2026-05-05", "what": "Corea del Norte ha lanzado más misiles balísticos en 2026 que en todo 2025; Rusia sigue transfiriendo tecnología", "source": "AEI / FDD", "url": "https://www.aei.org/articles/korean-peninsula-update-may-5-2026/"}
       ]
     },
     {
-      "id_crisis": "violencia-haiti",
-      "titulo_principal": "Colapso Institucional y Control Criminal en Haití",
-      "lat": 18.5392,
-      "lng": -72.3364,
-      "nivel_actual": "rojo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-04-05",
-          "titular": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición",
-          "fuente": "France 24",
-          "url": "#"
-        }
+      "id": "tension-estrecho-taiwan",
+      "type": "diplo",
+      "severity": 3,
+      "title": "Cerco Militar en el Estrecho de Taiwán",
+      "location": "Estrecho de Taiwán",
+      "lat": 23.6978, "lng": 120.9605,
+      "actors": ["China", "Taiwán", "EE.UU.", "Japón"],
+      "summary": "Xi insiste ante Trump en que Taiwán es la cuestión 'más importante' en la relación bilateral. Récord de cazas del EPL cruzando la línea media del estrecho. La guerra de Irán abre una ventana estratégica para China.",
+      "timeline": [
+        {"when": "2026-05-08", "what": "Xi insiste ante Trump en que Taiwán es la cuestión 'más importante' en la relación bilateral", "source": "AEI", "url": "https://www.aei.org/articles/china-taiwan-update-may-8-2026/"},
+        {"when": "2026-04-10", "what": "Récord histórico: cazas del EPL cruzan la línea media del estrecho", "source": "ABC", "url": "#"}
       ]
     },
     {
-      "id_crisis": "conflicto-ecuador",
-      "titulo_principal": "Estado de Excepción y Guerra contra el Crimen en Ecuador",
-      "lat": -2.1961,
-      "lng": -79.8862,
-      "nivel_actual": "rojo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-03-30",
-          "titular": "El ejército ecuatoriano asalta las principales cárceles bajo control de organizaciones criminales",
-          "fuente": "EFE",
-          "url": "#"
-        }
+      "id": "cambio-politico-hungria",
+      "type": "diplo",
+      "severity": 2,
+      "title": "Caída Histórica de Orbán en Hungría",
+      "location": "Budapest · Europa Central",
+      "lat": 47.4979, "lng": 19.0402,
+      "actors": ["Magyar (oposición)", "Orbán (Fidesz)", "UE"],
+      "summary": "Magyar entierra 16 años del ultraderechismo de Orbán con una victoria electoral incontestable. La UE recupera un aliado clave en el este europeo en plena guerra de Ucrania.",
+      "timeline": [
+        {"when": "2026-04-14", "what": "Magyar entierra 16 años del ultraderechista Orbán en Hungría con una incontestable victoria electoral", "source": "Público", "url": "#"}
       ]
     },
     {
-      "id_crisis": "crisis-energetica-europa",
-      "titulo_principal": "Crisis de Dependencia Energética Europea",
-      "lat": 50.0,
-      "lng": 10.0,
-      "nivel_actual": "naranja",
-      "actualizaciones": [
-        {
-          "fecha": "2026-04-01",
-          "titular": "Europa huyó del gas de Rusia para echarse en brazos de EEUU. La guerra de Irán demuestra que fue una trampa",
-          "fuente": "Xataka.com",
-          "url": "https://www.xataka.com/energia/europa-huyo-gas-rusia-para-echarse-brazos-eeuu-tercera-guerra-golfo-demuestra-que-fue-trampa"
-        },
-        {
-          "fecha": "2026-03-18",
-          "titular": "El salvavidas de las renovables: España tiene la energía mayorista más barata de Europa en plena crisis de Ormuz",
-          "fuente": "Xataka.com",
-          "url": "https://www.xataka.com/energia/espana-ha-encontrado-salvavidas-inesperado-crisis-ormuz-como-nuestra-luz-hoy-envidia-europa"
-        }
+      "id": "crisis-energetica-europa",
+      "type": "econ",
+      "severity": 3,
+      "title": "Crisis de Dependencia Energética Europea",
+      "location": "Europa · mercados de gas",
+      "lat": 50.0, "lng": 10.0,
+      "actors": ["UE", "EE.UU.", "Irán", "Rusia"],
+      "summary": "Europa huyó del gas ruso para comprar gas estadounidense; el conflicto de Ormuz demuestra que fue una trampa de dependencia. España tiene la energía más barata de Europa gracias a las renovables.",
+      "timeline": [
+        {"when": "2026-04-01", "what": "Europa huyó del gas ruso para echarse en brazos de EEUU. La guerra de Irán demuestra que fue una trampa", "source": "Xataka", "url": "https://www.xataka.com/energia/europa-huyo-gas-rusia-para-echarse-brazos-eeuu-tercera-guerra-golfo-demuestra-que-fue-trampa"},
+        {"when": "2026-03-18", "what": "España tiene la energía mayorista más barata de Europa en plena crisis de Ormuz gracias a las renovables", "source": "Xataka", "url": "https://www.xataka.com/energia/espana-ha-encontrado-salvavidas-inesperado-crisis-ormuz-como-nuestra-luz-hoy-envidia-europa"}
       ]
     },
     {
-      "id_crisis": "china-estrategia-energetica",
-      "titulo_principal": "Estrategia de China ante la Crisis Energética Global",
-      "lat": 39.9042,
-      "lng": 116.4074,
-      "nivel_actual": "amarillo",
-      "actualizaciones": [
-        {
-          "fecha": "2026-05-08",
-          "titular": "Cumbre Trump-Xi (14-15 mayo): Irán, aranceles, Taiwán y tierras raras centran la agenda; China ya recoge sus frutos energéticos",
-          "fuente": "CNBC / CSIS",
-          "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"
-        },
-        {
-          "fecha": "2026-03-24",
-          "titular": "China lleva años preparándose pacientemente para una gran crisis energética global. Y ahora recoge sus frutos",
-          "fuente": "Xataka.com",
-          "url": "https://www.xataka.com/energia/china-lleva-anos-preparandose-pacientemente-para-gran-crisis-energetica-global-ahora-recoge-sus-frutos"
-        }
+      "id": "china-estrategia-energetica",
+      "type": "econ",
+      "severity": 2,
+      "title": "China Aprovecha la Crisis Energética Global",
+      "location": "Pekín · Asia-Pacífico",
+      "lat": 39.9042, "lng": 116.4074,
+      "actors": ["China", "EE.UU.", "Rusia", "Arabia Saudí"],
+      "summary": "China lleva años preparándose para una crisis energética global y ahora recoge sus frutos: compra energía rusa a precios de saldo mientras Occidente paga tarifas récord. Cumbre Trump-Xi (14-15 mayo) con Taiwán, aranceles e Irán en la agenda.",
+      "timeline": [
+        {"when": "2026-05-08", "what": "Cumbre Trump-Xi (14-15 mayo): Irán, aranceles, Taiwán y tierras raras centran la agenda", "source": "CNBC / CSIS", "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"},
+        {"when": "2026-03-24", "what": "China lleva años preparándose para una gran crisis energética global y ahora recoge sus frutos", "source": "Xataka", "url": "https://www.xataka.com/energia/china-lleva-anos-preparandose-pacientemente-para-gran-crisis-energetica-global-ahora-recoge-sus-frutos"}
       ]
     }
   ],
   "relaciones": [
     {
       "id_relacion": "eeuu-rusia-ceasefire-may2026",
-      "origen": {
-        "nombre": "EE.UU.",
-        "lat": 38.8951,
-        "lng": -77.0364
-      },
-      "destino": {
-        "nombre": "Rusia",
-        "lat": 55.7558,
-        "lng": 37.6173
-      },
-      "tipo": "diplomática",
-      "nivel": "naranja",
-      "fecha": "2026-05-08",
-      "titular": "Trump media alto el fuego de 3 días Rusia-Ucrania (9-11 mayo); Moscú exige retirada ucraniana de territorios no conquistados a cambio de paz",
-      "fuente": "Al Jazeera / CBS News",
-      "url": "https://www.aljazeera.com/news/2026/5/8/trump-announces-three-day-ceasefire-in-russia-ukraine-war"
+      "origen": {"nombre": "EE.UU.", "lat": 38.8951, "lng": -77.0364},
+      "destino": {"nombre": "Rusia", "lat": 55.7558, "lng": 37.6173},
+      "tipo": "diplomática", "nivel": "naranja", "fecha": "2026-05-08",
+      "titular": "Trump media alto el fuego de 3 días Rusia-Ucrania (9-11 mayo)",
+      "fuente": "Al Jazeera", "url": "https://www.aljazeera.com/news/2026/5/8/trump-announces-three-day-ceasefire-in-russia-ukraine-war"
     },
     {
       "id_relacion": "choque-eeuu-iran-2026",
-      "origen": {
-        "nombre": "EE.UU.",
-        "lat": 38.8951,
-        "lng": -77.0364
-      },
-      "destino": {
-        "nombre": "Irán",
-        "lat": 35.6892,
-        "lng": 51.389
-      },
-      "tipo": "militar",
-      "nivel": "rojo",
-      "fecha": "2026-05-07",
-      "titular": "Intercambio de fuego EEUU-Irán en Ormuz; se negocia moratoria nuclear de 12-15 años a cambio de levantar sanciones y reabrir el estrecho",
-      "fuente": "CNBC / The Hill",
-      "url": "https://www.cnbc.com/2026/05/07/iran-war-hormuz-strait-ceasefire-trump.html"
+      "origen": {"nombre": "EE.UU.", "lat": 38.8951, "lng": -77.0364},
+      "destino": {"nombre": "Irán", "lat": 35.6892, "lng": 51.389},
+      "tipo": "militar", "nivel": "rojo", "fecha": "2026-05-07",
+      "titular": "Intercambio de fuego EE.UU.-Irán en Ormuz; negociación de moratoria nuclear 12-15 años",
+      "fuente": "CNBC", "url": "https://www.cnbc.com/2026/05/07/iran-war-hormuz-strait-ceasefire-trump.html"
     },
     {
       "id_relacion": "trump-xi-cumbre-may2026",
-      "origen": {
-        "nombre": "EE.UU.",
-        "lat": 38.8951,
-        "lng": -77.0364
-      },
-      "destino": {
-        "nombre": "China",
-        "lat": 39.9042,
-        "lng": 116.4074
-      },
-      "tipo": "diplomática",
-      "nivel": "naranja",
-      "fecha": "2026-05-08",
-      "titular": "Cumbre Trump-Xi en Pekín (14-15 mayo): Irán, aranceles, Taiwán y tierras raras; CEOs de Boeing y Citigroup acompañan a Trump",
-      "fuente": "CNBC / CSIS / World Economic Forum",
-      "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"
+      "origen": {"nombre": "EE.UU.", "lat": 38.8951, "lng": -77.0364},
+      "destino": {"nombre": "China", "lat": 39.9042, "lng": 116.4074},
+      "tipo": "diplomática", "nivel": "naranja", "fecha": "2026-05-08",
+      "titular": "Cumbre Trump-Xi en Pekín (14-15 mayo): Irán, aranceles, Taiwán y tierras raras",
+      "fuente": "CNBC / CSIS", "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"
     },
     {
       "id_relacion": "russia-corea-norte-tecnologia-may2026",
-      "origen": {
-        "nombre": "Rusia",
-        "lat": 55.7558,
-        "lng": 37.6173
-      },
-      "destino": {
-        "nombre": "Corea del Norte",
-        "lat": 39.0392,
-        "lng": 125.7625
-      },
-      "tipo": "militar",
-      "nivel": "rojo",
-      "fecha": "2026-05-07",
-      "titular": "Rusia transfiere tecnología de guiado a Corea del Norte: el misil KN-23 pasa de 1.500 m de error a menos de 100 m de precisión",
-      "fuente": "Foundation for Defense of Democracies",
-      "url": "https://www.fdd.org/analysis/2026/05/07/russian-security-assistance-is-creating-problems-on-the-korean-peninsula/"
+      "origen": {"nombre": "Rusia", "lat": 55.7558, "lng": 37.6173},
+      "destino": {"nombre": "Corea del Norte", "lat": 39.0392, "lng": 125.7625},
+      "tipo": "militar", "nivel": "rojo", "fecha": "2026-05-07",
+      "titular": "Rusia transfiere tecnología de guiado a Corea del Norte: KN-23 pasa de 1.500 m a menos de 100 m de precisión",
+      "fuente": "FDD", "url": "https://www.fdd.org/analysis/2026/05/07/russian-security-assistance-is-creating-problems-on-the-korean-peninsula/"
     },
     {
       "id_relacion": "china-taiwan-may2026",
-      "origen": {
-        "nombre": "China",
-        "lat": 39.9042,
-        "lng": 116.4074
-      },
-      "destino": {
-        "nombre": "Taiwán",
-        "lat": 23.6978,
-        "lng": 120.9605
-      },
-      "tipo": "militar",
-      "nivel": "naranja",
-      "fecha": "2026-05-08",
-      "titular": "Xi insiste ante Trump en que Taiwán es la cuestión 'más importante'; pide cautela en ventas de armas a la isla",
-      "fuente": "AEI China-Taiwan Update",
-      "url": "https://www.aei.org/articles/china-taiwan-update-may-8-2026/"
+      "origen": {"nombre": "China", "lat": 39.9042, "lng": 116.4074},
+      "destino": {"nombre": "Taiwán", "lat": 23.6978, "lng": 120.9605},
+      "tipo": "militar", "nivel": "naranja", "fecha": "2026-05-08",
+      "titular": "Xi insiste ante Trump en que Taiwán es la cuestión 'más importante'",
+      "fuente": "AEI", "url": "https://www.aei.org/articles/china-taiwan-update-may-8-2026/"
     },
     {
       "id_relacion": "sudan-uae-drones-may2026",
-      "origen": {
-        "nombre": "Emiratos Árabes Unidos",
-        "lat": 24.4764,
-        "lng": 54.3705
-      },
-      "destino": {
-        "nombre": "Sudán",
-        "lat": 15.5518,
-        "lng": 32.5324
-      },
-      "tipo": "militar",
-      "nivel": "rojo",
-      "fecha": "2026-05-05",
-      "titular": "Sudán acusa a Emiratos de suministrar drones lanzados desde Etiopía para atacar el aeropuerto de Jartum y posiciones del ejército",
-      "fuente": "Al Jazeera",
-      "url": "https://www.aljazeera.com/news/2026/5/5/sudan-accuses-ethiopia-uae-of-being-behind-recent-drone-attacks"
+      "origen": {"nombre": "Emiratos Árabes", "lat": 24.4764, "lng": 54.3705},
+      "destino": {"nombre": "Sudán", "lat": 15.5518, "lng": 32.5324},
+      "tipo": "militar", "nivel": "rojo", "fecha": "2026-05-05",
+      "titular": "Sudán acusa a Emiratos de suministrar drones para atacar el aeropuerto de Jartum",
+      "fuente": "Al Jazeera", "url": "https://www.aljazeera.com/news/2026/5/5/sudan-accuses-ethiopia-uae-of-being-behind-recent-drone-attacks"
     },
     {
       "id_relacion": "india-pakistan-may2026",
-      "origen": {
-        "nombre": "India",
-        "lat": 20.5937,
-        "lng": 78.9629
-      },
-      "destino": {
-        "nombre": "Pakistán",
-        "lat": 30.3753,
-        "lng": 69.3451
-      },
-      "tipo": "diplomática",
-      "nivel": "naranja",
-      "fecha": "2026-05-07",
-      "titular": "India mantiene suspendido el Tratado de las Aguas del Indo un año después de la Operación Sindoor; Pakistán lo califica de 'amenaza existencial'",
-      "fuente": "DD News / Chatham House",
-      "url": "https://ddnews.gov.in/en/india-reiterates-indus-waters-treaty-to-remain-in-abeyance-until-pakistan-ends-support-for-terrorism/"
+      "origen": {"nombre": "India", "lat": 20.5937, "lng": 78.9629},
+      "destino": {"nombre": "Pakistán", "lat": 30.3753, "lng": 69.3451},
+      "tipo": "diplomática", "nivel": "naranja", "fecha": "2026-05-07",
+      "titular": "India mantiene suspendido el Tratado de las Aguas del Indo un año después de la Operación Sindoor",
+      "fuente": "DD News / Chatham House", "url": "https://ddnews.gov.in/en/india-reiterates-indus-water-treaty-to-remain-in-abeyance/"
     },
     {
       "id_relacion": "diplomacia-espana-china",
-      "origen": {
-        "nombre": "España",
-        "lat": 40.4168,
-        "lng": -3.7038
-      },
-      "destino": {
-        "nombre": "China",
-        "lat": 39.9042,
-        "lng": 116.4074
-      },
-      "tipo": "diplomática",
-      "nivel": "amarillo",
-      "fecha": "2026-04-14",
-      "titular": "Xi sitúa a España en el 'lado correcto de la historia'; Sánchez pide a China mayor implicación para frenar la guerra de Irán",
-      "fuente": "Público",
-      "url": "https://www.publico.es/internacional"
+      "origen": {"nombre": "España", "lat": 40.4168, "lng": -3.7038},
+      "destino": {"nombre": "China", "lat": 39.9042, "lng": 116.4074},
+      "tipo": "diplomática", "nivel": "amarillo", "fecha": "2026-04-14",
+      "titular": "Xi sitúa a España en el 'lado correcto de la historia'; Sánchez pide mayor implicación para frenar la guerra de Irán",
+      "fuente": "Público", "url": "#"
     },
     {
       "id_relacion": "choque-eeuu-vaticano",
-      "origen": {
-        "nombre": "EE.UU.",
-        "lat": 38.8951,
-        "lng": -77.0364
-      },
-      "destino": {
-        "nombre": "Vaticano",
-        "lat": 41.9029,
-        "lng": 12.4534
-      },
-      "tipo": "diplomática",
-      "nivel": "naranja",
-      "fecha": "2026-04-13",
+      "origen": {"nombre": "EE.UU.", "lat": 38.8951, "lng": -77.0364},
+      "destino": {"nombre": "Vaticano", "lat": 41.9029, "lng": 12.4534},
+      "tipo": "diplomática", "nivel": "naranja", "fecha": "2026-04-13",
       "titular": "El papa León XIV responde a Trump: 'No tengo miedo. Seguiré hablando contra la guerra'",
-      "fuente": "El País",
-      "url": "https://elpais.com/internacional/"
+      "fuente": "El País", "url": "#"
     },
     {
       "id_relacion": "tension-espana-israel",
-      "origen": {
-        "nombre": "España",
-        "lat": 40.4168,
-        "lng": -3.7038
-      },
-      "destino": {
-        "nombre": "Israel",
-        "lat": 31.7683,
-        "lng": 35.2137
-      },
-      "tipo": "diplomática",
-      "nivel": "naranja",
-      "fecha": "2026-04-10",
-      "titular": "Israel llama a consultas a su embajadora tras el cruce de declaraciones sobre la crisis en Gaza",
-      "fuente": "El Mundo",
-      "url": "#"
+      "origen": {"nombre": "España", "lat": 40.4168, "lng": -3.7038},
+      "destino": {"nombre": "Israel", "lat": 31.7683, "lng": 35.2137},
+      "tipo": "diplomática", "nivel": "naranja", "fecha": "2026-04-10",
+      "titular": "Israel llama a consultas a su embajadora tras el cruce de declaraciones sobre Gaza",
+      "fuente": "El Mundo", "url": "#"
     },
     {
       "id_relacion": "tension-ecuador-mexico",
-      "origen": {
-        "nombre": "Ecuador",
-        "lat": -0.2298,
-        "lng": -78.5249
-      },
-      "destino": {
-        "nombre": "México",
-        "lat": 19.4326,
-        "lng": -99.1332
-      },
-      "tipo": "diplomática",
-      "nivel": "rojo",
-      "fecha": "2026-04-06",
+      "origen": {"nombre": "Ecuador", "lat": -0.2298, "lng": -78.5249},
+      "destino": {"nombre": "México", "lat": 19.4326, "lng": -99.1332},
+      "tipo": "diplomática", "nivel": "rojo", "fecha": "2026-04-06",
       "titular": "México rompe relaciones tras el histórico asalto policial a su embajada en Quito",
-      "fuente": "CNN en Español",
-      "url": "#"
-    },
-    {
-      "id_relacion": "tension-venezuela-guyana",
-      "origen": {
-        "nombre": "Venezuela",
-        "lat": 10.4806,
-        "lng": -66.9036
-      },
-      "destino": {
-        "nombre": "Guyana",
-        "lat": 6.8013,
-        "lng": -58.1551
-      },
-      "tipo": "territorial",
-      "nivel": "naranja",
-      "fecha": "2026-04-02",
-      "titular": "Guyana acude al Consejo de Seguridad ante la movilización militar venezolana en el Esequibo",
-      "fuente": "BBC News",
-      "url": "#"
-    },
-    {
-      "id_relacion": "guerra-comercial-ue-china",
-      "origen": {
-        "nombre": "Unión Europea",
-        "lat": 50.8503,
-        "lng": 4.3517
-      },
-      "destino": {
-        "nombre": "China",
-        "lat": 39.9042,
-        "lng": 116.4074
-      },
-      "tipo": "comercial",
-      "nivel": "amarillo",
-      "fecha": "2026-03-20",
-      "titular": "Pekín responde con sanciones tras los nuevos aranceles europeos a vehículos e importaciones tecnológicas",
-      "fuente": "Bloomberg",
-      "url": "#"
-    },
-    {
-      "id_relacion": "iran-turquia-energia",
-      "origen": {
-        "nombre": "Irán",
-        "lat": 32.4279,
-        "lng": 53.688
-      },
-      "destino": {
-        "nombre": "Turquía",
-        "lat": 38.9637,
-        "lng": 35.2433
-      },
-      "tipo": "comercial",
-      "nivel": "rojo",
-      "fecha": "2026-03-26",
-      "titular": "Irán cruza la gran línea roja energética. Turquía es la primera víctima de un apagón que ya mira a Europa",
-      "fuente": "Xataka.com",
-      "url": "https://www.xataka.com/energia/iran-acaba-cruzar-gran-linea-roja-energetica-turquia-primera-victima-apagon-que-mira-a-europa"
-    },
-    {
-      "id_relacion": "eeuu-espana-bases-militares",
-      "origen": {
-        "nombre": "Estados Unidos",
-        "lat": 37.0902,
-        "lng": -95.7129
-      },
-      "destino": {
-        "nombre": "España",
-        "lat": 40.4637,
-        "lng": -3.7492
-      },
-      "tipo": "militar",
-      "nivel": "naranja",
-      "fecha": "2026-04-09",
-      "titular": "EEUU estudia cerrar bases en países que dijeron 'no a la guerra'; España encabeza la lista",
-      "fuente": "Xataka.com",
-      "url": "https://www.xataka.com/magnet/hay-lista-paises-donde-eeuu-quiere-cerrar-sus-bases-primero-esta-marcado-rojo-su-no-a-guerra-espana"
-    },
-    {
-      "id_relacion": "iran-qatar-misil",
-      "origen": {
-        "nombre": "Irán",
-        "lat": 32.4279,
-        "lng": 53.688
-      },
-      "destino": {
-        "nombre": "Qatar",
-        "lat": 25.3548,
-        "lng": 51.1839
-      },
-      "tipo": "militar",
-      "nivel": "rojo",
-      "fecha": "2026-03-19",
-      "titular": "Misil de Irán a la mayor planta de gas de Qatar amenaza con detonar la crisis energética definitiva",
-      "fuente": "Xataka.com",
-      "url": "https://www.xataka.com/energia/llevamos-meses-esquivando-crisis-energetica-definitiva-misil-iran-a-mayor-planta-gas-qatar-amenaza-detonarla"
+      "fuente": "CNN en Español", "url": "#"
     }
   ]
 }

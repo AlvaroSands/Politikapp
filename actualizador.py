@@ -18,6 +18,10 @@ FUENTES_RSS = [
     "https://www.france24.com/es/rss",
     "https://elpais.com/rss/internacional/el-pais.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+    "https://feeds.reuters.com/reuters/worldNews",
+    "https://foreignpolicy.com/feed/",
+    "https://theeconomist.com/sections/world-politics/rss.xml",
+    "https://www.elmundo.es/rss/internacional.xml",
 ]
 
 # Coordenadas de países frecuentes
@@ -103,6 +107,10 @@ def cargar_db():
     return {"crisis": [], "relaciones": []}
 
 
+def id_crisis(c):
+    return c.get("id") or c.get("id_crisis", "")
+
+
 def guardar_db(datos):
     with open(ARCHIVO_DATOS, "w", encoding="utf-8") as f:
         json.dump(datos, f, ensure_ascii=False, indent=2)
@@ -145,7 +153,9 @@ def ejecutar_actualizacion():
     db = cargar_db()
 
     urls_vistas = set()
-    urls_vistas.update(act.get("url", "") for c in db["crisis"] for act in c.get("actualizaciones", []))
+    for c in db["crisis"]:
+        for act in c.get("timeline", c.get("actualizaciones", [])):
+            urls_vistas.add(act.get("url", ""))
     urls_vistas.update(r.get("url", "") for r in db["relaciones"])
 
     nuevas = 0
@@ -194,9 +204,12 @@ def ejecutar_actualizacion():
                 nueva_act = {"fecha": hoy, "titular": titulo, "fuente": nombre_fuente, "url": enlace}
 
                 if id_crisis:
+                    nueva_tl = {"when": hoy, "what": titulo, "source": nombre_fuente, "url": enlace}
                     for c in db["crisis"]:
-                        if c["id_crisis"] == id_crisis:
-                            c["actualizaciones"].insert(0, nueva_act)
+                        if id_crisis(c) == id_crisis:
+                            timeline = c.setdefault("timeline", c.pop("actualizaciones", []))
+                            timeline.insert(0, nueva_tl)
+                            c["timeline"] = timeline[:20]
                             print(f"     📎 Actualiza crisis: {id_crisis}")
                             nuevas += 1
                             break
