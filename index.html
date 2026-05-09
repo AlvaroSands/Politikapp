@@ -787,6 +787,7 @@ map.on('load', () => {
   animArcs();
   loadData();
   setInterval(loadData, 60000);
+  if (!_mob) map.on('move', updateGlobeMarkers);
 });
 
 function animArcs() {
@@ -866,6 +867,21 @@ function renderMarkers() {
       .setLngLat([c.lng, c.lat])
       .addTo(map);
     ST.markers.push(mk);
+  });
+  updateGlobeMarkers();
+}
+
+function updateGlobeMarkers() {
+  if (_mob) return; // mercator siempre correcto
+  const ctr = map.getCenter();
+  const φ1 = ctr.lat * Math.PI / 180;
+  const λ1 = ctr.lng;
+  ST.markers.forEach(mk => {
+    const ll = mk.getLngLat();
+    const φ2 = ll.lat * Math.PI / 180;
+    const Δλ = (ll.lng - λ1) * Math.PI / 180;
+    const dot = Math.sin(φ1) * Math.sin(φ2) + Math.cos(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+    mk.getElement().style.display = dot > 0 ? '' : 'none';
   });
 }
 
