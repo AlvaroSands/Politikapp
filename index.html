@@ -286,10 +286,192 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .maplibregl-popup-content { background:rgba(12,18,20,.97) !important; padding:8px 12px !important; border-radius:0 !important; border:1px solid var(--line-2) !important; box-shadow:0 4px 20px rgba(0,0,0,.8) !important; color:var(--text-2) !important; font-family:var(--mono) !important; font-size:11px !important; }
 .maplibregl-popup-tip { display:none !important; }
 .maplibregl-canvas { outline:none; }
+
+/* ── MÓVIL ────────────────────────────────────────────────────── */
+/* Drawer de filtros (móvil) */
+.mob-drawer-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);
+  z-index:200; backdrop-filter:blur(2px);
+}
+.mob-drawer-overlay.open { display:block; }
+.mob-drawer {
+  position:fixed; top:0; left:0; bottom:0; width:280px;
+  background:var(--bg-1); z-index:201; overflow-y:auto;
+  transform:translateX(-100%); transition:transform .28s cubic-bezier(.4,0,.2,1);
+  border-right:1px solid var(--line-1);
+}
+.mob-drawer.open { transform:translateX(0); }
+.mob-drawer-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px; border-bottom:1px solid var(--line-0);
+  font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-0);
+}
+.mob-drawer-close { font-size:18px; color:var(--text-1); padding:4px 8px; }
+
+/* Bottom sheet (móvil) */
+.mob-sheet {
+  position:fixed; left:0; right:0; bottom:56px;
+  background:var(--bg-1); border-top:1px solid var(--line-1);
+  z-index:150; transform:translateY(100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  height:55vh; display:flex; flex-direction:column;
+  border-radius:12px 12px 0 0;
+}
+.mob-sheet.open { transform:translateY(0); }
+.mob-sheet-handle {
+  width:36px; height:4px; background:var(--line-2); border-radius:2px;
+  margin:10px auto 0; flex-shrink:0;
+}
+.mob-sheet-tabs {
+  display:flex; border-bottom:1px solid var(--line-0); flex-shrink:0; margin-top:6px;
+}
+.mob-sheet-tab {
+  flex:1; padding:10px 8px; font-size:10px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--text-0); text-align:center; position:relative;
+}
+.mob-sheet-tab.active { color:var(--text-3); background:var(--bg-2); }
+.mob-sheet-tab.active::after { content:""; position:absolute; left:0; right:0; bottom:-1px; height:1px; background:var(--accent); }
+.mob-sheet-body { flex:1; overflow-y:auto; }
+.mob-sheet-pane { display:none; height:100%; }
+.mob-sheet-pane.active { display:block; }
+
+/* Bottom nav bar */
+.mob-nav {
+  display:none; position:fixed; left:0; right:0; bottom:0; height:56px;
+  background:var(--bg-1); border-top:1px solid var(--line-0);
+  z-index:160; align-items:stretch;
+}
+.mob-nav-btn {
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:3px; font-size:9px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--text-0); border-right:1px solid var(--line-0); transition:color .15s, background .15s;
+}
+.mob-nav-btn:last-child { border-right:0; }
+.mob-nav-btn.active { color:var(--text-3); background:var(--bg-2); }
+.mob-nav-btn svg { opacity:.7; }
+.mob-nav-btn.active svg { opacity:1; }
+
+@media (max-width: 768px) {
+  /* Colapsar el grid a pantalla completa con el mapa */
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 48px 1fr;
+    grid-template-areas: "topbar" "main";
+  }
+  .left, .right, .bottom { display:none; }
+
+  /* Topbar móvil simplificado */
+  .topbar {
+    grid-template-columns: 1fr auto auto;
+  }
+  .topbar-center { display:none; }
+  .topbar-clock .clock-cell:last-child { display:none; }
+  .topbar-clock { border-left:0; }
+  .clock-cell { min-width:unset; padding:6px 12px; }
+  .clock-cell .val { font-size:12px; }
+
+  /* Botón de filtros en topbar */
+  #mob-filter-btn {
+    display:flex; align-items:center; justify-content:center;
+    width:48px; border-left:1px solid var(--line-0);
+    color:var(--text-1); font-size:16px;
+  }
+
+  /* Mapa ocupa todo */
+  .main { height:calc(100vh - 48px); }
+
+  /* HUD y coordenadas ocultos en móvil */
+  .hud, .hud-corner, .coord-readout { display:none; }
+
+  /* Nav bar visible */
+  .mob-nav { display:flex; }
+
+  /* Marcadores más grandes para dedos */
+  .mk-wrap { width:44px; height:44px; }
+  .mk-ring:nth-child(3) { width:42px; height:42px; }
+}
 </style>
 </head>
 <body>
 <div class="app">
+
+  <!-- ── DRAWER FILTROS (móvil) ───────────────────────────────── -->
+  <div class="mob-drawer-overlay" id="mob-overlay"></div>
+  <div class="mob-drawer" id="mob-drawer">
+    <div class="mob-drawer-header">
+      <span>Filtros</span>
+      <button class="mob-drawer-close" id="mob-drawer-close">✕</button>
+    </div>
+    <div class="section">
+      <div class="section-title"><span>Categorías</span></div>
+      <div class="filter-group">
+        <div class="filter-row active" data-type="armed"><span class="swatch"></span><span class="lbl">Conflicto armado</span><span class="cnt" id="mob-cnt-armed">00</span></div>
+        <div class="filter-row active" data-type="diplo"><span class="swatch"></span><span class="lbl">Diplomático</span><span class="cnt" id="mob-cnt-diplo">00</span></div>
+        <div class="filter-row active" data-type="econ"><span class="swatch"></span><span class="lbl">Económico</span><span class="cnt" id="mob-cnt-econ">00</span></div>
+        <div class="filter-row active" data-type="cyber"><span class="swatch"></span><span class="lbl">Ciber</span><span class="cnt" id="mob-cnt-cyber">00</span></div>
+        <div class="filter-row active" data-type="intel"><span class="swatch"></span><span class="lbl">Inteligencia</span><span class="cnt" id="mob-cnt-intel">00</span></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title"><span>Severidad mínima</span></div>
+      <div class="severity-bar">
+        <div class="sev-cell on" data-sev="1">1</div>
+        <div class="sev-cell on" data-sev="2">2</div>
+        <div class="sev-cell on" data-sev="3">3</div>
+        <div class="sev-cell on" data-sev="4">4</div>
+        <div class="sev-cell on" data-sev="5">5</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title"><span>Saltar a región</span></div>
+      <div class="region-grid">
+        <button class="region-btn" data-region="global">Global</button>
+        <button class="region-btn" data-region="europe">Europa</button>
+        <button class="region-btn" data-region="mena">MENA</button>
+        <button class="region-btn" data-region="africa">África</button>
+        <button class="region-btn" data-region="asia">Asia</button>
+        <button class="region-btn" data-region="americas">Américas</button>
+      </div>
+    </div>
+    <div class="section" style="border-bottom:0;font-size:10px;color:var(--text-0);letter-spacing:.08em;line-height:1.8">
+      Últ. sync: <span id="mob-last-sync">—</span>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM SHEET (móvil) ─────────────────────────────────── -->
+  <div class="mob-sheet" id="mob-sheet">
+    <div class="mob-sheet-handle"></div>
+    <div class="mob-sheet-tabs">
+      <button class="mob-sheet-tab active" data-mob-tab="feed">Feed <span id="mob-cnt-feed"></span></button>
+      <button class="mob-sheet-tab" data-mob-tab="detail">Detalle</button>
+      <button class="mob-sheet-tab" data-mob-tab="stats">Resumen</button>
+    </div>
+    <div class="mob-sheet-body">
+      <div class="mob-sheet-pane active" data-mob-pane="feed"><div id="mob-feed-list"></div></div>
+      <div class="mob-sheet-pane" data-mob-pane="detail"><div id="mob-detail-panel"><div class="detail-empty">// toca un evento o un marcador</div></div></div>
+      <div class="mob-sheet-pane" data-mob-pane="stats"><div class="stats-grid" id="mob-stats-grid" style="margin:14px 16px"></div><div class="region-bars" id="mob-type-bars"></div></div>
+    </div>
+  </div>
+
+  <!-- ── NAV BAR (móvil) ──────────────────────────────────────── -->
+  <nav class="mob-nav" id="mob-nav">
+    <button class="mob-nav-btn active" id="mob-btn-map">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+      Mapa
+    </button>
+    <button class="mob-nav-btn" id="mob-btn-feed">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      Feed
+    </button>
+    <button class="mob-nav-btn" id="mob-btn-detail">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3"/></svg>
+      Detalle
+    </button>
+    <button class="mob-nav-btn" id="mob-btn-filter">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+      Filtros
+    </button>
+  </nav>
 
   <!-- ── TOPBAR ────────────────────────────────────────────────── -->
   <header class="topbar">
@@ -316,6 +498,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
         <div class="val" id="clock-date">—</div>
       </div>
     </div>
+    <button id="mob-filter-btn" style="display:none" aria-label="Filtros">☰</button>
   </header>
 
   <!-- ── LEFT SIDEBAR ──────────────────────────────────────────── -->
@@ -801,6 +984,193 @@ function tick() {
 }
 setInterval(tick, 1000);
 tick();
+
+/* ── MÓVIL ───────────────────────────────────────────────────── */
+const isMobile = () => window.innerWidth <= 768;
+
+function mobRenderAll() {
+  if (!isMobile() || !ST.data) return;
+  mobRenderFeed();
+  mobRenderStats();
+  mobUpdateCounts();
+  const sync = document.getElementById('mob-last-sync');
+  if (sync) sync.textContent = new Date().toLocaleTimeString('es-ES');
+}
+
+function mobRenderFeed() {
+  const list = document.getElementById('mob-feed-list');
+  if (!list) return;
+  const items = visibleCrisis().slice().sort((a,b) => b.severity - a.severity);
+  list.innerHTML = items.map(c => `
+    <div class="feed-item${ST.selected && ST.selected.id===c.id?' selected':''}" data-type="${c.type}" data-id="${c.id}">
+      <div class="dot"></div>
+      <div>
+        <div class="meta"><span>${c.type.toUpperCase()}</span><span class="sev">SEV ${c.severity}</span></div>
+        <div class="title">${c.title}</div>
+        <div class="where">${c.location}</div>
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('.feed-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const ev = ST.data.crisis.find(x => x.id === el.dataset.id);
+      if (ev) mobSelectEvent(ev);
+    });
+  });
+  const cnt = document.getElementById('mob-cnt-feed');
+  if (cnt) cnt.textContent = items.length;
+}
+
+function mobRenderStats() {
+  if (!ST.data) return;
+  const all = ST.data.crisis||[];
+  const counts = {};
+  all.forEach(c => counts[c.type]=(counts[c.type]||0)+1);
+  const avgSev = all.length ? (all.reduce((s,c)=>s+c.severity,0)/all.length).toFixed(1) : '—';
+  const sg = document.getElementById('mob-stats-grid');
+  if (sg) sg.innerHTML = `
+    <div class="stats-cell"><div class="lbl">Eventos</div><div class="val">${all.length}</div></div>
+    <div class="stats-cell"><div class="lbl">Sev. media</div><div class="val accent">${avgSev}</div></div>
+    <div class="stats-cell"><div class="lbl">Armados</div><div class="val armed">${counts.armed||0}</div></div>
+    <div class="stats-cell"><div class="lbl">Diplomáticos</div><div class="val diplo">${counts.diplo||0}</div></div>`;
+  const tb = document.getElementById('mob-type-bars');
+  if (tb) tb.innerHTML = ['armed','diplo','econ','cyber','intel'].map(t=>`
+    <div class="rbar"><span>${TYPE_LABELS[t]}</span><span class="n">${counts[t]||0}</span></div>`).join('');
+}
+
+function mobUpdateCounts() {
+  if (!ST.data) return;
+  const all = ST.data.crisis||[];
+  ['armed','diplo','econ','cyber','intel'].forEach(t => {
+    const el = document.getElementById('mob-cnt-'+t);
+    if (el) el.textContent = String(all.filter(c=>c.type===t).length).padStart(2,'0');
+  });
+}
+
+function mobSelectEvent(c) {
+  ST.selected = c;
+  renderMarkers();
+  mobRenderFeed();
+  mobRenderDetail(c);
+  mobSwitchSheetTab('detail');
+  openSheet();
+  map.flyTo({ center:[c.lng,c.lat], zoom:Math.max(map.getZoom(),3.5), duration:700 });
+  setMobNavActive('mob-btn-detail');
+}
+
+function mobRenderDetail(c) {
+  const panel = document.getElementById('mob-detail-panel');
+  if (!panel) return;
+  if (!c) { panel.innerHTML = '<div class="detail-empty">// toca un evento o un marcador</div>'; return; }
+  const sev = '■'.repeat(c.severity)+'□'.repeat(5-c.severity);
+  const actors = (c.actors||[]).map(a=>`<span class="actor-tag">${a}</span>`).join('');
+  const tl = (c.timeline||[]).slice(0,4).map(t=>`
+    <div class="tl-item">
+      <div class="when">${t.when}</div>
+      <div class="what">${t.url&&t.url!=='#'?`<a href="${t.url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${t.what}</a>`:t.what}</div>
+    </div>`).join('');
+  panel.innerHTML = `
+    <div style="color:var(--c-${c.type})">
+      <div class="detail-header">
+        <div class="detail-ribbon"><span>${TYPE_LABELS[c.type]||c.type} · SEV ${c.severity}</span></div>
+        <div class="detail-h-title">${c.title}</div>
+        <div class="detail-h-loc">${c.location}</div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-cell"><div class="lbl">Severidad</div><div class="val hi">${sev}</div></div>
+        <div class="detail-cell"><div class="lbl">Últ. act.</div><div class="val">${c.timeline?.[0]?.when||'—'}</div></div>
+      </div>
+      <div class="detail-summary">${c.summary||''}</div>
+      ${actors?`<div class="detail-actors"><div class="lbl">Actores</div><div class="actor-tags">${actors}</div></div>`:''}
+      ${tl?`<div class="detail-tl"><div class="lbl">Cronología</div>${tl}</div>`:''}
+    </div>`;
+}
+
+function openSheet() {
+  document.getElementById('mob-sheet').classList.add('open');
+}
+function closeSheet() {
+  document.getElementById('mob-sheet').classList.remove('open');
+  setMobNavActive('mob-btn-map');
+}
+
+function mobSwitchSheetTab(which) {
+  document.querySelectorAll('.mob-sheet-tab').forEach(t => t.classList.toggle('active', t.dataset.mobTab===which));
+  document.querySelectorAll('.mob-sheet-pane').forEach(p => p.classList.toggle('active', p.dataset.mobPane===which));
+  if (which==='detail') mobRenderDetail(ST.selected);
+}
+
+function setMobNavActive(id) {
+  document.querySelectorAll('.mob-nav-btn').forEach(b => b.classList.toggle('active', b.id===id));
+}
+
+function openDrawer() {
+  document.getElementById('mob-drawer').classList.add('open');
+  document.getElementById('mob-overlay').classList.add('open');
+}
+function closeDrawer() {
+  document.getElementById('mob-drawer').classList.remove('open');
+  document.getElementById('mob-overlay').classList.remove('open');
+}
+
+/* Nav bar wiring */
+document.getElementById('mob-btn-map').addEventListener('click', () => {
+  closeSheet(); setMobNavActive('mob-btn-map');
+});
+document.getElementById('mob-btn-feed').addEventListener('click', () => {
+  mobSwitchSheetTab('feed'); openSheet(); setMobNavActive('mob-btn-feed');
+});
+document.getElementById('mob-btn-detail').addEventListener('click', () => {
+  mobSwitchSheetTab('detail'); openSheet(); setMobNavActive('mob-btn-detail');
+});
+document.getElementById('mob-btn-filter').addEventListener('click', openDrawer);
+document.getElementById('mob-overlay').addEventListener('click', closeDrawer);
+document.getElementById('mob-drawer-close').addEventListener('click', closeDrawer);
+
+/* Sheet tabs wiring */
+document.querySelectorAll('.mob-sheet-tab').forEach(t => {
+  t.addEventListener('click', () => mobSwitchSheetTab(t.dataset.mobTab));
+});
+
+/* Drawer filters sync with desktop filters */
+document.querySelectorAll('#mob-drawer .filter-row').forEach(row => {
+  row.addEventListener('click', () => {
+    const t = row.dataset.type;
+    ST.filters[t] = !ST.filters[t];
+    document.querySelectorAll(`.filter-row[data-type="${t}"]`).forEach(r => {
+      r.classList.toggle('active', ST.filters[t]);
+      r.classList.toggle('muted', !ST.filters[t]);
+    });
+    renderMarkers(); mobRenderFeed(); renderHeat();
+  });
+});
+
+/* Drawer sev-cells sync */
+document.querySelectorAll('#mob-drawer .sev-cell').forEach(cell => {
+  cell.addEventListener('click', () => {
+    ST.sevMin = +cell.dataset.sev;
+    document.querySelectorAll('.sev-cell').forEach(c => c.classList.toggle('on', +c.dataset.sev >= ST.sevMin));
+    renderMarkers(); mobRenderFeed(); renderHeat();
+  });
+});
+
+/* Drawer region buttons */
+document.querySelectorAll('#mob-drawer .region-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    const r = REGIONS[b.dataset.region]||REGIONS.global;
+    map.flyTo({ center:r.center, zoom:r.zoom, duration:900 });
+    closeDrawer();
+  });
+});
+
+/* Hook into renderAll to also update mobile panels */
+const _origLoadData = loadData;
+async function loadData() {
+  await _origLoadData();
+  mobRenderAll();
+}
+
+/* Resize handler: re-init map size */
+window.addEventListener('resize', () => map.resize());
 </script>
 </body>
 </html>

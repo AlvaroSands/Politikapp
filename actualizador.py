@@ -13,15 +13,78 @@ from datetime import date
 ARCHIVO_DATOS = "datos.json"
 
 FUENTES_RSS = [
+    # Anglófonas — generalistas
     "https://feeds.bbci.co.uk/news/world/rss.xml",
-    "https://www.aljazeera.com/xml/rss/all.xml",
-    "https://www.france24.com/es/rss",
-    "https://elpais.com/rss/internacional/el-pais.xml",
+    "https://feeds.bbci.co.uk/news/world/europe/rss.xml",
+    "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml",
+    "https://feeds.bbci.co.uk/news/world/asia/rss.xml",
+    "https://feeds.bbci.co.uk/news/world/africa/rss.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+    "https://rss.nytimes.com/services/xml/rss/nyt/MiddleEast.xml",
     "https://feeds.reuters.com/reuters/worldNews",
+    "https://feeds.reuters.com/reuters/topNews",
+    "https://www.theguardian.com/world/rss",
+    "https://www.theguardian.com/world/europe-news/rss",
+    "https://www.theguardian.com/world/middleeast/rss",
+    "https://apnews.com/rss",
+    "https://www.independent.co.uk/news/world/rss",
+    "https://www.ft.com/world?format=rss",
+    "https://www.wsj.com/xml/rss/3_7085.xml",
+    # Anglófonas — especializadas geopolítica/defensa
     "https://foreignpolicy.com/feed/",
     "https://theeconomist.com/sections/world-politics/rss.xml",
+    "https://warontherocks.com/feed/",
+    "https://www.chathamhouse.org/rss.xml",
+    "https://www.brookings.edu/feed/",
+    "https://www.cfr.org/rss.xml",
+    "https://www.defensenews.com/arc/outboundfeeds/rss/?outputType=xml",
+    "https://www.janes.com/feeds/news",
+    "https://thediplomat.com/feed/",
+    "https://eastasiaforum.org/feed/",
+    "https://www.lowyinstitute.org/the-interpreter/rss.xml",
+    "https://www.iiss.org/rss",
+    # Oriente Medio / África / Asia
+    "https://www.aljazeera.com/xml/rss/all.xml",
+    "https://www.middleeasteye.net/rss",
+    "https://english.alarabiya.net/rss.xml",
+    "https://www.africaintelligence.com/rss",
+    "https://www.africanews.com/rss",
+    "https://www.scmp.com/rss/91/feed",
+    "https://www.scmp.com/rss/2/feed",
+    "https://asia.nikkei.com/rss/feed/nar",
+    "https://www.rfa.org/english/rss2.xml",
+    "https://www.voanews.com/api/zy$tqepmve",
+    # Francófonas
+    "https://www.france24.com/es/rss",
+    "https://www.france24.com/fr/monde/rss",
+    "https://www.lemonde.fr/international/rss_full.xml",
+    "https://www.liberation.fr/arc/outboundfeeds/rss/?outputType=xml",
+    # Hispanófonas
+    "https://elpais.com/rss/internacional/el-pais.xml",
     "https://www.elmundo.es/rss/internacional.xml",
+    "https://www.lavanguardia.com/mvc/feed/rss/internacional",
+    "https://www.elconfidencial.com/rss/mundo/",
+    "https://www.infobae.com/feeds/rss/america/",
+    "https://www.bbc.com/mundo/rss.xml",
+    "https://www.dw.com/es/rss/rss.xml",
+    # Alemanas / Europeas
+    "https://www.dw.com/en/rss/rss.xml",
+    "https://www.dw.com/de/rss/rss.xml",
+    "https://www.politico.eu/feed/",
+    "https://euobserver.com/rss.xml",
+    "https://www.euractiv.com/sections/global-europe/feed/",
+    # Radio pública / think tanks extra
+    "https://feeds.npr.org/1004/rss.xml",
+    "https://www.wilsoncenter.org/rss.xml",
+    "https://carnegieendowment.org/rss/solr/articles",
+    # Ucrania / Rusia / Europa del Este
+    "https://www.kyivpost.com/rss",
+    "https://www.ukrinform.net/rss/block-ato",
+    "https://meduza.io/rss/all",
+    # Seguridad / Ciberdefensa
+    "https://www.securityweek.com/feed",
+    "https://krebsonsecurity.com/feed/",
+    "https://feeds.feedburner.com/TheHackersNews",
 ]
 
 # Coordenadas de países frecuentes
@@ -56,6 +119,56 @@ PAISES = {
     "ecuador": {"nombre": "Ecuador",  "lat": -2.20,  "lng": -79.89},
     "hungary": {"nombre": "Hungría",  "lat": 47.50,  "lng": 19.04},
     "hungría": {"nombre": "Hungría",  "lat": 47.50,  "lng": 19.04},
+    "ethiopia": {"nombre": "Etiopía",  "lat": 9.02,   "lng": 38.75},
+    "etiopía":  {"nombre": "Etiopía",  "lat": 9.02,   "lng": 38.75},
+    "somalia":  {"nombre": "Somalia",  "lat": 2.05,   "lng": 45.34},
+    "myanmar":  {"nombre": "Myanmar",  "lat": 19.74,  "lng": 96.08},
+    "birmania": {"nombre": "Myanmar",  "lat": 19.74,  "lng": 96.08},
+    "afghanistan":{"nombre":"Afganistán","lat":33.93, "lng": 67.71},
+    "afganistán":{"nombre":"Afganistán","lat":33.93,  "lng": 67.71},
+    "syria":    {"nombre": "Siria",    "lat": 34.80,  "lng": 38.99},
+    "siria":    {"nombre": "Siria",    "lat": 34.80,  "lng": 38.99},
+    "lebanon":  {"nombre": "Líbano",   "lat": 33.85,  "lng": 35.86},
+    "líbano":   {"nombre": "Líbano",   "lat": 33.85,  "lng": 35.86},
+    "houthi":   {"nombre": "Yemen",    "lat": 15.55,  "lng": 48.52},
+    "yemen":    {"nombre": "Yemen",    "lat": 15.55,  "lng": 48.52},
+    "saudi":    {"nombre": "Arabia Saudí","lat":23.89,"lng": 45.08},
+    "arabia":   {"nombre": "Arabia Saudí","lat":23.89,"lng": 45.08},
+    "turkey":   {"nombre": "Turquía",  "lat": 38.96,  "lng": 35.24},
+    "turquía":  {"nombre": "Turquía",  "lat": 38.96,  "lng": 35.24},
+    "erdogan":  {"nombre": "Turquía",  "lat": 38.96,  "lng": 35.24},
+    "poland":   {"nombre": "Polonia",  "lat": 51.92,  "lng": 19.15},
+    "polonia":  {"nombre": "Polonia",  "lat": 51.92,  "lng": 19.15},
+    "finland":  {"nombre": "Finlandia","lat": 64.96,  "lng": 25.75},
+    "sweden":   {"nombre": "Suecia",   "lat": 60.13,  "lng": 18.64},
+    "baltic":   {"nombre": "Bálticos", "lat": 56.88,  "lng": 24.60},
+    "congo":    {"nombre": "Congo",    "lat": -4.03,  "lng": 21.76},
+    "drc":      {"nombre": "Congo",    "lat": -4.03,  "lng": 21.76},
+    "colombia": {"nombre": "Colombia", "lat": 4.57,   "lng": -74.30},
+    "mexico":   {"nombre": "México",   "lat": 23.63,  "lng": -102.55},
+    "méxico":   {"nombre": "México",   "lat": 23.63,  "lng": -102.55},
+    "brazil":   {"nombre": "Brasil",   "lat": -14.24, "lng": -51.93},
+    "brasil":   {"nombre": "Brasil",   "lat": -14.24, "lng": -51.93},
+    "argentina":{"nombre":"Argentina", "lat": -38.42, "lng": -63.62},
+    "japan":    {"nombre": "Japón",    "lat": 36.20,  "lng": 138.25},
+    "japón":    {"nombre": "Japón",    "lat": 36.20,  "lng": 138.25},
+    "south korea":{"nombre":"Corea del Sur","lat":35.91,"lng":127.77},
+    "philippines":{"nombre":"Filipinas","lat":12.88,  "lng":121.77},
+    "filipinas":{"nombre": "Filipinas","lat": 12.88,  "lng":121.77},
+    "indonesia":{"nombre":"Indonesia", "lat": -0.79,  "lng":113.92},
+    "vietnam":  {"nombre": "Vietnam",  "lat": 14.06,  "lng":108.28},
+    "nigeria":  {"nombre": "Nigeria",  "lat": 9.08,   "lng": 8.68},
+    "egypt":    {"nombre": "Egipto",   "lat": 26.82,  "lng": 30.80},
+    "egipto":   {"nombre": "Egipto",   "lat": 26.82,  "lng": 30.80},
+    "libya":    {"nombre": "Libia",    "lat": 26.34,  "lng": 17.23},
+    "libia":    {"nombre": "Libia",    "lat": 26.34,  "lng": 17.23},
+    "morocco":  {"nombre": "Marruecos","lat": 31.79,  "lng": -7.09},
+    "marruecos":{"nombre":"Marruecos", "lat": 31.79,  "lng": -7.09},
+    "serbia":   {"nombre": "Serbia",   "lat": 44.02,  "lng": 21.01},
+    "kosovo":   {"nombre": "Kosovo",   "lat": 42.60,  "lng": 20.90},
+    "georgia":  {"nombre": "Georgia",  "lat": 42.31,  "lng": 43.36},
+    "armenia":  {"nombre": "Armenia",  "lat": 40.07,  "lng": 45.04},
+    "azerbaijan":{"nombre":"Azerbaiyán","lat":40.14,  "lng": 47.58},
 }
 
 # Patrones de relaciones bilaterales (pares de países en un titular)
@@ -76,8 +189,16 @@ CRISIS_KEYWORDS = {
     "tension-estrecho-taiwan":  ["taiwan", "taiwán", "strait", "estrecho", "pla"],
     "violencia-haiti":          ["haiti", "haití", "gang", "banda"],
     "conflicto-ecuador":        ["ecuador", "noboa", "crimen organizado"],
-    "conflicto-mar-rojo-huties":["houthi", "huti", "hutí", "red sea", "mar rojo", "yemen"],
-    "crisis-energetica-europa": ["energy", "energía", "gas", "oil", "petróleo", "europa", "europe"],
+    "conflicto-mar-rojo-huties":["houthi", "huti", "hutí", "red sea", "mar rojo", "yemen", "bab el-mandeb"],
+    "crisis-energetica-europa": ["energy", "energía", "gas", "oil", "petróleo", "europa", "europe", "lng", "pipeline"],
+    "myanmar-golpe-guerra-civil":["myanmar", "birmania", "junta", "tatmadaw", "sac", "coup"],
+    "sahel-burkina-niger":      ["burkina", "niamey", "bamako", "aes", "sahel", "jihadist", "yihadista", "wagner"],
+    "armenia-azerbaiyan":       ["armenia", "azerbaiján", "azerbaiyán", "nagorno", "karabaj", "karabakh"],
+    "taiwan-china-estrecho":    ["taiwan", "taiwán", "strait", "estrecho", "pla", "tsmc"],
+    "africa-golfo-guinea":      ["nigeria", "bight of benin", "cameroon", "piracy", "gulf of guinea"],
+    "crisis-diplomatica-unsc":  ["united nations", "naciones unidas", "security council", "consejo de seguridad", "veto", "unsc"],
+    "ciber-ataques-estado":     ["cyberattack", "ciberataque", "ransomware", "hack", "espionage", "espionaje", "apt", "malware", "exploit"],
+    "suramerica-crisis":        ["venezuela", "maduro", "colombia", "farc", "cartels", "cartel", "narco", "ecuador"],
 }
 
 # Palabras que indican tensión entre dos actores (para detectar relación bilateral)
@@ -171,7 +292,7 @@ def ejecutar_actualizacion():
 
         nombre_fuente = getattr(feed.feed, "title", "Internacional")
 
-        for entrada in feed.entries[:5]:
+        for entrada in feed.entries[:8]:
             enlace = getattr(entrada, "link", "")
             titulo = getattr(entrada, "title", "")
 
