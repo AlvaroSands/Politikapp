@@ -45,9 +45,24 @@ async def api_datos():
         return JSONResponse(status_code=500, content={"error": "No se pudo leer la base de datos"})
 
 
+@app.get("/historial.json")
+async def api_historial():
+    try:
+        with open("historial_severidad.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
 @app.get("/", response_class=HTMLResponse)
 async def pagina_principal():
     with open("index.html", "r", encoding="utf-8") as f:
+        return f.read()
+
+
+@app.get("/analisis", response_class=HTMLResponse)
+async def pagina_analisis():
+    with open("analisis.html", "r", encoding="utf-8") as f:
         return f.read()
 
 

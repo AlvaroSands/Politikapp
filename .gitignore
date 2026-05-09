@@ -17,3 +17,4 @@ importador_masivo.py
 
 # Runtime generado por el actualizador (no subir al repo)
 pendientes.json
+.env

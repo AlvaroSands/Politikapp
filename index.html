@@ -490,6 +490,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       <span class="status-pill" id="pill-armed"><span class="status-dot r"></span> <span id="pill-armed-n">0</span> conflictos armados</span>
       <span class="status-pill" id="pill-diplo"><span class="status-dot w"></span> <span id="pill-diplo-n">0</span> tensiones activas</span>
       <span style="margin-left:auto;color:var(--text-0)">ACTUALIZACIÓN AUTO · CADA 3H</span>
+      <a href="/analisis" style="display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-1);border-left:1px solid var(--line-0);transition:color .15s" onmouseover="this.style.color='var(--text-3)'" onmouseout="this.style.color='var(--text-1)'">Análisis Regional ↗</a>
     </div>
     <div class="topbar-clock">
       <div class="clock-cell">
@@ -640,6 +641,7 @@ const REGIONS = {
 
 const ST = {
   data: null,
+  historial: {},
   markers: [],
   popup: null,
   filters: { armed:true, diplo:true, econ:true, cyber:true, intel:true },
@@ -746,12 +748,31 @@ function arcColorExpr() {
 function emptyFC() { return {type:'FeatureCollection',features:[]}; }
 
 /* ── DATA ────────────────────────────────────────────────────── */
+function sparklineSVG(puntos) {
+  if (!puntos || puntos.length < 2) return '';
+  const w=90, h=26, pad=3;
+  const coords = puntos.map((p,i) => {
+    const x = pad + (i/(puntos.length-1))*(w-2*pad);
+    const y = h - pad - ((p-1)/4)*(h-2*pad);
+    return [x.toFixed(1), y.toFixed(1)];
+  });
+  const pts = coords.map(c=>c.join(',')).join(' ');
+  const [lx,ly] = coords[coords.length-1];
+  const ult = puntos[puntos.length-1];
+  const col = ult>=4?'var(--c-armed)':ult>=3?'var(--c-econ)':'var(--c-diplo)';
+  return `<svg width="${w}" height="${h}" style="display:inline-block;vertical-align:middle"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round" opacity=".85"/><circle cx="${lx}" cy="${ly}" r="2.5" fill="${col}"/></svg>`;
+}
+
 async function loadData() {
   _dataLoaded = true;
   try {
-    const r = await fetch('/datos.json?t='+Date.now());
+    const [r, rh] = await Promise.all([
+      fetch('/datos.json?t='+Date.now()),
+      fetch('/historial.json?t='+Date.now()),
+    ]);
     const data = await r.json();
     ST.data = data;
+    ST.historial = await rh.json().catch(() => ({}));
     renderAll();
     mobRenderAll();
     document.getElementById('last-sync').textContent = new Date().toLocaleTimeString('es-ES');
@@ -904,6 +925,7 @@ function renderDetail(c) {
       </div>
       <div class="detail-summary">${c.summary||'Sin resumen disponible.'}</div>
       ${actors?`<div class="detail-actors"><div class="lbl">Actores</div><div class="actor-tags">${actors}</div></div>`:''}
+      ${(() => { const h=ST.historial[c.id]; return h&&h.length>=2?`<div class="detail-cell" style="border-top:1px solid var(--line-0);padding-top:8px;margin-top:2px"><div class="lbl">Tendencia severidad</div><div class="val" style="padding-top:4px">${sparklineSVG(h.map(e=>e.severity))}</div></div>`:''; })()}
       ${tl?`<div class="detail-tl"><div class="lbl">Cronología</div>${tl}</div>`:''}
     </div>`;
 }

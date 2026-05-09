@@ -13,10 +13,12 @@ from datetime import date, datetime, timedelta
 from difflib import SequenceMatcher
 
 import requests
+from notificaciones import alerta_nueva_crisis, alerta_escalada, alerta_relacion_bilateral
 from bs4 import BeautifulSoup
 
 ARCHIVO_DATOS     = "datos.json"
-ARCHIVO_PENDIENTES = "pendientes.json"
+ARCHIVO_PENDIENTES   = "pendientes.json"
+ARCHIVO_HISTORIAL    = "historial_severidad.json"
 
 HEADERS_HTTP = {
     "User-Agent": (
@@ -352,6 +354,33 @@ def guardar_pendientes(pendientes):
         json.dump(pendientes, f, ensure_ascii=False, indent=2)
 
 
+def cargar_historial():
+    if os.path.exists(ARCHIVO_HISTORIAL):
+        with open(ARCHIVO_HISTORIAL, "r", encoding="utf-8") as f:
+            try:
+                return json.load(f)
+            except (json.JSONDecodeError, ValueError):
+                pass
+    return {}
+
+
+def guardar_historial(historial):
+    with open(ARCHIVO_HISTORIAL, "w", encoding="utf-8") as f:
+        json.dump(historial, f, ensure_ascii=False, indent=2)
+
+
+def registrar_severidad(historial, crisis_id, severity):
+    """Añade un punto al historial solo si han pasado ≥24h desde el último."""
+    hoy = date.today().isoformat()
+    entradas = historial.setdefault(crisis_id, [])
+    if entradas and entradas[-1]["fecha"] == hoy:
+        entradas[-1]["severity"] = severity
+    else:
+        entradas.append({"fecha": hoy, "severity": severity})
+    # Mantener últimos 90 días
+    historial[crisis_id] = entradas[-90:]
+
+
 def normalizar(texto):
     t = unicodedata.normalize("NFD", texto.lower())
     t = "".join(c for c in t if unicodedata.category(c) != "Mn")
@@ -517,6 +546,7 @@ def promover_candidato(cand, db):
 
     db["crisis"].append(nueva_crisis)
     print(f"  🆕 NUEVA CRISIS CREADA [{tipo.upper()} SEV{severidad}]: {titulo[:70]}...")
+    alerta_nueva_crisis(nueva_crisis)
     return nueva_crisis
 
 
@@ -584,6 +614,10 @@ def ejecutar_actualizacion():
     db          = cargar_db()
     pendientes  = cargar_pendientes()
     pendientes  = limpiar_pendientes_caducados(pendientes)
+    historial   = cargar_historial()
+
+    # Snapshot de severidades antes de procesar (para detectar escaladas)
+    sev_antes = {id_crisis(c): c.get("severity", 1) for c in db["crisis"]}
 
     # URLs ya vistas (para no duplicar)
     urls_vistas = set()
@@ -701,7 +735,29 @@ def ejecutar_actualizacion():
             urls_vistas.add(enlace)
             time.sleep(0.4)
 
-    # ── 3. PERSISTIR ─────────────────────────────────────────────────────────
+    # ── 3. HISTORIAL DE SEVERIDAD + ALERTAS DE ESCALADA ─────────────────────
+    for c in db["crisis"]:
+        cid     = id_crisis(c)
+        sev_act = c.get("severity", 1)
+        sev_ant = sev_antes.get(cid, sev_act)
+        registrar_severidad(historial, cid, sev_act)
+        if sev_act > sev_ant:
+            print(f"  ⬆️  Escalada [{cid}]: {sev_ant} → {sev_act}")
+            alerta_escalada(c, sev_ant, sev_act)
+
+    # Alerta para relaciones bilaterales rojas nuevas
+    for r in db["relaciones"]:
+        if r.get("nivel") == "rojo" and r.get("url", "") not in urls_vistas:
+            alerta_relacion_bilateral(
+                r.get("origen", {}).get("nombre", "?"),
+                r.get("destino", {}).get("nombre", "?"),
+                "rojo",
+                r.get("titular", ""),
+            )
+
+    guardar_historial(historial)
+
+    # ── 4. PERSISTIR ─────────────────────────────────────────────────────────
     guardar_pendientes(pendientes)
 
     if nuevas > 0:

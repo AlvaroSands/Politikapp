@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Análisis Regional — Geopolitikapp</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-0:#07090a; --bg-1:#0c1214; --bg-2:#11191c; --bg-3:#182225;
+  --line-0:#182428; --line-1:#233339; --line-2:#314449;
+  --text-0:#4f6168; --text-1:#8195a0; --text-2:#c1d1d8; --text-3:#e8f1f4;
+  --c-armed:#e05050; --c-diplo:#4aa3d9; --c-econ:#d9a441;
+  --c-cyber:#b860d4; --c-intel:#4ad48f; --accent:#d9a441;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg-0);color:var(--text-2);font-family:var(--mono);font-size:12px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:grid;grid-template-columns:1fr auto auto;align-items:stretch;
+  height:52px;background:var(--bg-1);border-bottom:1px solid var(--line-0);
+  position:sticky;top:0;z-index:100;
+}
+.brand{display:flex;align-items:center;gap:12px;padding:0 18px;border-right:1px solid var(--line-0)}
+.brand-mark{width:24px;height:24px;background:var(--bg-3);border:1px solid var(--line-2);position:relative;display:flex;align-items:center;justify-content:center}
+.brand-mark::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--accent)}
+.brand-mark::after{content:"";position:absolute;top:50%;left:-3px;right:-3px;height:1px;background:var(--accent)}
+.brand-mark span{width:6px;height:6px;background:var(--accent);border-radius:50%;position:relative;z-index:1}
+.brand-text .t1{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--text-3)}
+.brand-text .t2{font-size:9px;color:var(--text-0);letter-spacing:.1em}
+.topbar-title{display:flex;align-items:center;padding:0 20px;font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--text-3)}
+.topbar-actions{display:flex;align-items:center;gap:0;border-left:1px solid var(--line-0)}
+.topbar-btn{
+  display:flex;align-items:center;gap:7px;padding:0 18px;height:100%;
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-1);
+  border-right:1px solid var(--line-0);transition:color .15s,background .15s;
+}
+.topbar-btn:hover{color:var(--text-3);background:var(--bg-2)}
+.clock{display:flex;align-items:center;padding:0 16px;gap:6px;font-size:11px;color:var(--text-0);border-right:1px solid var(--line-0)}
+.clock span{color:var(--text-1)}
+
+/* ── CONTENIDO ── */
+.page{max-width:1280px;margin:0 auto;padding:28px 20px 60px}
+
+.page-header{margin-bottom:28px}
+.page-header h1{font-family:var(--sans);font-size:22px;font-weight:700;color:var(--text-3);letter-spacing:.06em;margin-bottom:6px}
+.page-header p{color:var(--text-0);font-size:11px;letter-spacing:.08em}
+
+.sync-bar{display:flex;align-items:center;gap:12px;margin-bottom:24px;font-size:10px;color:var(--text-0);letter-spacing:.1em}
+.sync-dot{width:6px;height:6px;background:var(--c-intel);border-radius:50%;animation:pulse-dot 2s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── GRID DE REGIONES ── */
+.regions-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line-0)}
+@media(max-width:768px){.regions-grid{grid-template-columns:1fr}}
+
+.region-card{
+  background:var(--bg-1);padding:22px 20px;
+  transition:background .15s;
+}
+.region-card:hover{background:var(--bg-2)}
+
+.region-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.region-name{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--text-3);letter-spacing:.08em}
+.region-count{
+  font-size:10px;letter-spacing:.14em;color:var(--text-0);
+  background:var(--bg-3);border:1px solid var(--line-1);
+  padding:3px 8px;border-radius:2px;
+}
+.region-count span{color:var(--accent);font-weight:600}
+
+.sev-bar-wrap{margin-bottom:16px}
+.sev-label{font-size:9px;letter-spacing:.12em;color:var(--text-0);margin-bottom:5px}
+.sev-track{height:4px;background:var(--bg-3);border-radius:2px;overflow:hidden}
+.sev-fill{height:100%;border-radius:2px;transition:width .6s ease}
+
+.crisis-list{margin-bottom:16px}
+.crisis-list-title{font-size:9px;letter-spacing:.16em;color:var(--text-0);text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1px dashed var(--line-1)}
+.crisis-item{
+  display:grid;grid-template-columns:8px 1fr auto;gap:8px;
+  align-items:start;padding:6px 0;border-bottom:1px solid var(--bg-3);
+}
+.crisis-item:last-child{border-bottom:0}
+.crisis-dot{width:8px;height:8px;border-radius:50%;margin-top:2px;flex-shrink:0}
+.crisis-item-title{font-size:11px;color:var(--text-2);line-height:1.4}
+.crisis-item-loc{font-size:9px;color:var(--text-0)}
+.crisis-sev{
+  font-size:9px;font-weight:600;letter-spacing:.06em;
+  padding:2px 5px;border-radius:1px;align-self:start;
+  background:var(--bg-3);
+}
+
+.sparkline-wrap{margin-bottom:16px}
+.sparkline-label{font-size:9px;letter-spacing:.12em;color:var(--text-0);margin-bottom:5px}
+
+.news-section{}
+.news-title{font-size:9px;letter-spacing:.16em;color:var(--text-0);text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1px dashed var(--line-1)}
+.news-item{padding:6px 0;border-bottom:1px solid var(--bg-3)}
+.news-item:last-child{border-bottom:0}
+.news-when{font-size:9px;color:var(--text-0);margin-bottom:2px}
+.news-what{font-size:10px;color:var(--text-1);line-height:1.4}
+.news-what a{color:var(--text-1);text-decoration:underline;text-decoration-color:var(--line-2)}
+.news-what a:hover{color:var(--text-3)}
+.news-src{font-size:9px;color:var(--text-0);margin-top:2px}
+
+.empty-region{
+  display:flex;align-items:center;justify-content:center;
+  min-height:120px;color:var(--text-0);font-size:10px;letter-spacing:.1em;
+}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:24px;font-size:10px;color:var(--text-0);letter-spacing:.1em;border-top:1px solid var(--line-0);margin-top:40px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark"><span></span></div>
+    <div class="brand-text">
+      <div class="t1">MONITOR GEOPOLÍTICO</div>
+      <div class="t2">geopolitikapp.com · live</div>
+    </div>
+  </div>
+  <div class="topbar-title">ANÁLISIS REGIONAL</div>
+  <div class="topbar-actions">
+    <div class="clock">UTC <span id="clock-utc">—</span></div>
+    <a href="/" class="topbar-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+      ← Mapa
+    </a>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-header">
+    <h1>Análisis por Región</h1>
+    <p>RESUMEN AUTOMÁTICO · DATOS EN TIEMPO REAL · ACTUALIZACIÓN CADA 3 HORAS</p>
+  </div>
+
+  <div class="sync-bar">
+    <div class="sync-dot"></div>
+    <span>Última sincronización: <span id="last-sync">cargando...</span></span>
+    <span style="margin-left:auto"><span id="total-crisis">—</span> crisis activas globales</span>
+  </div>
+
+  <div class="regions-grid" id="regions-grid">
+    <div class="empty-region">// cargando datos...</div>
+  </div>
+</div>
+
+<footer class="footer">
+  geopolitikapp.com · monitor geopolítico en tiempo real · datos actualizados automáticamente
+</footer>
+
+<script>
+const TYPE_COLOR = {
+  armed:'var(--c-armed)', diplo:'var(--c-diplo)', econ:'var(--c-econ)',
+  cyber:'var(--c-cyber)', intel:'var(--c-intel)'
+};
+const TYPE_LABEL = {
+  armed:'ARMADO', diplo:'DIPLO', econ:'ECON', cyber:'CYBER', intel:'INTEL'
+};
+
+const REGIONES = {
+  europa: {
+    nombre: 'Europa',
+    ids: ['ucrania-este-2026','cambio-politico-hungria','crisis-energetica-europa'],
+    paises: ['ukraine','ucrania','russia','rusia','hungary','hungría','poland','polonia',
+             'serbia','kosovo','georgia','armenia','azerbaijan','finland','sweden',
+             'baltic','germany','france','spain','uk','britain','nato','europe','europa'],
+  },
+  oriente_medio: {
+    nombre: 'Oriente Medio',
+    ids: ['iran-ormuz-2026','oriente-medio-gaza','conflicto-mar-rojo-huties'],
+    paises: ['iran','irán','israel','gaza','lebanon','líbano','syria','siria',
+             'iraq','irak','jordan','jordania','saudi','arabia','houthi','yemen',
+             'turkey','turquía','qatar','kuwait','oman','uae','emirates'],
+  },
+  asia_pacifico: {
+    nombre: 'Asia-Pacífico',
+    ids: ['india-pakistan-sindoor-2026','corea-norte-misiles-2026','tension-estrecho-taiwan','china-estrategia-energetica'],
+    paises: ['china','taiwan','taiwán','north korea','corea','india','pakistan',
+             'myanmar','birmania','philippines','filipinas','indonesia','vietnam',
+             'japan','japón','south korea','thailand','bangladesh','nepal','afghanistan'],
+  },
+  africa: {
+    nombre: 'África',
+    ids: ['sudan-guerra-civil-2026','sahel-mali-yihadistas-2026'],
+    paises: ['sudan','sudán','mali','niger','ethiopia','etiopía','somalia','congo',
+             'drc','nigeria','morocco','marruecos','libya','libia','egypt','egipto',
+             'algeria','argelia','chad','mozambique','burkina','kenya','tanzania',
+             'cameroon','senegal','africa'],
+  },
+  americas: {
+    nombre: 'Américas',
+    ids: ['violencia-haiti','conflicto-ecuador'],
+    paises: ['venezuela','haiti','haití','ecuador','colombia','mexico','méxico',
+             'brazil','brasil','argentina','usa','america','eeuu','trump'],
+  },
+  global: {
+    nombre: 'Global / Transversal',
+    ids: ['ciber-ataques-estado','operaciones-inteligencia'],
+    paises: [],
+  },
+};
+
+// Asigna cada crisis a su región
+function asignarRegion(c) {
+  const cid = c.id || '';
+  const loc = (c.location || '').toLowerCase();
+  const titulo = (c.title || '').toLowerCase();
+  const texto = loc + ' ' + titulo;
+
+  for (const [key, reg] of Object.entries(REGIONES)) {
+    if (reg.ids.some(id => cid.includes(id.split('-')[0]) && cid === id)) return key;
+  }
+  for (const [key, reg] of Object.entries(REGIONES)) {
+    if (reg.ids.includes(cid)) return key;
+    if (reg.paises.some(p => texto.includes(p))) return key;
+  }
+  return 'global';
+}
+
+function sevColor(sev) {
+  if (sev >= 4) return 'var(--c-armed)';
+  if (sev >= 3) return 'var(--c-econ)';
+  return 'var(--c-diplo)';
+}
+
+function sparklineSVG(puntos) {
+  if (!puntos || puntos.length < 2) return '';
+  const w = 100, h = 28, pad = 3;
+  const coords = puntos.map((p, i) => {
+    const x = pad + (i / (puntos.length - 1)) * (w - 2 * pad);
+    const y = h - pad - ((p - 1) / 4) * (h - 2 * pad);
+    return [x.toFixed(1), y.toFixed(1)];
+  });
+  const pts = coords.map(c => c.join(',')).join(' ');
+  const [lx, ly] = coords[coords.length - 1];
+  const ult = puntos[puntos.length - 1];
+  const color = sevColor(ult);
+  return `<svg width="${w}" height="${h}" style="display:block">
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" opacity=".85"/>
+    <circle cx="${lx}" cy="${ly}" r="2.5" fill="${color}"/>
+  </svg>`;
+}
+
+function severidadMedia(crisis) {
+  if (!crisis.length) return 0;
+  return crisis.reduce((s, c) => s + (c.severity || 1), 0) / crisis.length;
+}
+
+// Obtiene últimas N noticias del timeline de un conjunto de crisis
+function ultimasNoticias(crisis, n = 3) {
+  const items = [];
+  for (const c of crisis) {
+    for (const t of (c.timeline || []).slice(0, 4)) {
+      items.push({ ...t, crisis_title: c.title, crisis_type: c.type });
+    }
+  }
+  return items
+    .sort((a, b) => (b.when || '').localeCompare(a.when || ''))
+    .slice(0, n);
+}
+
+// Sparkline de severidad media de la región a lo largo del tiempo
+function sparklineRegion(crisis, historial) {
+  if (!historial || !crisis.length) return '';
+  const fechas = new Set();
+  for (const c of crisis) {
+    for (const e of (historial[c.id] || [])) fechas.add(e.fecha);
+  }
+  const sorted = Array.from(fechas).sort();
+  if (sorted.length < 2) return '';
+  const puntos = sorted.map(fecha => {
+    let sum = 0, n = 0;
+    for (const c of crisis) {
+      const h = (historial[c.id] || []).find(e => e.fecha === fecha);
+      if (h) { sum += h.severity; n++; }
+    }
+    return n ? sum / n : null;
+  }).filter(v => v !== null);
+  return sparklineSVG(puntos);
+}
+
+function renderRegion(key, reg, crisis, historial) {
+  const sev = severidadMedia(crisis);
+  const sevPct = sev ? ((sev - 1) / 4 * 100).toFixed(0) : 0;
+  const color = sevColor(sev);
+  const noticias = ultimasNoticias(crisis, 3);
+  const spark = sparklineRegion(crisis, historial);
+
+  if (!crisis.length) {
+    return `<div class="region-card">
+      <div class="region-header">
+        <div class="region-name">${reg.nombre}</div>
+        <div class="region-count">SIN DATOS</div>
+      </div>
+      <div class="empty-region">// sin crisis activas</div>
+    </div>`;
+  }
+
+  const crisisItems = crisis
+    .slice().sort((a, b) => (b.severity || 0) - (a.severity || 0))
+    .slice(0, 4)
+    .map(c => `
+      <div class="crisis-item">
+        <div class="crisis-dot" style="background:${TYPE_COLOR[c.type] || 'var(--text-0)'}"></div>
+        <div>
+          <div class="crisis-item-title">${c.title}</div>
+          <div class="crisis-item-loc">${c.location || '—'}</div>
+        </div>
+        <div class="crisis-sev" style="color:${sevColor(c.severity)}">${'■'.repeat(c.severity || 1)}${'□'.repeat(5 - (c.severity || 1))}</div>
+      </div>`).join('');
+
+  const noticiasHTML = noticias.length ? noticias.map(n => `
+    <div class="news-item">
+      <div class="news-when">${n.when || '—'}</div>
+      <div class="news-what">${n.url && n.url !== '#'
+        ? `<a href="${n.url}" target="_blank" rel="noopener">${n.what}</a>`
+        : n.what}</div>
+      <div class="news-src">${n.source || '—'}</div>
+    </div>`).join('') : '<div style="color:var(--text-0);font-size:10px;padding:8px 0">// sin noticias recientes</div>';
+
+  return `<div class="region-card">
+    <div class="region-header">
+      <div class="region-name">${reg.nombre}</div>
+      <div class="region-count"><span>${crisis.length}</span> crisis activas</div>
+    </div>
+
+    <div class="sev-bar-wrap">
+      <div class="sev-label">SEVERIDAD MEDIA · ${sev.toFixed(1)}/5</div>
+      <div class="sev-track"><div class="sev-fill" style="width:${sevPct}%;background:${color}"></div></div>
+    </div>
+
+    ${spark ? `<div class="sparkline-wrap">
+      <div class="sparkline-label">EVOLUCIÓN DE SEVERIDAD (historial)</div>
+      ${spark}
+    </div>` : ''}
+
+    <div class="crisis-list">
+      <div class="crisis-list-title">Crisis activas</div>
+      ${crisisItems}
+    </div>
+
+    <div class="news-section">
+      <div class="news-title">Últimas noticias</div>
+      ${noticiasHTML}
+    </div>
+  </div>`;
+}
+
+async function cargarYRenderizar() {
+  try {
+    const [datosRes, histRes] = await Promise.all([
+      fetch('/datos.json?t=' + Date.now()),
+      fetch('/historial.json?t=' + Date.now()),
+    ]);
+    const datos    = await datosRes.json();
+    const historial = await histRes.json().catch(() => ({}));
+    const crisis   = datos.crisis || [];
+
+    document.getElementById('total-crisis').textContent = crisis.length;
+    document.getElementById('last-sync').textContent = new Date().toLocaleTimeString('es-ES');
+
+    // Agrupar por región
+    const grupos = {};
+    for (const key of Object.keys(REGIONES)) grupos[key] = [];
+    for (const c of crisis) {
+      const key = asignarRegion(c);
+      grupos[key].push(c);
+    }
+
+    const grid = document.getElementById('regions-grid');
+    grid.innerHTML = Object.entries(REGIONES)
+      .map(([key, reg]) => renderRegion(key, reg, grupos[key] || [], historial))
+      .join('');
+
+  } catch (e) {
+    document.getElementById('regions-grid').innerHTML =
+      '<div class="empty-region">// error cargando datos</div>';
+  }
+}
+
+// Reloj UTC
+function tickClock() {
+  const now = new Date();
+  const hh = String(now.getUTCHours()).padStart(2,'0');
+  const mm = String(now.getUTCMinutes()).padStart(2,'0');
+  const ss = String(now.getUTCSeconds()).padStart(2,'0');
+  document.getElementById('clock-utc').textContent = `${hh}:${mm}:${ss}`;
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+cargarYRenderizar();
+setInterval(cargarYRenderizar, 5 * 60 * 1000);
+</script>
+</body>
+</html>
