@@ -14,3 +14,6 @@ __pycache__/
 
 # Importador (script local)
 importador_masivo.py
+
+# Runtime generado por el actualizador (no subir al repo)
+pendientes.json
