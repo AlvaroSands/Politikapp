@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Geopolitikapp — Monitor Geopolítico</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Monitor geopolítico en tiempo real. Conflictos, tensiones diplomáticas y crisis globales actualizadas cada 3 horas.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -310,11 +310,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* Bottom sheet (móvil) */
 .mob-sheet {
-  position:fixed; left:0; right:0; bottom:56px;
+  position:fixed; left:0; right:0;
+  bottom:calc(56px + env(safe-area-inset-bottom, 0px));
   background:var(--bg-1); border-top:1px solid var(--line-1);
   z-index:150; transform:translateY(100%);
   transition:transform .3s cubic-bezier(.4,0,.2,1);
-  height:55vh; display:flex; flex-direction:column;
+  height:55dvh; height:55vh; display:flex; flex-direction:column;
   border-radius:12px 12px 0 0;
 }
 .mob-sheet.open { transform:translateY(0); }
@@ -337,7 +338,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* Bottom nav bar */
 .mob-nav {
-  display:none; position:fixed; left:0; right:0; bottom:0; height:56px;
+  display:none; position:fixed; left:0; right:0; bottom:0;
+  height:calc(56px + env(safe-area-inset-bottom, 0px));
+  padding-bottom:env(safe-area-inset-bottom, 0px);
   background:var(--bg-1); border-top:1px solid var(--line-0);
   z-index:160; align-items:stretch;
 }
@@ -378,7 +381,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   }
 
   /* Mapa ocupa todo */
-  .main { height:calc(100vh - 48px); }
+  .main { height:calc(100dvh - 48px); height:calc(100vh - 48px); }
 
   /* HUD y coordenadas ocultos en móvil */
   .hud, .hud-corner, .coord-readout { display:none; }
@@ -646,31 +649,44 @@ const ST = {
 };
 
 /* ── MAP ─────────────────────────────────────────────────────── */
+const _mob = window.innerWidth <= 768;
+let _dataLoaded = false;
+
 const map = new maplibregl.Map({
   container:'map',
   style:'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
-  center:[22,24], zoom:2.3, minZoom:1.2, maxZoom:16,
-  projection:'globe'
+  center:[22,24], zoom: _mob ? 1.5 : 2.3, minZoom:1.2, maxZoom:16,
+  projection: _mob ? 'mercator' : 'globe',
+  antialias: !_mob
 });
 map.addControl(new maplibregl.NavigationControl({ showCompass:true }), 'bottom-right');
 ST.popup = new maplibregl.Popup({ closeButton:false, closeOnClick:false, offset:14 });
 
+/* Fallback: si el mapa tarda más de 5s, carga datos igualmente */
+const _dataFallback = setTimeout(() => {
+  if (!_dataLoaded) { loadData(); setInterval(loadData, 60000); }
+}, 5000);
+
 map.on('load', () => {
-  try {
-    map.setFog({
-      'space-color':'#00000a', 'star-intensity':0.7,
-      'horizon-blend':0.03, 'high-color':'#000e1a',
-      'color':'#000810', 'range':[0.8,8]
-    });
-  } catch(e) {}
-  try {
-    map.addLayer({ id:'sky', type:'sky', paint:{
-      'sky-type':'atmosphere',
-      'sky-atmosphere-color':'rgba(0,8,26,1)',
-      'sky-atmosphere-halo-color':'rgba(0,30,80,.4)',
-      'sky-atmosphere-sun-intensity':4
-    }});
-  } catch(e) {}
+  clearTimeout(_dataFallback);
+
+  if (!_mob) {
+    try {
+      map.setFog({
+        'space-color':'#00000a', 'star-intensity':0.7,
+        'horizon-blend':0.03, 'high-color':'#000e1a',
+        'color':'#000810', 'range':[0.8,8]
+      });
+    } catch(e) {}
+    try {
+      map.addLayer({ id:'sky', type:'sky', paint:{
+        'sky-type':'atmosphere',
+        'sky-atmosphere-color':'rgba(0,8,26,1)',
+        'sky-atmosphere-halo-color':'rgba(0,30,80,.4)',
+        'sky-atmosphere-sun-intensity':4
+      }});
+    } catch(e) {}
+  }
 
   map.addSource('arcs', { type:'geojson', data:emptyFC() });
   map.addSource('heat', { type:'geojson', data:emptyFC() });
@@ -706,11 +722,13 @@ map.on('load', () => {
   map.on('mousemove','arcs-hit', e => ST.popup.isOpen() && ST.popup.setLngLat(e.lngLat));
   map.on('mouseleave','arcs-hit', () => { map.getCanvas().style.cursor=''; ST.popup.remove(); });
 
-  map.on('mousemove', e => {
-    const {lng,lat} = e.lngLat;
-    document.getElementById('coord-live').textContent =
-      `${Math.abs(lat).toFixed(2)}°${lat>=0?'N':'S'}  ${Math.abs(lng).toFixed(2)}°${lng>=0?'E':'W'}`;
-  });
+  if (!_mob) {
+    map.on('mousemove', e => {
+      const {lng,lat} = e.lngLat;
+      document.getElementById('coord-live').textContent =
+        `${Math.abs(lat).toFixed(2)}°${lat>=0?'N':'S'}  ${Math.abs(lng).toFixed(2)}°${lng>=0?'E':'W'}`;
+    });
+  }
 
   animArcs();
   loadData();
@@ -729,6 +747,7 @@ function emptyFC() { return {type:'FeatureCollection',features:[]}; }
 
 /* ── DATA ────────────────────────────────────────────────────── */
 async function loadData() {
+  _dataLoaded = true;
   try {
     const r = await fetch('/datos.json?t='+Date.now());
     const data = await r.json();
