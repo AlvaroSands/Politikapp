@@ -325,6 +325,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .tg-btn { margin-left:auto; display:flex; align-items:center; gap:5px; color:#54a9eb; text-decoration:none; border:1px solid rgba(84,169,235,.3); padding:4px 10px; letter-spacing:.1em; transition:border-color .15s,color .15s; white-space:nowrap; }
 .tg-btn:hover { border-color:#54a9eb; color:#fff; }
 .tg-btn svg { flex-shrink:0; }
+.lang-toggle { display:flex; border:1px solid var(--line-1); overflow:hidden; }
+.lang-btn { padding:0 9px; font-size:9px; letter-spacing:.14em; font-family:inherit; color:var(--text-0); background:none; border:none; cursor:pointer; transition:color .15s,background .15s; }
+.lang-btn.active { background:var(--line-2); color:var(--text-3); }
 .leg-item { display:inline-flex; align-items:center; gap:6px; color:var(--text-1); }
 .leg-sw { width:10px; height:10px; }
 .leg-sw.armed { background:var(--c-armed); } .leg-sw.diplo { background:var(--c-diplo); }
@@ -503,8 +506,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     <div class="mob-sheet-handle"></div>
     <div class="mob-sheet-tabs">
       <button class="mob-sheet-tab active" data-mob-tab="feed">Feed <span id="mob-cnt-feed"></span></button>
-      <button class="mob-sheet-tab" data-mob-tab="detail">Detalle</button>
-      <button class="mob-sheet-tab" data-mob-tab="stats">Resumen</button>
+      <button class="mob-sheet-tab" data-mob-tab="detail" data-i18n="tab_detail">Detalle</button>
+      <button class="mob-sheet-tab" data-mob-tab="stats" data-i18n="tab_stats">Resumen</button>
     </div>
     <div class="mob-sheet-body">
       <div class="mob-sheet-pane active" data-mob-pane="feed"><div id="mob-feed-list"></div></div>
@@ -517,7 +520,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   <nav class="mob-nav" id="mob-nav">
     <button class="mob-nav-btn active" id="mob-btn-map">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
-      Mapa
+      <span data-i18n="mob_map">Mapa</span>
     </button>
     <button class="mob-nav-btn" id="mob-btn-feed">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
@@ -525,11 +528,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     </button>
     <button class="mob-nav-btn" id="mob-btn-detail">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3"/></svg>
-      Detalle
+      <span data-i18n="tab_detail">Detalle</span>
     </button>
     <button class="mob-nav-btn" id="mob-btn-filter">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
-      Filtros
+      <span data-i18n="mob_filters">Filtros</span>
     </button>
   </nav>
 
@@ -543,11 +546,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       </div>
     </div>
     <div class="topbar-center">
-      <span class="status-pill"><span class="status-dot"></span> Sistema operativo</span>
-      <span class="status-pill" id="pill-armed"><span class="status-dot r"></span> <span id="pill-armed-n">0</span> conflictos armados</span>
-      <span class="status-pill" id="pill-diplo"><span class="status-dot w"></span> <span id="pill-diplo-n">0</span> tensiones activas</span>
-      <span style="margin-left:auto;color:var(--text-0)">ACTUALIZACIÓN AUTO · CADA 3H</span>
-      <a href="/analisis" style="display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-1);border-left:1px solid var(--line-0);transition:color .15s" onmouseover="this.style.color='var(--text-3)'" onmouseout="this.style.color='var(--text-1)'">Análisis Regional ↗</a>
+      <span class="status-pill"><span class="status-dot"></span> <span data-i18n="status_ok">Sistema operativo</span></span>
+      <span class="status-pill" id="pill-armed"><span class="status-dot r"></span> <span id="pill-armed-n">0</span> <span data-i18n="armed_conflicts">conflictos armados</span></span>
+      <span class="status-pill" id="pill-diplo"><span class="status-dot w"></span> <span id="pill-diplo-n">0</span> <span data-i18n="active_tensions">tensiones activas</span></span>
+      <span style="margin-left:auto;color:var(--text-0)" data-i18n="auto_update">ACTUALIZACIÓN AUTO · CADA 3H</span>
+      <div class="lang-toggle" style="margin-left:12px">
+        <button class="lang-btn active" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="/analisis" data-i18n="analysis" style="display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-1);border-left:1px solid var(--line-0);transition:color .15s" onmouseover="this.style.color='var(--text-3)'" onmouseout="this.style.color='var(--text-1)'">Análisis Regional ↗</a>
     </div>
     <div class="topbar-clock">
       <div class="clock-cell">
@@ -565,17 +572,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   <!-- ── LEFT SIDEBAR ──────────────────────────────────────────── -->
   <aside class="left">
     <div class="section">
-      <div class="section-title"><span>Categorías</span><span class="badge">FILTRO</span></div>
+      <div class="section-title"><span data-i18n="categories">Categorías</span><span class="badge" data-i18n="filter_badge">FILTRO</span></div>
       <div class="filter-group">
-        <div class="filter-row active" data-type="armed"><span class="swatch"></span><span class="lbl">Conflicto armado</span><span class="cnt" id="cnt-armed">00</span></div>
-        <div class="filter-row active" data-type="diplo"><span class="swatch"></span><span class="lbl">Diplomático</span><span class="cnt" id="cnt-diplo">00</span></div>
-        <div class="filter-row active" data-type="econ"><span class="swatch"></span><span class="lbl">Económico</span><span class="cnt" id="cnt-econ">00</span></div>
-        <div class="filter-row active" data-type="cyber"><span class="swatch"></span><span class="lbl">Ciber</span><span class="cnt" id="cnt-cyber">00</span></div>
-        <div class="filter-row active" data-type="intel"><span class="swatch"></span><span class="lbl">Inteligencia</span><span class="cnt" id="cnt-intel">00</span></div>
+        <div class="filter-row active" data-type="armed"><span class="swatch"></span><span class="lbl" data-i18n="t_armed">Conflicto armado</span><span class="cnt" id="cnt-armed">00</span></div>
+        <div class="filter-row active" data-type="diplo"><span class="swatch"></span><span class="lbl" data-i18n="t_diplo">Diplomático</span><span class="cnt" id="cnt-diplo">00</span></div>
+        <div class="filter-row active" data-type="econ"><span class="swatch"></span><span class="lbl" data-i18n="t_econ">Económico</span><span class="cnt" id="cnt-econ">00</span></div>
+        <div class="filter-row active" data-type="cyber"><span class="swatch"></span><span class="lbl" data-i18n="t_cyber">Ciber</span><span class="cnt" id="cnt-cyber">00</span></div>
+        <div class="filter-row active" data-type="intel"><span class="swatch"></span><span class="lbl" data-i18n="t_intel">Inteligencia</span><span class="cnt" id="cnt-intel">00</span></div>
       </div>
     </div>
     <div class="section">
-      <div class="section-title"><span>Severidad mínima</span><span class="badge">SEV</span></div>
+      <div class="section-title"><span data-i18n="min_severity">Severidad mínima</span><span class="badge">SEV</span></div>
       <div class="severity-bar">
         <div class="sev-cell on" data-sev="1">1</div>
         <div class="sev-cell on" data-sev="2">2</div>
@@ -585,7 +592,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       </div>
     </div>
     <div class="section">
-      <div class="section-title"><span>Saltar a región</span><span class="badge">NAV</span></div>
+      <div class="section-title"><span data-i18n="jump_region">Saltar a región</span><span class="badge">NAV</span></div>
       <div class="region-grid">
         <button class="region-btn" data-region="global">Global</button>
         <button class="region-btn" data-region="europe">Europa</button>
@@ -598,12 +605,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       </div>
     </div>
     <div class="section" style="border-bottom:0">
-      <div class="section-title"><span>Fuentes de datos</span></div>
+      <div class="section-title"><span data-i18n="data_sources">Fuentes de datos</span></div>
       <div style="font-size:10px;color:var(--text-0);letter-spacing:.08em;line-height:1.8">
         BBC World · Al Jazeera · France 24<br>
         El País · Reuters · NYT World<br>
-        <span style="color:var(--accent)">// RSS · clasificación automática</span><br>
-        Últ. sync: <span id="last-sync">—</span>
+        <span style="color:var(--accent)" data-i18n="rss_auto">// RSS · clasificación automática</span><br>
+        <span data-i18n="last_sync">Últ. sync:</span> <span id="last-sync">—</span>
       </div>
     </div>
   </aside>
@@ -639,8 +646,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   <aside class="right">
     <div class="right-tabs">
       <button class="right-tab active" data-tab="feed">Feed <span class="cnt" id="cnt-feed">0</span></button>
-      <button class="right-tab" data-tab="detail">Detalle</button>
-      <button class="right-tab" data-tab="stats">Resumen</button>
+      <button class="right-tab" data-tab="detail" data-i18n="tab_detail">Detalle</button>
+      <button class="right-tab" data-tab="stats" data-i18n="tab_stats">Resumen</button>
     </div>
     <div class="right-body">
       <div class="right-pane active" data-pane="feed">
@@ -663,7 +670,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   <footer class="bottom">
     <div class="timeline-panel">
       <div class="tl-head">
-        <span>Línea de tiempo · últimas <span class="acc">72H</span></span>
+        <span><span data-i18n="tl_label">Línea de tiempo · últimas</span> <span class="acc">72H</span></span>
         <span id="tl-range">—</span>
       </div>
       <div class="tl-track" id="tl-track">
@@ -671,15 +678,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       </div>
     </div>
     <div class="legend-panel">
-      <span class="leg-item"><span class="leg-sw armed"></span>Armado</span>
-      <span class="leg-item"><span class="leg-sw diplo"></span>Diplomático</span>
-      <span class="leg-item"><span class="leg-sw econ"></span>Económico</span>
-      <span class="leg-item"><span class="leg-sw cyber"></span>Ciber</span>
-      <span class="leg-item" style="margin-left:8px"><span class="leg-line militar"></span>Militar</span>
-      <span class="leg-item"><span class="leg-line diplo"></span>Diplomático</span>
+      <span class="leg-item"><span class="leg-sw armed"></span><span data-i18n="leg_armed">Armado</span></span>
+      <span class="leg-item"><span class="leg-sw diplo"></span><span data-i18n="leg_diplo">Diplomático</span></span>
+      <span class="leg-item"><span class="leg-sw econ"></span><span data-i18n="leg_econ">Económico</span></span>
+      <span class="leg-item"><span class="leg-sw cyber"></span><span data-i18n="leg_cyber">Ciber</span></span>
+      <span class="leg-item" style="margin-left:8px"><span class="leg-line militar"></span><span data-i18n="leg_mil">Militar</span></span>
+      <span class="leg-item"><span class="leg-line diplo"></span><span data-i18n="leg_diplo">Diplomático</span></span>
       <a href="https://t.me/GeopolitikappBot" target="_blank" rel="noopener" class="tg-btn">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.496.969z"/></svg>
-        Alertas Telegram
+        <span data-i18n="tg_alerts">Alertas Telegram</span>
       </a>
     </div>
   </footer>
@@ -688,6 +695,79 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
+/* ── i18n ────────────────────────────────────────────────────── */
+const STRINGS = {
+  es: {
+    brand:'MONITOR GEOPOLÍTICO', status_ok:'Sistema operativo',
+    armed_conflicts:'conflictos armados', active_tensions:'tensiones activas',
+    auto_update:'ACTUALIZACIÓN AUTO · CADA 3H', analysis:'Análisis Regional ↗',
+    clock_date:'Fecha', categories:'Categorías', min_severity:'Severidad mínima',
+    jump_region:'Saltar a región', data_sources:'Fuentes de datos',
+    rss_auto:'// RSS · clasificación automática', last_sync:'Últ. sync:',
+    tab_detail:'Detalle', tab_stats:'Resumen',
+    empty_detail:'// selecciona un evento del feed<br>o un marcador del mapa',
+    empty_mob:'// toca un evento o un marcador',
+    dist_type:'Distribución por tipo', tl_label:'Línea de tiempo · últimas', tl_today:'HOY',
+    leg_armed:'Armado', leg_diplo:'Diplomático', leg_econ:'Económico',
+    leg_cyber:'Ciber', leg_mil:'Militar', tg_alerts:'Alertas Telegram',
+    mob_map:'Mapa', mob_filters:'Filtros',
+    lbl_type:'Tipo', lbl_severity:'Severidad', lbl_updated:'Últ. actualización',
+    lbl_source:'Fuente', lbl_actors:'Actores',
+    lbl_sev_chart:'Evolución de severidad', lbl_timeline:'Cronología',
+    no_summary:'Sin resumen disponible.',
+    stat_total:'Eventos totales', stat_avg:'Sev. media',
+    stat_armed:'Armados activos', stat_diplo:'Diplomáticos',
+    mob_events:'Eventos', mob_armed:'Armados',
+    t_armed:'Conflicto armado', t_diplo:'Diplomático',
+    t_econ:'Económico', t_cyber:'Ciber', t_intel:'Inteligencia',
+  },
+  en: {
+    brand:'GEOPOLITICAL MONITOR', status_ok:'System operational',
+    armed_conflicts:'armed conflicts', active_tensions:'active tensions',
+    auto_update:'AUTO UPDATE · EVERY 3H', analysis:'Regional Analysis ↗',
+    clock_date:'Date', categories:'Categories', min_severity:'Min. severity',
+    jump_region:'Jump to region', data_sources:'Data sources',
+    rss_auto:'// RSS · auto classification', last_sync:'Last sync:',
+    tab_detail:'Detail', tab_stats:'Summary',
+    empty_detail:'// select an event from the feed<br>or a marker on the map',
+    empty_mob:'// tap an event or a marker',
+    dist_type:'Distribution by type', tl_label:'Timeline · last', tl_today:'TODAY',
+    leg_armed:'Armed', leg_diplo:'Diplomatic', leg_econ:'Economic',
+    leg_cyber:'Cyber', leg_mil:'Military', tg_alerts:'Telegram Alerts',
+    mob_map:'Map', mob_filters:'Filters',
+    lbl_type:'Type', lbl_severity:'Severity', lbl_updated:'Last update',
+    lbl_source:'Source', lbl_actors:'Actors',
+    lbl_sev_chart:'Severity trend', lbl_timeline:'Timeline',
+    no_summary:'No summary available.',
+    stat_total:'Total events', stat_avg:'Avg. severity',
+    stat_armed:'Active armed', stat_diplo:'Diplomatic',
+    mob_events:'Events', mob_armed:'Armed',
+    t_armed:'Armed conflict', t_diplo:'Diplomatic',
+    t_econ:'Economic', t_cyber:'Cyber', t_intel:'Intelligence',
+  }
+};
+let _lang = 'es';
+function L(k) { return (STRINGS[_lang]||STRINGS.es)[k] || k; }
+function setLang(lang) {
+  _lang = lang;
+  localStorage.setItem('geo_lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang===lang));
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = L(el.dataset.i18n);
+    el.dataset.i18nHtml ? (el.innerHTML = v) : (el.textContent = v);
+  });
+  TYPE_LABELS.armed = L('t_armed'); TYPE_LABELS.diplo = L('t_diplo');
+  TYPE_LABELS.econ  = L('t_econ');  TYPE_LABELS.cyber = L('t_cyber');
+  TYPE_LABELS.intel = L('t_intel');
+  if (ST.data) {
+    renderFeed(); renderStats(); renderTimeline();
+    mobRenderFeed(); mobRenderStats();
+    ST.selected ? (renderDetail(ST.selected), mobRenderDetail(ST.selected))
+                : renderDetail(null);
+  }
+}
+
 const TYPE_LABELS = { armed:'Conflicto armado', diplo:'Diplomático', econ:'Económico', cyber:'Ciber', intel:'Inteligencia' };
 const REGIONS = {
   global:   { center:[10,20],   zoom:1.8 },
@@ -1039,7 +1119,7 @@ function selectEvent(c) {
 
 function renderDetail(c) {
   if (!c) {
-    document.getElementById('detail-panel').innerHTML = '<div class="detail-empty">// selecciona un evento del feed<br>o un marcador del mapa</div>';
+    document.getElementById('detail-panel').innerHTML = `<div class="detail-empty" data-i18n="empty_detail" data-i18n-html="1">${L('empty_detail')}</div>`;
     return;
   }
   const sev = '■'.repeat(c.severity) + '□'.repeat(5-c.severity);
@@ -1057,15 +1137,15 @@ function renderDetail(c) {
         <div class="detail-h-loc">${c.location}</div>
       </div>
       <div class="detail-grid">
-        <div class="detail-cell"><div class="lbl">Tipo</div><div class="val hi">${TYPE_LABELS[c.type]||c.type}</div></div>
-        <div class="detail-cell"><div class="lbl">Severidad</div><div class="val hi" style="letter-spacing:.1em">${sev}</div></div>
-        <div class="detail-cell"><div class="lbl">Últ. actualización</div><div class="val">${c.timeline?.[0]?.when||'—'}</div></div>
-        <div class="detail-cell"><div class="lbl">Fuente</div><div class="val">${c.timeline?.[0]?.source||'—'}</div></div>
+        <div class="detail-cell"><div class="lbl">${L('lbl_type')}</div><div class="val hi">${TYPE_LABELS[c.type]||c.type}</div></div>
+        <div class="detail-cell"><div class="lbl">${L('lbl_severity')}</div><div class="val hi" style="letter-spacing:.1em">${sev}</div></div>
+        <div class="detail-cell"><div class="lbl">${L('lbl_updated')}</div><div class="val">${c.timeline?.[0]?.when||'—'}</div></div>
+        <div class="detail-cell"><div class="lbl">${L('lbl_source')}</div><div class="val">${c.timeline?.[0]?.source||'—'}</div></div>
       </div>
-      <div class="detail-summary">${c.summary||'Sin resumen disponible.'}</div>
-      ${actors?`<div class="detail-actors"><div class="lbl">Actores</div><div class="actor-tags">${actors}</div></div>`:''}
-      ${(() => { const h=ST.historial[c.id]; return h&&h.length>=2?`<div class="detail-cell" style="border-top:1px solid var(--line-0);padding-top:8px;margin-top:4px"><div class="lbl" style="margin-bottom:6px">Evolución de severidad</div>${severityChartSVG(h)}</div>`:''; })()}
-      ${tl?`<div class="detail-tl"><div class="lbl">Cronología</div>${tl}</div>`:''}
+      <div class="detail-summary">${c.summary||L('no_summary')}</div>
+      ${actors?`<div class="detail-actors"><div class="lbl">${L('lbl_actors')}</div><div class="actor-tags">${actors}</div></div>`:''}
+      ${(() => { const h=ST.historial[c.id]; return h&&h.length>=2?`<div class="detail-cell" style="border-top:1px solid var(--line-0);padding-top:8px;margin-top:4px"><div class="lbl" style="margin-bottom:6px">${L('lbl_sev_chart')}</div>${severityChartSVG(h)}</div>`:''; })()}
+      ${tl?`<div class="detail-tl"><div class="lbl">${L('lbl_timeline')}</div>${tl}</div>`:''}
     </div>`;
   animateDetailCharts();
 }
@@ -1080,10 +1160,10 @@ function renderStats() {
   const total = all.length;
   const avgSev = all.length ? (all.reduce((s,c)=>s+c.severity,0)/all.length).toFixed(1) : '—';
   document.getElementById('stats-grid').innerHTML = `
-    <div class="stats-cell"><div class="lbl">Eventos totales</div><div class="val">${total}</div></div>
-    <div class="stats-cell"><div class="lbl">Sev. media</div><div class="val accent">${avgSev}</div></div>
-    <div class="stats-cell"><div class="lbl">Armados activos</div><div class="val armed">${armed}</div></div>
-    <div class="stats-cell"><div class="lbl">Diplomáticos</div><div class="val diplo">${counts.diplo||0}</div></div>`;
+    <div class="stats-cell"><div class="lbl">${L('stat_total')}</div><div class="val">${total}</div></div>
+    <div class="stats-cell"><div class="lbl">${L('stat_avg')}</div><div class="val accent">${avgSev}</div></div>
+    <div class="stats-cell"><div class="lbl">${L('stat_armed')}</div><div class="val armed">${armed}</div></div>
+    <div class="stats-cell"><div class="lbl">${L('stat_diplo')}</div><div class="val diplo">${counts.diplo||0}</div></div>`;
   const types = ['armed','diplo','econ','cyber','intel'];
   document.getElementById('type-bars').innerHTML = types.map(t=>`
     <div class="rbar">
@@ -1124,7 +1204,8 @@ function renderTimeline() {
     m.style.left = pct+'%';
     track.appendChild(m);
   });
-  document.getElementById('tl-range').textContent = new Date(now-range).toLocaleDateString('es-ES',{day:'2-digit',month:'short'}) + ' → HOY';
+  const _loc = _lang==='es' ? 'es-ES' : 'en-GB';
+  document.getElementById('tl-range').textContent = new Date(now-range).toLocaleDateString(_loc,{day:'2-digit',month:'short'}) + ' → ' + L('tl_today');
 }
 
 /* ── UI WIRING ───────────────────────────────────────────────── */
@@ -1218,10 +1299,10 @@ function mobRenderStats() {
   const avgSev = all.length ? (all.reduce((s,c)=>s+c.severity,0)/all.length).toFixed(1) : '—';
   const sg = document.getElementById('mob-stats-grid');
   if (sg) sg.innerHTML = `
-    <div class="stats-cell"><div class="lbl">Eventos</div><div class="val">${all.length}</div></div>
-    <div class="stats-cell"><div class="lbl">Sev. media</div><div class="val accent">${avgSev}</div></div>
-    <div class="stats-cell"><div class="lbl">Armados</div><div class="val armed">${counts.armed||0}</div></div>
-    <div class="stats-cell"><div class="lbl">Diplomáticos</div><div class="val diplo">${counts.diplo||0}</div></div>`;
+    <div class="stats-cell"><div class="lbl">${L('mob_events')}</div><div class="val">${all.length}</div></div>
+    <div class="stats-cell"><div class="lbl">${L('stat_avg')}</div><div class="val accent">${avgSev}</div></div>
+    <div class="stats-cell"><div class="lbl">${L('mob_armed')}</div><div class="val armed">${counts.armed||0}</div></div>
+    <div class="stats-cell"><div class="lbl">${L('stat_diplo')}</div><div class="val diplo">${counts.diplo||0}</div></div>`;
   const tb = document.getElementById('mob-type-bars');
   if (tb) tb.innerHTML = ['armed','diplo','econ','cyber','intel'].map(t=>`
     <div class="rbar"><span>${TYPE_LABELS[t]}</span><span class="n">${counts[t]||0}</span></div>`).join('');
@@ -1250,7 +1331,7 @@ function mobSelectEvent(c) {
 function mobRenderDetail(c) {
   const panel = document.getElementById('mob-detail-panel');
   if (!panel) return;
-  if (!c) { panel.innerHTML = '<div class="detail-empty">// toca un evento o un marcador</div>'; return; }
+  if (!c) { panel.innerHTML = `<div class="detail-empty">${L('empty_mob')}</div>`; return; }
   const sev = '■'.repeat(c.severity)+'□'.repeat(5-c.severity);
   const actors = (c.actors||[]).map(a=>`<span class="actor-tag">${a}</span>`).join('');
   const tl = (c.timeline||[]).slice(0,4).map(t=>`
@@ -1266,13 +1347,13 @@ function mobRenderDetail(c) {
         <div class="detail-h-loc">${c.location}</div>
       </div>
       <div class="detail-grid">
-        <div class="detail-cell"><div class="lbl">Severidad</div><div class="val hi">${sev}</div></div>
-        <div class="detail-cell"><div class="lbl">Últ. act.</div><div class="val">${c.timeline?.[0]?.when||'—'}</div></div>
+        <div class="detail-cell"><div class="lbl">${L('lbl_severity')}</div><div class="val hi">${sev}</div></div>
+        <div class="detail-cell"><div class="lbl">${L('lbl_updated')}</div><div class="val">${c.timeline?.[0]?.when||'—'}</div></div>
       </div>
       <div class="detail-summary">${c.summary||''}</div>
-      ${actors?`<div class="detail-actors"><div class="lbl">Actores</div><div class="actor-tags">${actors}</div></div>`:''}
-      ${(() => { const h=ST.historial[c.id]; return h&&h.length>=2?`<div class="detail-cell" style="border-top:1px solid var(--line-0);padding-top:8px;margin-top:4px"><div class="lbl" style="margin-bottom:6px">Evolución de severidad</div>${severityChartSVG(h)}</div>`:''; })()}
-      ${tl?`<div class="detail-tl"><div class="lbl">Cronología</div>${tl}</div>`:''}
+      ${actors?`<div class="detail-actors"><div class="lbl">${L('lbl_actors')}</div><div class="actor-tags">${actors}</div></div>`:''}
+      ${(() => { const h=ST.historial[c.id]; return h&&h.length>=2?`<div class="detail-cell" style="border-top:1px solid var(--line-0);padding-top:8px;margin-top:4px"><div class="lbl" style="margin-bottom:6px">${L('lbl_sev_chart')}</div>${severityChartSVG(h)}</div>`:''; })()}
+      ${tl?`<div class="detail-tl"><div class="lbl">${L('lbl_timeline')}</div>${tl}</div>`:''}
     </div>`;
   animateDetailCharts();
 }
@@ -1356,6 +1437,16 @@ document.querySelectorAll('#mob-drawer .region-btn').forEach(b => {
 
 /* Resize handler: re-init map size */
 window.addEventListener('resize', () => map.resize());
+
+/* ── LANG INIT ───────────────────────────────────────────────── */
+document.querySelectorAll('.lang-btn').forEach(b => {
+  b.addEventListener('click', () => setLang(b.dataset.lang));
+});
+(function() {
+  const saved = localStorage.getItem('geo_lang');
+  const browser = navigator.language && navigator.language.startsWith('es') ? 'es' : 'en';
+  setLang(saved || browser);
+})();
 </script>
 </body>
 </html>
