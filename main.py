@@ -10,6 +10,7 @@ import json
 import os
 import logging
 import requests
+from html import escape as _e
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -40,9 +41,15 @@ async def lifespan(app: FastAPI):
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     if token:
         try:
+            webhook_secret = os.environ.get("TELEGRAM_WEBHOOK_SECRET", "")
+            payload = {"url": "https://geopolitikapp.com/webhook/telegram"}
+            if webhook_secret:
+                payload["secret_token"] = webhook_secret
+            else:
+                logger.warning("TELEGRAM_WEBHOOK_SECRET no configurado — el webhook no verificará el origen")
             r = requests.post(
                 f"https://api.telegram.org/bot{token}/setWebhook",
-                json={"url": "https://geopolitikapp.com/webhook/telegram"},
+                json=payload,
                 timeout=10,
             )
             logger.info(f"Telegram webhook: {r.json()}")
@@ -53,6 +60,16 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Intel-Geo Command Center", lifespan=lifespan)
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    return response
 
 
 def _leer_datos():
@@ -98,8 +115,8 @@ def _inyectar_seo(html: str) -> str:
 
     # noscript con resumen legible para crawlers sin JS
     noscript_items = "".join(
-        f"<li><strong>{c.get('title','')}</strong> — {c.get('location','')} "
-        f"({TYPE_ES.get(c.get('type',''), '')}, severidad {c.get('severity',1)}/5)</li>"
+        f"<li><strong>{_e(c.get('title',''))}</strong> — {_e(c.get('location',''))} "
+        f"({_e(TYPE_ES.get(c.get('type',''), ''))}, severidad {c.get('severity',1)}/5)</li>"
         for c in sorted(crisis, key=lambda x: -x.get("severity", 0))[:10]
     )
     noscript = (
@@ -156,7 +173,7 @@ def _crisis_page(crisis: dict) -> str:
     location = crisis.get("location", "")
     tipo     = crisis.get("type", "diplo")
     tipo_es  = TYPE_ES.get(tipo, "Crisis")
-    severity = crisis.get("severity", 1)
+    severity = int(crisis.get("severity", 1))
     summary  = crisis.get("summary", "")
     actors   = crisis.get("actors", [])
     timeline = crisis.get("timeline", [])[:12]
@@ -172,6 +189,7 @@ def _crisis_page(crisis: dict) -> str:
     pub_date  = timeline[-1].get("when", hoy) if timeline else hoy
     mod_date  = timeline[0].get("when", hoy)  if timeline else hoy
 
+    # JSON-LD usa json.dumps — no necesita escape HTML
     ld_article = {
         "@context": "https://schema.org", "@type": "NewsArticle",
         "headline": title,
@@ -195,34 +213,50 @@ def _crisis_page(crisis: dict) -> str:
         ],
     }
 
+    # Versiones escapadas para inserción directa en HTML
+    e_title    = _e(title)
+    e_location = _e(location)
+    e_tipo_es  = _e(tipo_es)
+    e_meta     = _e(meta_desc)
+    e_cid      = _e(cid)
+    e_summary  = _e(summary)
+
     actors_html = "".join(
         f'<span style="display:inline-block;padding:3px 8px;border:1px solid #233339;'
-        f'font-size:10px;letter-spacing:.1em;margin:2px 3px 2px 0;color:#8195a0">{a}</span>'
+        f'font-size:10px;letter-spacing:.1em;margin:2px 3px 2px 0;color:#8195a0">{_e(a)}</span>'
         for a in actors
     )
 
-    tl_items = "".join(
-        f'<div style="padding:8px 0;border-bottom:1px solid #182225">'
-        f'<div style="font-size:9px;color:#4f6168;margin-bottom:3px">{t.get("when","—")} · {t.get("source","—")}</div>'
-        f'<div style="font-size:11px;color:#c1d1d8;line-height:1.5">'
-        f'{"<a href=" + repr(t["url"]) + " target=_blank rel=noopener style=color:#c1d1d8>" + t.get("what","") + "</a>" if t.get("url") and t["url"] != "#" else t.get("what","")}'
-        f'</div></div>'
-        for t in timeline
-    )
+    tl_items = ""
+    for t in timeline:
+        raw_url = t.get("url") or ""
+        safe_url = raw_url if raw_url.startswith(("https://", "http://")) else "#"
+        what = _e(t.get("what", ""))
+        link = (
+            f'<a href="{_e(safe_url)}" target="_blank" rel="noopener noreferrer" style="color:#c1d1d8">{what}</a>'
+            if safe_url != "#" else what
+        )
+        tl_items += (
+            f'<div style="padding:8px 0;border-bottom:1px solid #182225">'
+            f'<div style="font-size:9px;color:#4f6168;margin-bottom:3px">'
+            f'{_e(t.get("when", "—"))} · {_e(t.get("source", "—"))}</div>'
+            f'<div style="font-size:11px;color:#c1d1d8;line-height:1.5">{link}</div>'
+            f'</div>'
+        )
 
     return f"""<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>{title} — {tipo_es} en {location} | Geopolitikapp</title>
+<title>{e_title} — {e_tipo_es} en {e_location} | Geopolitikapp</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="{meta_desc}">
+<meta name="description" content="{e_meta}">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://geopolitikapp.com/crisis/{cid}">
+<link rel="canonical" href="https://geopolitikapp.com/crisis/{e_cid}">
 <meta property="og:type" content="article">
-<meta property="og:title" content="{title} | Geopolitikapp">
-<meta property="og:description" content="{meta_desc}">
-<meta property="og:url" content="https://geopolitikapp.com/crisis/{cid}">
+<meta property="og:title" content="{e_title} | Geopolitikapp">
+<meta property="og:description" content="{e_meta}">
+<meta property="og:url" content="https://geopolitikapp.com/crisis/{e_cid}">
 <meta property="og:site_name" content="Geopolitikapp">
 <script type="application/ld+json">{json.dumps(ld_article, ensure_ascii=False)}</script>
 <script type="application/ld+json">{json.dumps(ld_breadcrumb, ensure_ascii=False)}</script>
@@ -263,17 +297,17 @@ h1{{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:
 </header>
 <main class="page">
   <nav class="breadcrumb" aria-label="Ruta">
-    <a href="/">Inicio</a> &rsaquo; <a href="/analisis">Análisis Regional</a> &rsaquo; {title}
+    <a href="/">Inicio</a> &rsaquo; <a href="/analisis">Análisis Regional</a> &rsaquo; {e_title}
   </nav>
-  <div class="ribbon">{tipo_es.upper()}</div>
-  <h1>{title}</h1>
-  <p class="meta-loc">{location}</p>
+  <div class="ribbon">{e_tipo_es.upper()}</div>
+  <h1>{e_title}</h1>
+  <p class="meta-loc">{e_location}</p>
   <div class="severity">
     <span class="sev-label">SEVERIDAD</span>
     <span class="sev-val">{sev_str}</span>
     <span class="sev-label">{severity}/5</span>
   </div>
-  {f'<div class="summary"><h2 class="section-title">Resumen</h2>{summary}</div>' if summary else ''}
+  {f'<div class="summary"><h2 class="section-title">Resumen</h2>{e_summary}</div>' if summary else ''}
   {f'<div class="actors"><div class="section-title">Actores</div>{actors_html}</div>' if actors else ''}
   {f'<div class="timeline"><h2 class="section-title">Cronología</h2>{tl_items}</div>' if tl_items else ''}
   <a href="/" class="back-map">← Ver en el mapa en tiempo real</a>
@@ -334,6 +368,9 @@ Sitemap: https://geopolitikapp.com/sitemap.xml
 
 @app.post("/webhook/telegram")
 async def telegram_webhook(request: Request):
+    secret = os.environ.get("TELEGRAM_WEBHOOK_SECRET", "")
+    if secret and request.headers.get("X-Telegram-Bot-Api-Secret-Token", "") != secret:
+        return JSONResponse(status_code=403, content={"ok": False})
     try:
         data = await request.json()
     except Exception:
