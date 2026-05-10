@@ -625,6 +625,9 @@ def ejecutar_actualizacion():
     # Snapshot de severidades antes de procesar (para detectar escaladas)
     sev_antes = {id_crisis(c): c.get("severity", 1) for c in db["crisis"]}
 
+    # Acumulador de noticias para context nodes
+    ctx_news = {n["id"]: [] for n in db.get("context_nodes", [])}
+
     # URLs ya vistas (para no duplicar)
     urls_vistas = set()
     for c in db["crisis"]:
@@ -697,6 +700,15 @@ def ejecutar_actualizacion():
                         pendientes.remove(promovido)
                         nuevas += 1
 
+            # Recolectar para context nodes (independiente de la clasificación de crisis)
+            t_low = titulo.lower()
+            for node in db.get("context_nodes", []):
+                if any(k.lower() in t_low for k in node.get("keywords", [])):
+                    ctx_news[node["id"]].append({
+                        "when": hoy, "what": titulo,
+                        "source": nombre_fuente, "url": enlace
+                    })
+
             urls_vistas.add(enlace)
             time.sleep(0.3)
 
@@ -738,6 +750,15 @@ def ejecutar_actualizacion():
                     pendientes.remove(promovido)
                     nuevas += 1
 
+            # Recolectar para context nodes
+            t_low = titulo.lower()
+            for node in db.get("context_nodes", []):
+                if any(k.lower() in t_low for k in node.get("keywords", [])):
+                    ctx_news[node["id"]].append({
+                        "when": hoy, "what": titulo,
+                        "source": nombre_src, "url": enlace
+                    })
+
             urls_vistas.add(enlace)
             time.sleep(0.4)
 
@@ -769,10 +790,23 @@ def ejecutar_actualizacion():
 
     guardar_historial(historial)
 
+    # ── 3b. ACTUALIZAR NOTICIAS DE CONTEXT NODES ─────────────────────────────
+    ctx_actualizado = False
+    for node in db.get("context_nodes", []):
+        nid = node["id"]
+        collected = ctx_news.get(nid, [])
+        if not collected:
+            continue
+        seen_urls = {x["url"] for x in collected}
+        existing = [n for n in node.get("news", []) if n.get("url") not in seen_urls]
+        node["news"] = (collected + existing)[:5]
+        ctx_actualizado = True
+        print(f"  📍 Context node [{nid}]: {len(collected)} noticias nuevas")
+
     # ── 4. PERSISTIR ─────────────────────────────────────────────────────────
     guardar_pendientes(pendientes)
 
-    if nuevas > 0:
+    if nuevas > 0 or ctx_actualizado:
         guardar_db(db)
         print(f"\n🎉 {nuevas} eventos añadidos/actualizados en datos.json")
         if ids_promovidos:

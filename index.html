@@ -708,7 +708,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       <span class="leg-item"><span class="leg-sw diplo"></span><span data-i18n="leg_diplo">Diplomático</span></span>
       <span class="leg-item"><span class="leg-sw econ"></span><span data-i18n="leg_econ">Económico</span></span>
       <span class="leg-item"><span class="leg-sw cyber"></span><span data-i18n="leg_cyber">Ciber</span></span>
-      <span class="leg-item" style="margin-left:8px"><span class="leg-line militar"></span><span data-i18n="leg_mil">Militar</span></span>
+      <span class="leg-item" style="margin-left:8px"><span style="display:inline-block;width:8px;height:8px;border:1.5px solid #6abed0;border-radius:50%;margin-right:5px;vertical-align:middle"></span><span data-i18n="leg_ctx">Contexto</span></span>
+      <span class="leg-item" style="margin-left:4px"><span class="leg-line militar"></span><span data-i18n="leg_mil">Militar</span></span>
       <span class="leg-item"><span class="leg-line diplo"></span><span data-i18n="leg_diplo">Diplomático</span></span>
     </div>
   </footer>
@@ -742,6 +743,8 @@ const STRINGS = {
     mob_events:'Eventos', mob_armed:'Armados',
     t_armed:'Conflicto armado', t_diplo:'Diplomático',
     t_econ:'Económico', t_cyber:'Ciber', t_intel:'Inteligencia',
+    leg_ctx:'Contexto', ctx_label:'CONTEXTO GEOPOLÍTICO',
+    ctx_news:'Últimas noticias', ctx_no_news:'// sin noticias recientes',
   },
   en: {
     brand:'GEOPOLITICAL MONITOR', status_ok:'System operational',
@@ -766,6 +769,8 @@ const STRINGS = {
     mob_events:'Events', mob_armed:'Armed',
     t_armed:'Armed conflict', t_diplo:'Diplomatic',
     t_econ:'Economic', t_cyber:'Cyber', t_intel:'Intelligence',
+    leg_ctx:'Context', ctx_label:'GEOPOLITICAL CONTEXT',
+    ctx_news:'Latest news', ctx_no_news:'// no recent news',
   }
 };
 let _lang = 'es';
@@ -809,6 +814,7 @@ const ST = {
   filters: { armed:true, diplo:true, econ:true, cyber:true, intel:true },
   sevMin: 1,
   selected: null,
+  selectedCtx: null,
   arcOff: 0
 };
 
@@ -852,9 +858,10 @@ map.on('load', () => {
     } catch(e) {}
   }
 
-  map.addSource('arcs',      { type:'geojson', data:emptyFC() });
-  map.addSource('heat',      { type:'geojson', data:emptyFC() });
-  map.addSource('crisis-pts',{ type:'geojson', data:emptyFC() });
+  map.addSource('arcs',        { type:'geojson', data:emptyFC() });
+  map.addSource('heat',        { type:'geojson', data:emptyFC() });
+  map.addSource('context-pts', { type:'geojson', data:emptyFC() });
+  map.addSource('crisis-pts',  { type:'geojson', data:emptyFC() });
 
   map.addLayer({ id:'heatmap', type:'heatmap', source:'heat', maxzoom:7, paint:{
     'heatmap-weight':1,
@@ -894,6 +901,44 @@ map.on('load', () => {
         `${Math.abs(lat).toFixed(2)}°${lat>=0?'N':'S'}  ${Math.abs(lng).toFixed(2)}°${lng>=0?'E':'W'}`;
     });
   }
+
+  // ── CONTEXT NODE LAYERS (debajo de las crisis) ───────────────
+  map.addLayer({ id:'context-dots', type:'circle', source:'context-pts', paint:{
+    'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 4,6, 8,8],
+    'circle-color': 'transparent',
+    'circle-stroke-width': 2,
+    'circle-stroke-color': '#6abed0'
+  }});
+
+  map.addLayer({ id:'context-sel', type:'circle', source:'context-pts',
+    filter:['==',['get','id'],'__none__'],
+    paint:{
+      'circle-radius': ['interpolate',['linear'],['zoom'], 1,7, 4,9, 8,12],
+      'circle-color': 'rgba(106,190,208,0.12)',
+      'circle-stroke-width': 2.5,
+      'circle-stroke-color': '#6abed0'
+    }
+  });
+
+  map.addLayer({ id:'context-hit', type:'circle', source:'context-pts',
+    paint:{'circle-radius':18,'circle-opacity':0,'circle-stroke-opacity':0}
+  });
+
+  map.on('click','context-hit', e => {
+    if (!e.features.length) return;
+    const nid = e.features[0].properties.id;
+    const node = (ST.data?.context_nodes||[]).find(x => x.id === nid);
+    if (node) selectCtx(node);
+  });
+  map.on('mouseenter','context-hit', e => {
+    map.getCanvas().style.cursor = 'pointer';
+    const p = e.features[0].properties;
+    ST.popup.setLngLat(e.lngLat)
+      .setHTML(`<b>${p.flag||''} ${p.name}</b>`)
+      .addTo(map);
+  });
+  map.on('mousemove','context-hit', e => ST.popup.isOpen() && ST.popup.setLngLat(e.lngLat));
+  map.on('mouseleave','context-hit', () => { map.getCanvas().style.cursor=''; ST.popup.remove(); });
 
   const crisisColor = ['match',['get','type'],
     'armed','#e05050','diplo','#4aa3d9','econ','#d9a441','cyber','#4ad9a4','intel','#a44ad9','#64748b'];
@@ -942,14 +987,17 @@ map.on('load', () => {
 
   // Deseleccionar al pinchar en zona vacía del mapa
   map.on('click', e => {
-    const hit = map.queryRenderedFeatures(e.point, { layers:['crisis-hit'] });
-    if (hit.length) return;
-    if (!ST.selected) return;
+    const hitCrisis = map.queryRenderedFeatures(e.point, { layers:['crisis-hit'] });
+    const hitCtx    = map.queryRenderedFeatures(e.point, { layers:['context-hit'] });
+    if (hitCrisis.length || hitCtx.length) return;
+    if (!ST.selected && !ST.selectedCtx) return;
     ST.selected = null;
+    ST.selectedCtx = null;
     renderArcs(null);
     renderFeed();
     renderDetail(null);
     try { map.setFilter('crisis-sel',['==',['get','id'],'__none__']); } catch(e) {}
+    try { map.setFilter('context-sel',['==',['get','id'],'__none__']); } catch(e) {}
     if (!isMobile()) switchTab('feed');
     else { mobRenderFeed(); mobRenderDetail(null); }
   });
@@ -1049,6 +1097,7 @@ function visibleCrisis() {
 }
 
 function renderAll() {
+  renderContextNodes();
   renderMarkers();
   renderArcs(ST.selected || null);
   renderHeat();
@@ -1056,6 +1105,19 @@ function renderAll() {
   renderStats();
   updateCounts();
   renderTimeline();
+}
+
+function renderContextNodes() {
+  if (!ST.data) return;
+  const nodes = ST.data.context_nodes || [];
+  const features = nodes.map(n => ({
+    type:'Feature',
+    geometry:{ type:'Point', coordinates:[n.lng, n.lat] },
+    properties:{ id:n.id, name:n.name, flag:n.flag||'' }
+  }));
+  try { map.getSource('context-pts').setData({type:'FeatureCollection',features}); } catch(e) {}
+  const selId = ST.selectedCtx ? ST.selectedCtx.id : '__none__';
+  try { map.setFilter('context-sel',['==',['get','id'], selId]); } catch(e) {}
 }
 
 /* ── MARKERS (WebGL circle layers — sincronizados con el globo) ── */
@@ -1202,6 +1264,84 @@ function renderDetail(c) {
       ${tl?`<div class="detail-tl"><div class="lbl">${L('lbl_timeline')}</div>${tl}</div>`:''}
     </div>`;
   animateDetailCharts();
+}
+
+function selectCtx(node) {
+  ST.selected = null;
+  ST.selectedCtx = node;
+  renderArcs(null);
+  renderFeed();
+  try { map.setFilter('crisis-sel',['==',['get','id'],'__none__']); } catch(e) {}
+  renderContextNodes();
+  renderDetailCtx(node);
+  if (isMobile()) {
+    mobRenderDetailCtx(node);
+    mobSwitchSheetTab('detail');
+    openSheet();
+    setMobNavActive('mob-btn-detail');
+  } else {
+    switchTab('detail');
+  }
+  map.flyTo({ center:[node.lng,node.lat], zoom:Math.max(map.getZoom(),3.5), duration:700 });
+}
+
+function renderDetailCtx(node) {
+  if (!node) { renderDetail(null); return; }
+  const name = _lang==='es' ? node.name : (node.name_en||node.name);
+  const role = _lang==='es' ? node.role_es : (node.role_en||node.role_es);
+  const newsItems = (node.news||[]).slice(0,5);
+  const newsHtml = newsItems.length
+    ? newsItems.map(n => `
+        <div class="tl-item">
+          <div class="when">${n.when||'—'}</div>
+          <div class="what">${n.url&&n.url!=='#'
+            ? `<a href="${n.url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${n.what}</a>`
+            : n.what}</div>
+        </div>`).join('')
+    : `<div style="color:var(--text-0);font-size:10px;padding:6px 0">${L('ctx_no_news')}</div>`;
+  document.getElementById('detail-panel').innerHTML = `
+    <div style="color:#6abed0">
+      <div class="detail-header">
+        <div class="detail-ribbon"><span>${L('ctx_label')}</span></div>
+        <div class="detail-h-title">${node.flag||''} ${name}</div>
+        <div class="detail-h-loc">${node.name}</div>
+      </div>
+      <div class="detail-summary" style="color:var(--text-2)">${role}</div>
+      <div class="detail-tl">
+        <div class="lbl">${L('ctx_news')}</div>
+        ${newsHtml}
+      </div>
+    </div>`;
+}
+
+function mobRenderDetailCtx(node) {
+  const panel = document.getElementById('mob-detail-panel');
+  if (!panel || !node) return;
+  const name = _lang==='es' ? node.name : (node.name_en||node.name);
+  const role = _lang==='es' ? node.role_es : (node.role_en||node.role_es);
+  const newsItems = (node.news||[]).slice(0,4);
+  const newsHtml = newsItems.length
+    ? newsItems.map(n => `
+        <div class="tl-item">
+          <div class="when">${n.when||'—'}</div>
+          <div class="what">${n.url&&n.url!=='#'
+            ? `<a href="${n.url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${n.what}</a>`
+            : n.what}</div>
+        </div>`).join('')
+    : `<div style="color:var(--text-0);font-size:10px;padding:6px 0">${L('ctx_no_news')}</div>`;
+  panel.innerHTML = `
+    <div style="color:#6abed0">
+      <div class="detail-header">
+        <div class="detail-ribbon"><span>${L('ctx_label')}</span></div>
+        <div class="detail-h-title">${node.flag||''} ${name}</div>
+        <div class="detail-h-loc">${node.name}</div>
+      </div>
+      <div class="detail-summary" style="color:var(--text-2)">${role}</div>
+      <div class="detail-tl">
+        <div class="lbl">${L('ctx_news')}</div>
+        ${newsHtml}
+      </div>
+    </div>`;
 }
 
 /* ── STATS ───────────────────────────────────────────────────── */

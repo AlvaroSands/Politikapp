@@ -653,5 +653,163 @@
       "fuente": "CNN en Español",
       "url": "#"
     }
+  ],
+  "context_nodes": [
+    {
+      "id": "ctx-usa",
+      "name": "Estados Unidos",
+      "name_en": "United States",
+      "flag": "🇺🇸",
+      "lat": 38.9,
+      "lng": -77.04,
+      "keywords": ["estados unidos", "eeuu", "washington", "trump", "casa blanca", "usa", "united states", "pentagon", "american", "white house", "state department", "biden", "harris"],
+      "role_es": "Principal potencia global y actor directo o indirecto en casi todos los conflictos activos. Su política exterior, sanciones y posicionamiento militar definen el equilibrio de fuerzas en cada región.",
+      "role_en": "Primary global power and direct or indirect actor in virtually every active conflict. Its foreign policy, sanctions, and military posture define the balance of power in every region.",
+      "news": []
+    },
+    {
+      "id": "ctx-alemania",
+      "name": "Alemania",
+      "name_en": "Germany",
+      "flag": "🇩🇪",
+      "lat": 51.17,
+      "lng": 10.45,
+      "keywords": ["alemania", "berlin", "berlín", "germany", "scholz", "merz", "bundeswehr", "german", "bundestag", "bundesregierung"],
+      "role_es": "Motor económico de la UE y referente en la financiación de la defensa europea. Atraviesa un debate histórico sobre rearme y su papel como potencia diplomática en el flanco este de la OTAN.",
+      "role_en": "Economic engine of the EU and a key reference for European defense funding. Undergoing a historic debate on rearmament and its role as a diplomatic power on NATO's eastern flank.",
+      "news": []
+    },
+    {
+      "id": "ctx-francia",
+      "name": "Francia",
+      "name_en": "France",
+      "flag": "🇫🇷",
+      "lat": 46.23,
+      "lng": 2.21,
+      "keywords": ["francia", "paris", "parís", "france", "macron", "elysée", "french", "légion", "armée", "quai d'orsay"],
+      "role_es": "Potencia nuclear y miembro permanente del Consejo de Seguridad. Protagonista del repliegue del Sahel y de la redefinición de la arquitectura de seguridad europea. Presidencialismo activo en política exterior.",
+      "role_en": "Nuclear power and permanent UN Security Council member. Key actor in the Sahel withdrawal and the redefinition of European security architecture. Active presidential foreign policy.",
+      "news": []
+    },
+    {
+      "id": "ctx-reino-unido",
+      "name": "Reino Unido",
+      "name_en": "United Kingdom",
+      "flag": "🇬🇧",
+      "lat": 55.38,
+      "lng": -3.44,
+      "keywords": ["reino unido", "uk", "britain", "british", "london", "starmer", "sunak", "parliament", "foreign office", "five eyes", "gchq"],
+      "role_es": "Potencia nuclear post-Brexit con fuerte presencia en inteligencia (Five Eyes), defensa atlántica y apoyo a Ucrania. Reposiciona su influencia global fuera del marco comunitario europeo.",
+      "role_en": "Post-Brexit nuclear power with strong presence in intelligence (Five Eyes), Atlantic defense, and Ukraine support. Repositioning its global influence outside the European framework.",
+      "news": []
+    },
+    {
+      "id": "ctx-polonia",
+      "name": "Polonia",
+      "name_en": "Poland",
+      "flag": "🇵🇱",
+      "lat": 51.92,
+      "lng": 19.15,
+      "keywords": ["polonia", "poland", "varsovia", "warsaw", "tusk", "polish", "flanco este", "eastern flank", "wojsko polskie"],
+      "role_es": "Flanco oriental crítico de la OTAN y principal receptor de armamento y refugiados ucranianos. El mayor gasto en defensa proporcional de Europa. Pieza central en la disuasión frente a Rusia.",
+      "role_en": "Critical NATO eastern flank and main recipient of Ukrainian weapons and refugees. Europe's highest proportional defense spending. Central piece in deterrence against Russia.",
+      "news": []
+    },
+    {
+      "id": "ctx-turquia",
+      "name": "Turquía",
+      "name_en": "Turkey",
+      "flag": "🇹🇷",
+      "lat": 38.96,
+      "lng": 35.24,
+      "keywords": ["turquía", "turkey", "ankara", "erdogan", "turkish", "estambul", "istanbul", "dışişleri", "mit", "siria turquía"],
+      "role_es": "Miembro de la OTAN que juega a dos bandas: mantiene relaciones con Rusia y Ucrania, actúa como mediador en Gaza y controla el paso del Bósforo. Influencia en el Cáucaso, Siria y Asia Central.",
+      "role_en": "NATO member playing both sides: maintains ties with Russia and Ukraine, acts as mediator in Gaza, and controls the Bosphorus. Influence across the Caucasus, Syria, and Central Asia.",
+      "news": []
+    },
+    {
+      "id": "ctx-arabia-saudi",
+      "name": "Arabia Saudí",
+      "name_en": "Saudi Arabia",
+      "flag": "🇸🇦",
+      "lat": 23.89,
+      "lng": 45.08,
+      "keywords": ["arabia saudí", "saudi", "riad", "riyadh", "mbs", "bin salman", "aramco", "opec", "gulf", "golfo pérsico"],
+      "role_es": "Potencia del Golfo y motor de la OPEP. Financia el conflicto en Yemen y negocia la normalización con Israel. Su papel en el precio del petróleo impacta directamente en la economía global.",
+      "role_en": "Gulf power and OPEC driver. Finances the conflict in Yemen and negotiates normalization with Israel. Its role in oil pricing directly impacts the global economy.",
+      "news": []
+    },
+    {
+      "id": "ctx-brasil",
+      "name": "Brasil",
+      "name_en": "Brazil",
+      "flag": "🇧🇷",
+      "lat": -15.78,
+      "lng": -47.93,
+      "keywords": ["brasil", "brazil", "brasilia", "brasília", "lula", "brazilian", "brics", "amazon", "amazonia", "itamaraty"],
+      "role_es": "Ancla del Sur Global y voz del multilateralismo emergente en los BRICS. Lula proyecta una diplomacia activa entre occidente y el eje China-Rusia. Peso creciente en América Latina y África.",
+      "role_en": "Anchor of the Global South and voice of emerging multilateralism within BRICS. Lula projects active diplomacy between the West and the China-Russia axis. Growing weight in Latin America and Africa.",
+      "news": []
+    },
+    {
+      "id": "ctx-japon",
+      "name": "Japón",
+      "name_en": "Japan",
+      "flag": "🇯🇵",
+      "lat": 36.20,
+      "lng": 138.25,
+      "keywords": ["japón", "japan", "tokio", "tokyo", "ishiba", "kishida", "japanese", "jsdf", "autodefensa", "mar de china", "quad"],
+      "role_es": "Rearme histórico tras décadas de pacifismo constitucional. Pieza clave del eje Quad frente a China. Presión directa de Corea del Norte y tensión en el Mar del Japón. Segundo presupuesto de defensa de Asia.",
+      "role_en": "Historic rearmament after decades of constitutional pacifism. Key piece of the Quad axis against China. Direct pressure from North Korea and tension in the Sea of Japan. Asia's second-largest defense budget.",
+      "news": []
+    },
+    {
+      "id": "ctx-espana",
+      "name": "España",
+      "name_en": "Spain",
+      "flag": "🇪🇸",
+      "lat": 40.46,
+      "lng": -3.75,
+      "keywords": ["españa", "spain", "madrid", "sánchez", "sanchez", "español", "spanish", "moncloa", "marruecos españa", "ceuta", "melilla", "sahel españa", "iberoamerica", "iberoamérica", "gobierno español"],
+      "role_es": "Miembro de la UE y la OTAN con posición geoestratégica única: frontera sur de Europa, vecino de Marruecos, nexo histórico con Iberoamérica y puente entre el Mediterráneo y el Atlántico. Actor clave en la estabilidad del Sahel y en la política migratoria europea.",
+      "role_en": "EU and NATO member with a unique geostrategic position: Europe's southern border, neighbor to Morocco, historical link to Latin America, and bridge between the Mediterranean and the Atlantic. Key actor in Sahel stability and European migration policy.",
+      "news": []
+    },
+    {
+      "id": "ctx-sudafrica",
+      "name": "Sudáfrica",
+      "name_en": "South Africa",
+      "flag": "🇿🇦",
+      "lat": -25.74,
+      "lng": 28.22,
+      "keywords": ["sudáfrica", "south africa", "pretoria", "johannesburg", "anc", "ramaphosa", "african union", "unión africana", "icj", "brics sudáfrica"],
+      "role_es": "Voz del Sur Global en la UA y los BRICS. Llevó a Israel ante el Tribunal Internacional de Justicia. Árbitro en conflictos africanos y referente diplomático del continente.",
+      "role_en": "Voice of the Global South in the AU and BRICS. Brought Israel before the International Court of Justice. Arbitrator in African conflicts and the continent's diplomatic reference.",
+      "news": []
+    },
+    {
+      "id": "ctx-corea-sur",
+      "name": "Corea del Sur",
+      "name_en": "South Korea",
+      "flag": "🇰🇷",
+      "lat": 37.57,
+      "lng": 127.0,
+      "keywords": ["corea del sur", "south korea", "seúl", "seoul", "korean", "han", "yoon", "korea", "república de corea", "k-defense"],
+      "role_es": "Bajo presión constante de Corea del Norte y en medio de una crisis política interna sin precedentes. Exportador creciente de armamento a Europa y pieza del eje de seguridad del Indo-Pacífico.",
+      "role_en": "Under constant pressure from North Korea and amid an unprecedented internal political crisis. Growing arms exporter to Europe and a key piece of the Indo-Pacific security axis.",
+      "news": []
+    },
+    {
+      "id": "ctx-indonesia",
+      "name": "Indonesia",
+      "name_en": "Indonesia",
+      "flag": "🇮🇩",
+      "lat": -6.21,
+      "lng": 106.85,
+      "keywords": ["indonesia", "jakarta", "prabowo", "indonesian", "asean", "indo-pacífico", "indo-pacific", "mar del sur de china"],
+      "role_es": "Mayor país musulmán del mundo y potencia emergente de la ASEAN. Bajo Prabowo, pivota hacia una posición más asertiva en el Indo-Pacífico y en la disputa del Mar del Sur de China.",
+      "role_en": "World's largest Muslim country and emerging ASEAN power. Under Prabowo, pivoting toward a more assertive position in the Indo-Pacific and the South China Sea dispute.",
+      "news": []
+    }
   ]
 }
