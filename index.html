@@ -903,20 +903,32 @@ map.on('load', () => {
   }
 
   // ── CONTEXT NODE LAYERS (debajo de las crisis) ───────────────
-  map.addLayer({ id:'context-dots', type:'circle', source:'context-pts', paint:{
-    'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 4,6, 8,8],
-    'circle-color': 'transparent',
-    'circle-stroke-width': 2,
-    'circle-stroke-color': '#6abed0'
-  }});
-
-  map.addLayer({ id:'context-sel', type:'circle', source:'context-pts',
-    filter:['==',['get','id'],'__none__'],
+  map.addLayer({ id:'context-sym', type:'symbol', source:'context-pts',
+    layout:{
+      'text-field': '◆',
+      'text-size': ['interpolate',['linear'],['zoom'], 1,10, 4,12, 8,15],
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
+    },
     paint:{
-      'circle-radius': ['interpolate',['linear'],['zoom'], 1,7, 4,9, 8,12],
-      'circle-color': 'rgba(106,190,208,0.12)',
-      'circle-stroke-width': 2.5,
-      'circle-stroke-color': '#6abed0'
+      'text-color': '#6abed0',
+      'text-halo-color': 'rgba(7,9,10,0.75)',
+      'text-halo-width': 1.5,
+    }
+  });
+
+  map.addLayer({ id:'context-sym-sel', type:'symbol', source:'context-pts',
+    filter:['==',['get','id'],'__none__'],
+    layout:{
+      'text-field': '◆',
+      'text-size': ['interpolate',['linear'],['zoom'], 1,14, 4,17, 8,21],
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
+    },
+    paint:{
+      'text-color': '#ffffff',
+      'text-halo-color': '#6abed0',
+      'text-halo-width': 2.5,
     }
   });
 
@@ -997,7 +1009,7 @@ map.on('load', () => {
     renderFeed();
     renderDetail(null);
     try { map.setFilter('crisis-sel',['==',['get','id'],'__none__']); } catch(e) {}
-    try { map.setFilter('context-sel',['==',['get','id'],'__none__']); } catch(e) {}
+    try { map.setFilter('context-sym-sel',['==',['get','id'],'__none__']); } catch(e) {}
     if (!isMobile()) switchTab('feed');
     else { mobRenderFeed(); mobRenderDetail(null); }
   });
@@ -1117,7 +1129,7 @@ function renderContextNodes() {
   }));
   try { map.getSource('context-pts').setData({type:'FeatureCollection',features}); } catch(e) {}
   const selId = ST.selectedCtx ? ST.selectedCtx.id : '__none__';
-  try { map.setFilter('context-sel',['==',['get','id'], selId]); } catch(e) {}
+  try { map.setFilter('context-sym-sel',['==',['get','id'], selId]); } catch(e) {}
 }
 
 /* ── MARKERS (WebGL circle layers — sincronizados con el globo) ── */
@@ -1285,63 +1297,68 @@ function selectCtx(node) {
   map.flyTo({ center:[node.lng,node.lat], zoom:Math.max(map.getZoom(),3.5), duration:700 });
 }
 
-function renderDetailCtx(node) {
-  if (!node) { renderDetail(null); return; }
+function _ctxRelaciones(node) {
+  const kws = (node.keywords||[]).map(k => k.toLowerCase()).filter(k => k.length > 3);
+  const nivelColor = n => n==='rojo'?'var(--c-armed)':n==='naranja'?'var(--c-econ)':'var(--c-diplo)';
+  const rels = (ST.data?.relaciones||[]).filter(r => {
+    const o = (r.origen?.nombre||'').toLowerCase();
+    const d = (r.destino?.nombre||'').toLowerCase();
+    return kws.some(k => o.includes(k) || d.includes(k));
+  }).slice(0,5);
+  if (!rels.length) return `<div style="color:var(--text-0);font-size:10px;padding:6px 0">// sin relaciones en el feed actual</div>`;
+  return rels.map(r => {
+    const o = (r.origen?.nombre||'').toLowerCase();
+    const kws_low = kws;
+    const otro = kws_low.some(k => o.includes(k)) ? (r.destino?.nombre||'—') : (r.origen?.nombre||'—');
+    const txt = `↔ <b>${otro}</b> — ${r.titular||''}`;
+    return `<div class="tl-item">
+      <div class="when" style="color:${nivelColor(r.nivel)}">${(r.nivel||'').toUpperCase()} · ${r.fecha||'—'}</div>
+      <div class="what">${r.url&&r.url!=='#'?`<a href="${r.url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${txt}</a>`:txt}</div>
+    </div>`;
+  }).join('');
+}
+
+function _ctxPanelHTML(node, newsLimit) {
   const name = _lang==='es' ? node.name : (node.name_en||node.name);
   const role = _lang==='es' ? node.role_es : (node.role_en||node.role_es);
-  const newsItems = (node.news||[]).slice(0,5);
+  const relHtml = _ctxRelaciones(node);
+  const newsItems = (node.news||[]).slice(0, newsLimit);
   const newsHtml = newsItems.length
     ? newsItems.map(n => `
         <div class="tl-item">
-          <div class="when">${n.when||'—'}</div>
+          <div class="when">${n.when||'—'} · ${n.source||'—'}</div>
           <div class="what">${n.url&&n.url!=='#'
             ? `<a href="${n.url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${n.what}</a>`
             : n.what}</div>
         </div>`).join('')
     : `<div style="color:var(--text-0);font-size:10px;padding:6px 0">${L('ctx_no_news')}</div>`;
-  document.getElementById('detail-panel').innerHTML = `
-    <div style="color:#6abed0">
-      <div class="detail-header">
-        <div class="detail-ribbon"><span>${L('ctx_label')}</span></div>
-        <div class="detail-h-title">${node.flag||''} ${name}</div>
-        <div class="detail-h-loc">${node.name}</div>
-      </div>
-      <div class="detail-summary" style="color:var(--text-2)">${role}</div>
-      <div class="detail-tl">
-        <div class="lbl">${L('ctx_news')}</div>
-        ${newsHtml}
-      </div>
-    </div>`;
+  return `<div style="color:#6abed0">
+    <div class="detail-header">
+      <div class="detail-ribbon"><span>${L('ctx_label')}</span></div>
+      <div class="detail-h-title">${node.flag||''} ${name}</div>
+      <div class="detail-h-loc">${node.name}</div>
+    </div>
+    <div class="detail-summary" style="color:var(--text-2);margin-bottom:0">${role}</div>
+    <div class="detail-tl" style="margin-top:10px">
+      <div class="lbl">RELACIONES DIPLOMÁTICAS · RSS</div>
+      ${relHtml}
+    </div>
+    <div class="detail-tl">
+      <div class="lbl">${L('ctx_news')}</div>
+      ${newsHtml}
+    </div>
+  </div>`;
+}
+
+function renderDetailCtx(node) {
+  if (!node) { renderDetail(null); return; }
+  document.getElementById('detail-panel').innerHTML = _ctxPanelHTML(node, 5);
 }
 
 function mobRenderDetailCtx(node) {
   const panel = document.getElementById('mob-detail-panel');
   if (!panel || !node) return;
-  const name = _lang==='es' ? node.name : (node.name_en||node.name);
-  const role = _lang==='es' ? node.role_es : (node.role_en||node.role_es);
-  const newsItems = (node.news||[]).slice(0,4);
-  const newsHtml = newsItems.length
-    ? newsItems.map(n => `
-        <div class="tl-item">
-          <div class="when">${n.when||'—'}</div>
-          <div class="what">${n.url&&n.url!=='#'
-            ? `<a href="${n.url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">${n.what}</a>`
-            : n.what}</div>
-        </div>`).join('')
-    : `<div style="color:var(--text-0);font-size:10px;padding:6px 0">${L('ctx_no_news')}</div>`;
-  panel.innerHTML = `
-    <div style="color:#6abed0">
-      <div class="detail-header">
-        <div class="detail-ribbon"><span>${L('ctx_label')}</span></div>
-        <div class="detail-h-title">${node.flag||''} ${name}</div>
-        <div class="detail-h-loc">${node.name}</div>
-      </div>
-      <div class="detail-summary" style="color:var(--text-2)">${role}</div>
-      <div class="detail-tl">
-        <div class="lbl">${L('ctx_news')}</div>
-        ${newsHtml}
-      </div>
-    </div>`;
+  panel.innerHTML = _ctxPanelHTML(node, 4);
 }
 
 /* ── STATS ───────────────────────────────────────────────────── */

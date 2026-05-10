@@ -662,9 +662,23 @@
       "flag": "🇺🇸",
       "lat": 38.9,
       "lng": -77.04,
-      "keywords": ["estados unidos", "eeuu", "washington", "trump", "casa blanca", "usa", "united states", "pentagon", "american", "white house", "state department", "biden", "harris"],
-      "role_es": "Principal potencia global y actor directo o indirecto en casi todos los conflictos activos. Su política exterior, sanciones y posicionamiento militar definen el equilibrio de fuerzas en cada región.",
-      "role_en": "Primary global power and direct or indirect actor in virtually every active conflict. Its foreign policy, sanctions, and military posture define the balance of power in every region.",
+      "keywords": [
+        "estados unidos",
+        "eeuu",
+        "washington",
+        "trump",
+        "casa blanca",
+        "usa",
+        "united states",
+        "pentagon",
+        "american",
+        "white house",
+        "state department",
+        "biden",
+        "harris"
+      ],
+      "role_es": "La administración Trump aplica aranceles del 145% a China y recorta la ayuda multilateral. Principal proveedor de armamento a Ucrania y ancla del sistema OTAN-Quad. Su política de 'America First' remodela los equilibrios geopolíticos globales.",
+      "role_en": "The Trump administration imposes 145% tariffs on China and cuts multilateral aid. Primary arms supplier to Ukraine and anchor of the NATO-Quad alliance system. Its 'America First' policy is reshaping global geopolitical balances.",
       "news": []
     },
     {
@@ -674,9 +688,20 @@
       "flag": "🇩🇪",
       "lat": 51.17,
       "lng": 10.45,
-      "keywords": ["alemania", "berlin", "berlín", "germany", "scholz", "merz", "bundeswehr", "german", "bundestag", "bundesregierung"],
-      "role_es": "Motor económico de la UE y referente en la financiación de la defensa europea. Atraviesa un debate histórico sobre rearme y su papel como potencia diplomática en el flanco este de la OTAN.",
-      "role_en": "Economic engine of the EU and a key reference for European defense funding. Undergoing a historic debate on rearmament and its role as a diplomatic power on NATO's eastern flank.",
+      "keywords": [
+        "alemania",
+        "berlin",
+        "berlín",
+        "germany",
+        "scholz",
+        "merz",
+        "bundeswehr",
+        "german",
+        "bundestag",
+        "bundesregierung"
+      ],
+      "role_es": "El canciller Merz impulsa un fondo especial de 100.000M€ para defensa tras décadas de infrafinanciación. Mayor economía de la UE en recesión industrial acelerada por la crisis energética post-Ucrania. Primer donante europeo de armamento pesado a Kiev.",
+      "role_en": "Chancellor Merz drives a special €100bn defense fund after decades of underfunding. The EU's largest economy is in industrial recession accelerated by the post-Ukraine energy crisis. Europe's top supplier of heavy weapons to Kyiv.",
       "news": []
     },
     {
@@ -686,9 +711,20 @@
       "flag": "🇫🇷",
       "lat": 46.23,
       "lng": 2.21,
-      "keywords": ["francia", "paris", "parís", "france", "macron", "elysée", "french", "légion", "armée", "quai d'orsay"],
-      "role_es": "Potencia nuclear y miembro permanente del Consejo de Seguridad. Protagonista del repliegue del Sahel y de la redefinición de la arquitectura de seguridad europea. Presidencialismo activo en política exterior.",
-      "role_en": "Nuclear power and permanent UN Security Council member. Key actor in the Sahel withdrawal and the redefinition of European security architecture. Active presidential foreign policy.",
+      "keywords": [
+        "francia",
+        "paris",
+        "parís",
+        "france",
+        "macron",
+        "elysée",
+        "french",
+        "légion",
+        "armée",
+        "quai d'orsay"
+      ],
+      "role_es": "Única potencia nuclear de la UE tras el Brexit. Completó el repliegue del Sahel (Mali, Níger, Burkina) en 2024. Macron propone un escudo nuclear europeo como alternativa a la dependencia estratégica de EEUU.",
+      "role_en": "The EU's sole nuclear power since Brexit. Completed its Sahel withdrawal (Mali, Niger, Burkina) in 2024. Macron is proposing a European nuclear umbrella as an alternative to US strategic dependence.",
       "news": []
     },
     {
@@ -698,9 +734,21 @@
       "flag": "🇬🇧",
       "lat": 55.38,
       "lng": -3.44,
-      "keywords": ["reino unido", "uk", "britain", "british", "london", "starmer", "sunak", "parliament", "foreign office", "five eyes", "gchq"],
-      "role_es": "Potencia nuclear post-Brexit con fuerte presencia en inteligencia (Five Eyes), defensa atlántica y apoyo a Ucrania. Reposiciona su influencia global fuera del marco comunitario europeo.",
-      "role_en": "Post-Brexit nuclear power with strong presence in intelligence (Five Eyes), Atlantic defense, and Ukraine support. Repositioning its global influence outside the European framework.",
+      "keywords": [
+        "reino unido",
+        "uk",
+        "britain",
+        "british",
+        "london",
+        "starmer",
+        "sunak",
+        "parliament",
+        "foreign office",
+        "five eyes",
+        "gchq"
+      ],
+      "role_es": "Starmer busca un 'reinicio' con la UE sin renunciar al Brexit. Segundo mayor donante de armamento a Ucrania tras EEUU. Mantiene una de las capacidades de inteligencia más potentes del mundo (GCHQ, Five Eyes).",
+      "role_en": "Starmer seeks a 'reset' with the EU without reversing Brexit. Second-largest arms donor to Ukraine after the US. Operates one of the world's most powerful intelligence networks (GCHQ, Five Eyes).",
       "news": []
     },
     {
@@ -710,9 +758,19 @@
       "flag": "🇵🇱",
       "lat": 51.92,
       "lng": 19.15,
-      "keywords": ["polonia", "poland", "varsovia", "warsaw", "tusk", "polish", "flanco este", "eastern flank", "wojsko polskie"],
-      "role_es": "Flanco oriental crítico de la OTAN y principal receptor de armamento y refugiados ucranianos. El mayor gasto en defensa proporcional de Europa. Pieza central en la disuasión frente a Rusia.",
-      "role_en": "Critical NATO eastern flank and main recipient of Ukrainian weapons and refugees. Europe's highest proportional defense spending. Central piece in deterrence against Russia.",
+      "keywords": [
+        "polonia",
+        "poland",
+        "varsovia",
+        "warsaw",
+        "tusk",
+        "polish",
+        "flanco este",
+        "eastern flank",
+        "wojsko polskie"
+      ],
+      "role_es": "Mayor gasto en defensa de la OTAN en proporción al PIB (4,1% en 2025). Acoge la mayor base militar terrestre de EEUU en Europa. Gestiona una frontera con Bielorrusia usada como vector de presión migratoria por Lukashenko.",
+      "role_en": "NATO's highest defense spender as a share of GDP (4.1% in 2025). Hosts the largest US ground military base in Europe. Manages a border with Belarus weaponized by Lukashenko as a migration pressure tool.",
       "news": []
     },
     {
@@ -722,9 +780,20 @@
       "flag": "🇹🇷",
       "lat": 38.96,
       "lng": 35.24,
-      "keywords": ["turquía", "turkey", "ankara", "erdogan", "turkish", "estambul", "istanbul", "dışişleri", "mit", "siria turquía"],
-      "role_es": "Miembro de la OTAN que juega a dos bandas: mantiene relaciones con Rusia y Ucrania, actúa como mediador en Gaza y controla el paso del Bósforo. Influencia en el Cáucaso, Siria y Asia Central.",
-      "role_en": "NATO member playing both sides: maintains ties with Russia and Ukraine, acts as mediator in Gaza, and controls the Bosphorus. Influence across the Caucasus, Syria, and Central Asia.",
+      "keywords": [
+        "turquía",
+        "turkey",
+        "ankara",
+        "erdogan",
+        "turkish",
+        "estambul",
+        "istanbul",
+        "dışişleri",
+        "mit",
+        "siria turquía"
+      ],
+      "role_es": "Única OTAN que mantiene comercio activo con Rusia y acoge el TurkStream. Erdogan actúa como mediador en las negociaciones Ucrania-Rusia. Controla el acceso al Mar Negro mediante la Convención de Montreux.",
+      "role_en": "The only NATO member maintaining active trade with Russia and hosting TurkStream. Erdogan acts as mediator in Ukraine-Russia negotiations. Controls Black Sea access through the Montreux Convention.",
       "news": []
     },
     {
@@ -734,9 +803,20 @@
       "flag": "🇸🇦",
       "lat": 23.89,
       "lng": 45.08,
-      "keywords": ["arabia saudí", "saudi", "riad", "riyadh", "mbs", "bin salman", "aramco", "opec", "gulf", "golfo pérsico"],
-      "role_es": "Potencia del Golfo y motor de la OPEP. Financia el conflicto en Yemen y negocia la normalización con Israel. Su papel en el precio del petróleo impacta directamente en la economía global.",
-      "role_en": "Gulf power and OPEC driver. Finances the conflict in Yemen and negotiates normalization with Israel. Its role in oil pricing directly impacts the global economy.",
+      "keywords": [
+        "arabia saudí",
+        "saudi",
+        "riad",
+        "riyadh",
+        "mbs",
+        "bin salman",
+        "aramco",
+        "opec",
+        "gulf",
+        "golfo pérsico"
+      ],
+      "role_es": "MBS consolida el poder y lanza una diversificación económica masiva (Vision 2030, NEOM). Negocia la normalización con Israel condicionada a avances hacia un estado palestino. Lidera la OPEP+ con cortes de producción para sostener el crudo.",
+      "role_en": "MBS consolidates power and launches massive economic diversification (Vision 2030, NEOM). Negotiates normalization with Israel contingent on Palestinian state progress. Leads OPEC+ with production cuts to support oil prices.",
       "news": []
     },
     {
@@ -746,9 +826,20 @@
       "flag": "🇧🇷",
       "lat": -15.78,
       "lng": -47.93,
-      "keywords": ["brasil", "brazil", "brasilia", "brasília", "lula", "brazilian", "brics", "amazon", "amazonia", "itamaraty"],
-      "role_es": "Ancla del Sur Global y voz del multilateralismo emergente en los BRICS. Lula proyecta una diplomacia activa entre occidente y el eje China-Rusia. Peso creciente en América Latina y África.",
-      "role_en": "Anchor of the Global South and voice of emerging multilateralism within BRICS. Lula projects active diplomacy between the West and the China-Russia axis. Growing weight in Latin America and Africa.",
+      "keywords": [
+        "brasil",
+        "brazil",
+        "brasilia",
+        "brasília",
+        "lula",
+        "brazilian",
+        "brics",
+        "amazon",
+        "amazonia",
+        "itamaraty"
+      ],
+      "role_es": "Lula se posiciona como principal mediador del Sur Global en la guerra de Ucrania. Impulsa la expansión de los BRICS y un sistema de pagos alternativo al dólar. La Amazonia como recurso estratégico en negociaciones climáticas globales.",
+      "role_en": "Lula positions himself as the Global South's chief mediator in the Ukraine war. Drives BRICS expansion and a dollar-alternative payment system. The Amazon as a strategic asset in global climate negotiations.",
       "news": []
     },
     {
@@ -756,11 +847,23 @@
       "name": "Japón",
       "name_en": "Japan",
       "flag": "🇯🇵",
-      "lat": 36.20,
+      "lat": 36.2,
       "lng": 138.25,
-      "keywords": ["japón", "japan", "tokio", "tokyo", "ishiba", "kishida", "japanese", "jsdf", "autodefensa", "mar de china", "quad"],
-      "role_es": "Rearme histórico tras décadas de pacifismo constitucional. Pieza clave del eje Quad frente a China. Presión directa de Corea del Norte y tensión en el Mar del Japón. Segundo presupuesto de defensa de Asia.",
-      "role_en": "Historic rearmament after decades of constitutional pacifism. Key piece of the Quad axis against China. Direct pressure from North Korea and tension in the Sea of Japan. Asia's second-largest defense budget.",
+      "keywords": [
+        "japón",
+        "japan",
+        "tokio",
+        "tokyo",
+        "ishiba",
+        "kishida",
+        "japanese",
+        "jsdf",
+        "autodefensa",
+        "mar de china",
+        "quad"
+      ],
+      "role_es": "Dobla el presupuesto de defensa al 2% del PIB e incorpora misiles de ataque preventivo. Ishiba refuerza las alianzas con Corea del Sur, Australia y Filipinas frente a China. Los Senkaku y el estrecho de Tsushima, focos de tensión permanente.",
+      "role_en": "Doubles defense budget to 2% of GDP and adopts preemptive strike missiles. Ishiba strengthens alliances with South Korea, Australia, and the Philippines against China. The Senkaku islands and Tsushima Strait remain permanent tension flashpoints.",
       "news": []
     },
     {
@@ -770,9 +873,25 @@
       "flag": "🇪🇸",
       "lat": 40.46,
       "lng": -3.75,
-      "keywords": ["españa", "spain", "madrid", "sánchez", "sanchez", "español", "spanish", "moncloa", "marruecos españa", "ceuta", "melilla", "sahel españa", "iberoamerica", "iberoamérica", "gobierno español"],
-      "role_es": "Miembro de la UE y la OTAN con posición geoestratégica única: frontera sur de Europa, vecino de Marruecos, nexo histórico con Iberoamérica y puente entre el Mediterráneo y el Atlántico. Actor clave en la estabilidad del Sahel y en la política migratoria europea.",
-      "role_en": "EU and NATO member with a unique geostrategic position: Europe's southern border, neighbor to Morocco, historical link to Latin America, and bridge between the Mediterranean and the Atlantic. Key actor in Sahel stability and European migration policy.",
+      "keywords": [
+        "españa",
+        "spain",
+        "madrid",
+        "sánchez",
+        "sanchez",
+        "español",
+        "spanish",
+        "moncloa",
+        "marruecos españa",
+        "ceuta",
+        "melilla",
+        "sahel españa",
+        "iberoamerica",
+        "iberoamérica",
+        "gobierno español"
+      ],
+      "role_es": "Gestiona la relación más compleja de Europa con Marruecos: energía, Ceuta y Melilla, migración y el Sáhara Occidental como palancas de presión mutua. Puerta de entrada de la UE hacia Iberoamérica y punto de tránsito atlántico crítico. Contribuye con armamento y financiación a Ucrania.",
+      "role_en": "Manages Europe's most complex relationship with Morocco: energy, Ceuta and Melilla, migration, and Western Sahara as mutual pressure levers. The EU's gateway to Latin America and a critical Atlantic transit hub. Contributes arms and funding to Ukraine.",
       "news": []
     },
     {
@@ -782,9 +901,20 @@
       "flag": "🇿🇦",
       "lat": -25.74,
       "lng": 28.22,
-      "keywords": ["sudáfrica", "south africa", "pretoria", "johannesburg", "anc", "ramaphosa", "african union", "unión africana", "icj", "brics sudáfrica"],
-      "role_es": "Voz del Sur Global en la UA y los BRICS. Llevó a Israel ante el Tribunal Internacional de Justicia. Árbitro en conflictos africanos y referente diplomático del continente.",
-      "role_en": "Voice of the Global South in the AU and BRICS. Brought Israel before the International Court of Justice. Arbitrator in African conflicts and the continent's diplomatic reference.",
+      "keywords": [
+        "sudáfrica",
+        "south africa",
+        "pretoria",
+        "johannesburg",
+        "anc",
+        "ramaphosa",
+        "african union",
+        "unión africana",
+        "icj",
+        "brics sudáfrica"
+      ],
+      "role_es": "Presentó en 2023 la demanda de genocidio contra Israel ante el Tribunal Internacional de Justicia. Miembro de los BRICS y sede de la cumbre que amplió el bloque. Sufre cortes de electricidad de hasta 12 horas diarias que frenan su economía.",
+      "role_en": "Filed the 2023 genocide case against Israel at the International Court of Justice. BRICS member and host of the summit that expanded the bloc. Suffers electricity blackouts of up to 12 hours daily that constrain its economy.",
       "news": []
     },
     {
@@ -794,9 +924,20 @@
       "flag": "🇰🇷",
       "lat": 37.57,
       "lng": 127.0,
-      "keywords": ["corea del sur", "south korea", "seúl", "seoul", "korean", "han", "yoon", "korea", "república de corea", "k-defense"],
-      "role_es": "Bajo presión constante de Corea del Norte y en medio de una crisis política interna sin precedentes. Exportador creciente de armamento a Europa y pieza del eje de seguridad del Indo-Pacífico.",
-      "role_en": "Under constant pressure from North Korea and amid an unprecedented internal political crisis. Growing arms exporter to Europe and a key piece of the Indo-Pacific security axis.",
+      "keywords": [
+        "corea del sur",
+        "south korea",
+        "seúl",
+        "seoul",
+        "korean",
+        "han",
+        "yoon",
+        "korea",
+        "república de corea",
+        "k-defense"
+      ],
+      "role_es": "El expresidente Yoon decretó la ley marcial en diciembre 2024, desencadenando la mayor crisis constitucional desde la democratización. Principal proveedor de munición de artillería a Europa para el frente ucraniano. El KF-21 consolida su posición como potencia exportadora de defensa.",
+      "role_en": "Former president Yoon declared martial law in December 2024, triggering the worst constitutional crisis since democratization. Primary supplier of artillery ammunition to Europe for the Ukrainian front. The KF-21 fighter jet consolidates its role as a rising defense exporter.",
       "news": []
     },
     {
@@ -806,9 +947,18 @@
       "flag": "🇮🇩",
       "lat": -6.21,
       "lng": 106.85,
-      "keywords": ["indonesia", "jakarta", "prabowo", "indonesian", "asean", "indo-pacífico", "indo-pacific", "mar del sur de china"],
-      "role_es": "Mayor país musulmán del mundo y potencia emergente de la ASEAN. Bajo Prabowo, pivota hacia una posición más asertiva en el Indo-Pacífico y en la disputa del Mar del Sur de China.",
-      "role_en": "World's largest Muslim country and emerging ASEAN power. Under Prabowo, pivoting toward a more assertive position in the Indo-Pacific and the South China Sea dispute.",
+      "keywords": [
+        "indonesia",
+        "jakarta",
+        "prabowo",
+        "indonesian",
+        "asean",
+        "indo-pacífico",
+        "indo-pacific",
+        "mar del sur de china"
+      ],
+      "role_es": "Prabowo Subianto asume la presidencia en octubre 2024 con agenda de defensa reforzada y mayor protagonismo en la ASEAN. Cuarto país más poblado del mundo (277M) y mayor nación de mayoría musulmana. Disputa activa con China en las aguas de Natuna (Mar del Sur de China).",
+      "role_en": "Prabowo Subianto took office in October 2024 with a strengthened defense agenda and a push for greater ASEAN leadership. The world's fourth most populous country (277M) and largest Muslim-majority nation. Active maritime dispute with China over the Natuna waters (South China Sea).",
       "news": []
     }
   ]
