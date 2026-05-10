@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from actualizador import ejecutar_actualizacion
+from notificaciones import briefing_diario
 import uvicorn
 import json
 import os
@@ -29,8 +30,11 @@ async def lifespan(app: FastAPI):
         ejecutar_actualizacion, "interval", hours=3, id="actualizador",
         next_run_time=datetime.now()
     )
+    scheduler.add_job(
+        briefing_diario, "cron", hour=6, minute=0, id="briefing",
+    )
     scheduler.start()
-    logger.info("Scheduler iniciado — actualizador RSS ahora y cada 3 horas")
+    logger.info("Scheduler iniciado — actualizador RSS ahora y cada 3 horas · briefing diario 6:00 UTC")
     yield
     scheduler.shutdown()
 

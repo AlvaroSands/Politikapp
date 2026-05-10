@@ -12,8 +12,10 @@ SETUP (una sola vez):
        TELEGRAM_BOT_TOKEN=xxxxxxxxxx:xxxxxxxxxxxxxxxxxxxxxxx
        TELEGRAM_CHAT_ID=xxxxxxxxx
 """
+import json
 import os
 import requests
+from datetime import date, datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -101,3 +103,88 @@ def alerta_relacion_bilateral(origen: str, destino: str, nivel: str, titular: st
         f"🌐 geopolitikapp.com"
     )
     return enviar_telegram(msg)
+
+
+def briefing_diario() -> bool:
+    try:
+        with open("datos.json", "r", encoding="utf-8") as f:
+            db = json.load(f)
+        crisis = db.get("crisis", [])
+        relaciones = db.get("relaciones", [])
+    except Exception:
+        crisis, relaciones = [], []
+
+    try:
+        with open("historial_severidad.json", "r", encoding="utf-8") as f:
+            historial = json.load(f)
+    except Exception:
+        historial = {}
+
+    hoy = date.today().isoformat()
+    ayer = (date.today() - timedelta(days=1)).isoformat()
+
+    # Crisis ordenadas por severidad
+    crisis_ord = sorted(crisis, key=lambda c: -c.get("severity", 0))
+
+    # Detectar escaladas en las últimas 24h
+    escaladas = []
+    for c in crisis:
+        cid = c.get("id", "")
+        puntos = historial.get(cid, [])
+        if len(puntos) >= 2:
+            ultimo = puntos[-1]
+            penultimo = puntos[-2]
+            if ultimo.get("fecha") == hoy and ultimo["severity"] > penultimo["severity"]:
+                escaladas.append((c, penultimo["severity"], ultimo["severity"]))
+
+    # Relaciones bilaterales críticas
+    rojas = [r for r in relaciones if r.get("nivel") == "rojo"]
+
+    # ── Construir mensaje ────────────────────────────────────────────────────
+    fecha_fmt = datetime.now().strftime("%-d de %B de %Y")
+    lineas = [f"🌍 <b>BRIEFING GEOPOLÍTICO — {fecha_fmt}</b>\n"]
+
+    # Bloque 1: crisis críticas (sev 4-5)
+    criticas = [c for c in crisis_ord if c.get("severity", 0) >= 4]
+    if criticas:
+        lineas.append("🔥 <b>SITUACIONES CRÍTICAS</b>")
+        for c in criticas[:5]:
+            emoji = TYPE_EMOJI.get(c.get("type", "diplo"), "⚪")
+            sev = c.get("severity", 1)
+            barra = SEV_BAR.get(sev, "?")
+            lineas.append(f"{emoji} <b>{c['title']}</b>\n   📍 {c.get('location','—')} · {barra} ({sev}/5)")
+        lineas.append("")
+
+    # Bloque 2: escaladas recientes
+    if escaladas:
+        lineas.append("⬆️ <b>ESCALADAS EN LAS ÚLTIMAS 24H</b>")
+        for c, ant, nva in escaladas[:3]:
+            lineas.append(
+                f"• {c.get('title','—')} "
+                f"({SEV_BAR.get(ant,'?')} {ant} → {SEV_BAR.get(nva,'?')} {nva})"
+            )
+        lineas.append("")
+
+    # Bloque 3: tensiones bilaterales rojas
+    if rojas:
+        lineas.append("🔴 <b>TENSIONES BILATERALES CRÍTICAS</b>")
+        for r in rojas[:3]:
+            origen = r.get("origen", {}).get("nombre", "?") if isinstance(r.get("origen"), dict) else r.get("origen", "?")
+            destino = r.get("destino", {}).get("nombre", "?") if isinstance(r.get("destino"), dict) else r.get("destino", "?")
+            lineas.append(f"• {origen} ↔ {destino}: <i>{r.get('titular','')[:100]}</i>")
+        lineas.append("")
+
+    # Bloque 4: resumen general
+    n_armed = sum(1 for c in crisis if c.get("type") == "armed")
+    n_diplo = sum(1 for c in crisis if c.get("type") == "diplo")
+    n_econ  = sum(1 for c in crisis if c.get("type") == "econ")
+    sev_media = round(sum(c.get("severity", 1) for c in crisis) / len(crisis), 1) if crisis else 0
+
+    lineas.append("📊 <b>RESUMEN GLOBAL</b>")
+    lineas.append(f"Crisis monitorizadas: <b>{len(crisis)}</b>")
+    lineas.append(f"Severidad media: <b>{sev_media}/5</b>")
+    lineas.append(f"🔴 Armadas: {n_armed}  🔵 Diplomáticas: {n_diplo}  🟡 Económicas: {n_econ}")
+    lineas.append("")
+    lineas.append("🌐 geopolitikapp.com")
+
+    return enviar_telegram("\n".join(lineas))
