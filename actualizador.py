@@ -14,6 +14,7 @@ from difflib import SequenceMatcher
 
 import requests
 from notificaciones import alerta_nueva_crisis, alerta_escalada, alerta_relacion_bilateral
+from twitter import tweet_nueva_crisis, tweet_escalada, tweet_tension_bilateral
 from bs4 import BeautifulSoup
 
 ARCHIVO_DATOS     = "datos.json"
@@ -551,6 +552,7 @@ def promover_candidato(cand, db):
     db["crisis"].append(nueva_crisis)
     print(f"  🆕 NUEVA CRISIS CREADA [{tipo.upper()} SEV{severidad}]: {titulo[:70]}...")
     alerta_nueva_crisis(nueva_crisis)
+    tweet_nueva_crisis(nueva_crisis)
     return nueva_crisis
 
 
@@ -748,6 +750,7 @@ def ejecutar_actualizacion():
         if sev_act > sev_ant:
             print(f"  ⬆️  Escalada [{cid}]: {sev_ant} → {sev_act}")
             alerta_escalada(c, sev_ant, sev_act)
+            tweet_escalada(c, sev_ant, sev_act)
 
     # Alerta para relaciones bilaterales rojas nuevas
     for r in db["relaciones"]:
@@ -756,6 +759,11 @@ def ejecutar_actualizacion():
                 r.get("origen", {}).get("nombre", "?"),
                 r.get("destino", {}).get("nombre", "?"),
                 "rojo",
+                r.get("titular", ""),
+            )
+            tweet_tension_bilateral(
+                r.get("origen", {}).get("nombre", "?"),
+                r.get("destino", {}).get("nombre", "?"),
                 r.get("titular", ""),
             )
 
