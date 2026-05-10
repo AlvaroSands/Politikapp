@@ -73,6 +73,15 @@
   --mono:'IBM Plex Mono',ui-monospace,monospace;
   --sans:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
 }
+:root[data-theme="light"] {
+  --bg-0:#f2efe8; --bg-1:#e8e4db; --bg-2:#ddd8cd; --bg-3:#d0cab8;
+  --line-0:#c8c2b0; --line-1:#b8b2a0; --line-2:#a8a290;
+  --text-0:#8a8070; --text-1:#6a5e50; --text-2:#3a2e24; --text-3:#1e1610;
+  --accent:#b87820;
+  --c-armed:#c03030; --c-diplo:#1878b8; --c-econ:#b87820;
+  --c-cyber:#8838b8; --c-intel:#1a9448;
+}
+:root[data-theme="light"] body { font-weight:500; }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg-0);color:var(--text-2);font-family:var(--mono);font-size:12px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
@@ -174,6 +183,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   min-height:120px;color:var(--text-0);font-size:10px;letter-spacing:.1em;
 }
 
+.theme-btn{padding:0 12px;height:100%;font-size:14px;color:var(--text-1);border-right:1px solid var(--line-0);transition:color .15s}
+.theme-btn:hover{color:var(--text-3)}
+
 /* ── FOOTER ── */
 .footer{text-align:center;padding:24px;font-size:10px;color:var(--text-0);letter-spacing:.1em;border-top:1px solid var(--line-0);margin-top:40px}
 </style>
@@ -191,6 +203,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <div class="topbar-title" data-i18n="page_title">ANÁLISIS REGIONAL</div>
   <div class="topbar-actions">
     <div class="clock">UTC <span id="clock-utc">—</span></div>
+    <button id="theme-btn" class="theme-btn" title="Cambiar tema">☀</button>
     <div class="lang-toggle" style="margin:auto 12px">
       <button class="lang-btn active" data-lang="es">ES</button>
       <button class="lang-btn" data-lang="en">EN</button>
@@ -517,6 +530,18 @@ document.querySelectorAll('.lang-btn').forEach(b => {
   b.addEventListener('click', () => { setLang(b.dataset.lang); cargarYRenderizar(); });
 });
 setLang(_lang);
+
+/* ── TEMA ── */
+function setTheme(t) {
+  localStorage.setItem('geo_theme', t);
+  document.documentElement.dataset.theme = t === 'light' ? 'light' : '';
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = t === 'light' ? '🌙' : '☀';
+}
+document.getElementById('theme-btn').addEventListener('click', function() {
+  setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
+});
+setTheme(localStorage.getItem('geo_theme') || 'dark');
 </script>
 </body>
 </html>
