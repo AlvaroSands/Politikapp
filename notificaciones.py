@@ -23,6 +23,8 @@ load_dotenv()
 _TOKEN   = os.getenv("TELEGRAM_BOT_TOKEN", "")
 _CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 
+ARCHIVO_SUSCRIPTORES = "suscriptores.json"
+
 TYPE_EMOJI = {
     "armed": "🔴",
     "diplo": "🔵",
@@ -35,22 +37,85 @@ SEV_BAR = {1: "▪︎░░░░", 2: "▪︎▪︎░░░", 3: "▪︎▪︎
 
 
 def _configurado():
-    return bool(_TOKEN and _CHAT_ID)
+    return bool(_TOKEN)
 
 
-def enviar_telegram(mensaje: str) -> bool:
-    """Envía un mensaje al chat configurado. Retorna True si tuvo éxito."""
+def _cargar_suscriptores() -> list:
+    ids = []
+    try:
+        with open(ARCHIVO_SUSCRIPTORES, "r", encoding="utf-8") as f:
+            ids = json.load(f)
+    except Exception:
+        pass
+    # El propietario siempre recibe aunque el archivo esté vacío
+    if _CHAT_ID:
+        try:
+            owner = int(_CHAT_ID)
+            if owner not in ids:
+                ids.insert(0, owner)
+        except ValueError:
+            pass
+    return ids
+
+
+def _guardar_suscriptores(ids: list):
+    try:
+        with open(ARCHIVO_SUSCRIPTORES, "w", encoding="utf-8") as f:
+            json.dump(ids, f)
+    except Exception:
+        pass
+
+
+def agregar_suscriptor(chat_id: int) -> bool:
+    ids = _cargar_suscriptores()
+    if chat_id not in ids:
+        ids.append(chat_id)
+        _guardar_suscriptores(ids)
+        return True
+    return False
+
+
+def eliminar_suscriptor(chat_id: int) -> bool:
+    ids = _cargar_suscriptores()
+    if chat_id in ids:
+        ids.remove(chat_id)
+        _guardar_suscriptores(ids)
+        return True
+    return False
+
+
+def enviar_a(mensaje: str, chat_id: int) -> bool:
     if not _configurado():
         return False
     try:
-        url = f"https://api.telegram.org/bot{_TOKEN}/sendMessage"
         resp = requests.post(
-            url,
-            json={"chat_id": _CHAT_ID, "text": mensaje, "parse_mode": "HTML"},
+            f"https://api.telegram.org/bot{_TOKEN}/sendMessage",
+            json={"chat_id": chat_id, "text": mensaje, "parse_mode": "HTML"},
             timeout=10,
         )
         return resp.ok
     except Exception:
+        return False
+
+
+def enviar_a_todos(mensaje: str) -> bool:
+    if not _configurado():
+        return False
+    ids = _cargar_suscriptores()
+    exito = False
+    for chat_id in ids:
+        if enviar_a(mensaje, chat_id):
+            exito = True
+    return exito
+
+
+def enviar_telegram(mensaje: str) -> bool:
+    """Compatibilidad — envía solo al propietario."""
+    if not _CHAT_ID:
+        return False
+    try:
+        return enviar_a(mensaje, int(_CHAT_ID))
+    except ValueError:
         return False
 
 
@@ -72,7 +137,7 @@ def alerta_nueva_crisis(crisis: dict) -> bool:
         f"{resumen}\n\n"
         f"🌐 geopolitikapp.com"
     )
-    return enviar_telegram(msg)
+    return enviar_a_todos(msg)
 
 
 def alerta_escalada(crisis: dict, sev_anterior: int, sev_nueva: int) -> bool:
@@ -90,7 +155,7 @@ def alerta_escalada(crisis: dict, sev_anterior: int, sev_nueva: int) -> bool:
         f"Severidad: {antes} ({sev_anterior}) → {ahora} ({sev_nueva})\n\n"
         f"🌐 geopolitikapp.com"
     )
-    return enviar_telegram(msg)
+    return enviar_a_todos(msg)
 
 
 def alerta_relacion_bilateral(origen: str, destino: str, nivel: str, titular: str) -> bool:
@@ -102,7 +167,7 @@ def alerta_relacion_bilateral(origen: str, destino: str, nivel: str, titular: st
         f"<i>{titular[:200]}</i>\n\n"
         f"🌐 geopolitikapp.com"
     )
-    return enviar_telegram(msg)
+    return enviar_a_todos(msg)
 
 
 def briefing_diario() -> bool:
@@ -121,12 +186,9 @@ def briefing_diario() -> bool:
         historial = {}
 
     hoy = date.today().isoformat()
-    ayer = (date.today() - timedelta(days=1)).isoformat()
 
-    # Crisis ordenadas por severidad
     crisis_ord = sorted(crisis, key=lambda c: -c.get("severity", 0))
 
-    # Detectar escaladas en las últimas 24h
     escaladas = []
     for c in crisis:
         cid = c.get("id", "")
@@ -137,14 +199,11 @@ def briefing_diario() -> bool:
             if ultimo.get("fecha") == hoy and ultimo["severity"] > penultimo["severity"]:
                 escaladas.append((c, penultimo["severity"], ultimo["severity"]))
 
-    # Relaciones bilaterales críticas
     rojas = [r for r in relaciones if r.get("nivel") == "rojo"]
 
-    # ── Construir mensaje ────────────────────────────────────────────────────
     fecha_fmt = datetime.now().strftime("%-d de %B de %Y")
     lineas = [f"🌍 <b>BRIEFING GEOPOLÍTICO — {fecha_fmt}</b>\n"]
 
-    # Bloque 1: crisis críticas (sev 4-5)
     criticas = [c for c in crisis_ord if c.get("severity", 0) >= 4]
     if criticas:
         lineas.append("🔥 <b>SITUACIONES CRÍTICAS</b>")
@@ -155,7 +214,6 @@ def briefing_diario() -> bool:
             lineas.append(f"{emoji} <b>{c['title']}</b>\n   📍 {c.get('location','—')} · {barra} ({sev}/5)")
         lineas.append("")
 
-    # Bloque 2: escaladas recientes
     if escaladas:
         lineas.append("⬆️ <b>ESCALADAS EN LAS ÚLTIMAS 24H</b>")
         for c, ant, nva in escaladas[:3]:
@@ -165,7 +223,6 @@ def briefing_diario() -> bool:
             )
         lineas.append("")
 
-    # Bloque 3: tensiones bilaterales rojas
     if rojas:
         lineas.append("🔴 <b>TENSIONES BILATERALES CRÍTICAS</b>")
         for r in rojas[:3]:
@@ -174,7 +231,6 @@ def briefing_diario() -> bool:
             lineas.append(f"• {origen} ↔ {destino}: <i>{r.get('titular','')[:100]}</i>")
         lineas.append("")
 
-    # Bloque 4: resumen general
     n_armed = sum(1 for c in crisis if c.get("type") == "armed")
     n_diplo = sum(1 for c in crisis if c.get("type") == "diplo")
     n_econ  = sum(1 for c in crisis if c.get("type") == "econ")
@@ -187,4 +243,4 @@ def briefing_diario() -> bool:
     lineas.append("")
     lineas.append("🌐 geopolitikapp.com")
 
-    return enviar_telegram("\n".join(lineas))
+    return enviar_a_todos("\n".join(lineas))

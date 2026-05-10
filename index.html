@@ -221,6 +221,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .mk-ring:nth-child(2) { width:34px; height:34px; animation-delay:.8s; }
 .mk-ring:nth-child(3) { width:50px; height:50px; animation-delay:1.6s; }
 @keyframes ring-out { 0%{transform:scale(0);opacity:.8} 100%{transform:scale(1);opacity:0} }
+@keyframes chartDotPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(2.2);opacity:.25} }
+.chart-dot-pulse { transform-box:fill-box; transform-origin:center; animation:chartDotPulse 2s ease-in-out infinite; }
 .mk-core { width:10px; height:10px; border-radius:50%; border:2px solid rgba(255,255,255,.4); position:relative; z-index:2; transition:transform .2s; }
 .mk-wrap:hover .mk-core { transform:scale(1.5); }
 .mk-wrap.selected .mk-core { transform:scale(1.7); border-color:white; }
@@ -320,6 +322,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .tl-mk[data-type="diplo"] { background:var(--c-diplo); }
 .tl-mk[data-type="econ"]  { background:var(--c-econ); }
 .legend-panel { background:var(--bg-1); padding:12px 18px; display:flex; align-items:center; gap:16px; font-size:10px; letter-spacing:.16em; text-transform:uppercase; }
+.tg-btn { margin-left:auto; display:flex; align-items:center; gap:5px; color:#54a9eb; text-decoration:none; border:1px solid rgba(84,169,235,.3); padding:4px 10px; letter-spacing:.1em; transition:border-color .15s,color .15s; white-space:nowrap; }
+.tg-btn:hover { border-color:#54a9eb; color:#fff; }
+.tg-btn svg { flex-shrink:0; }
 .leg-item { display:inline-flex; align-items:center; gap:6px; color:var(--text-1); }
 .leg-sw { width:10px; height:10px; }
 .leg-sw.armed { background:var(--c-armed); } .leg-sw.diplo { background:var(--c-diplo); }
@@ -672,6 +677,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
       <span class="leg-item"><span class="leg-sw cyber"></span>Ciber</span>
       <span class="leg-item" style="margin-left:8px"><span class="leg-line militar"></span>Militar</span>
       <span class="leg-item"><span class="leg-line diplo"></span>Diplomático</span>
+      <a href="https://t.me/GeopolitikappBot" target="_blank" rel="noopener" class="tg-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.496.969z"/></svg>
+        Alertas Telegram
+      </a>
     </div>
   </footer>
 
@@ -850,19 +859,50 @@ function arcColorExpr() {
 function emptyFC() { return {type:'FeatureCollection',features:[]}; }
 
 /* ── DATA ────────────────────────────────────────────────────── */
-function sparklineSVG(puntos) {
-  if (!puntos || puntos.length < 2) return '';
-  const w=90, h=26, pad=3;
-  const coords = puntos.map((p,i) => {
-    const x = pad + (i/(puntos.length-1))*(w-2*pad);
-    const y = h - pad - ((p-1)/4)*(h-2*pad);
-    return [x.toFixed(1), y.toFixed(1)];
+function severityChartSVG(hist) {
+  if (!hist || hist.length < 2) return '';
+  const W=214, H=78, pL=18, pR=6, pT=8, pB=18;
+  const cW=W-pL-pR, cH=H-pT-pB;
+  const n=hist.length;
+  const colFor = s => s>=4?'var(--c-armed)':s>=3?'var(--c-econ)':'var(--c-diplo)';
+  const coords = hist.map((e,i) => ({
+    x: pL + (n===1?cW/2:(i/(n-1))*cW),
+    y: pT + ((5-e.severity)/4)*cH,
+    s: e.severity, f: (e.fecha||'').slice(5)
+  }));
+  const pts = coords.map(c=>`${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
+  const lastCol = colFor(hist[n-1].severity);
+  const uid = 'sc'+Math.random().toString(36).slice(2,7);
+  const grid = [1,2,3,4,5].map(s=>{
+    const y=(pT+((5-s)/4)*cH).toFixed(1);
+    return `<line x1="${pL-3}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="rgba(255,255,255,.06)" stroke-width="0.5"/>
+            <text x="${pL-5}" y="${(+y+3).toFixed(1)}" text-anchor="end" font-size="7" fill="rgba(255,255,255,.3)" font-family="monospace">${s}</text>`;
+  }).join('');
+  const xLabels = `<text x="${pL}" y="${H-3}" text-anchor="middle" font-size="7" fill="rgba(255,255,255,.35)" font-family="monospace">${coords[0].f}</text>
+    <text x="${(W-pR).toFixed(1)}" y="${H-3}" text-anchor="end" font-size="7" fill="rgba(255,255,255,.35)" font-family="monospace">${coords[n-1].f}</text>`;
+  const dots = coords.map((c,i)=>{
+    const col=colFor(c.s), isLast=i===n-1;
+    return `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="${isLast?3:2}" fill="${col}" ${isLast?'class="chart-dot-pulse"':'opacity=".75"'}/>`;
+  }).join('');
+  return `<svg id="${uid}" width="${W}" height="${H}" style="display:block;overflow:visible">
+    ${grid}${xLabels}
+    <polyline id="${uid}l" points="${pts}" fill="none" stroke="${lastCol}" stroke-width="1.8" stroke-linejoin="round" opacity=".9"/>
+    ${dots}
+  </svg>`;
+}
+
+function animateDetailCharts() {
+  document.querySelectorAll('[id$="l"]').forEach(el => {
+    if (!el.getTotalLength) return;
+    const len = el.getTotalLength();
+    el.style.transition = 'none';
+    el.style.strokeDasharray = len;
+    el.style.strokeDashoffset = len;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.style.transition = 'stroke-dashoffset 1.3s ease-out';
+      el.style.strokeDashoffset = 0;
+    }));
   });
-  const pts = coords.map(c=>c.join(',')).join(' ');
-  const [lx,ly] = coords[coords.length-1];
-  const ult = puntos[puntos.length-1];
-  const col = ult>=4?'var(--c-armed)':ult>=3?'var(--c-econ)':'var(--c-diplo)';
-  return `<svg width="${w}" height="${h}" style="display:inline-block;vertical-align:middle"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round" opacity=".85"/><circle cx="${lx}" cy="${ly}" r="2.5" fill="${col}"/></svg>`;
 }
 
 async function loadData() {
@@ -1024,9 +1064,10 @@ function renderDetail(c) {
       </div>
       <div class="detail-summary">${c.summary||'Sin resumen disponible.'}</div>
       ${actors?`<div class="detail-actors"><div class="lbl">Actores</div><div class="actor-tags">${actors}</div></div>`:''}
-      ${(() => { const h=ST.historial[c.id]; return h&&h.length>=2?`<div class="detail-cell" style="border-top:1px solid var(--line-0);padding-top:8px;margin-top:2px"><div class="lbl">Tendencia severidad</div><div class="val" style="padding-top:4px">${sparklineSVG(h.map(e=>e.severity))}</div></div>`:''; })()}
+      ${(() => { const h=ST.historial[c.id]; return h&&h.length>=2?`<div class="detail-cell" style="border-top:1px solid var(--line-0);padding-top:8px;margin-top:4px"><div class="lbl" style="margin-bottom:6px">Evolución de severidad</div>${severityChartSVG(h)}</div>`:''; })()}
       ${tl?`<div class="detail-tl"><div class="lbl">Cronología</div>${tl}</div>`:''}
     </div>`;
+  animateDetailCharts();
 }
 
 /* ── STATS ───────────────────────────────────────────────────── */
@@ -1230,8 +1271,10 @@ function mobRenderDetail(c) {
       </div>
       <div class="detail-summary">${c.summary||''}</div>
       ${actors?`<div class="detail-actors"><div class="lbl">Actores</div><div class="actor-tags">${actors}</div></div>`:''}
+      ${(() => { const h=ST.historial[c.id]; return h&&h.length>=2?`<div class="detail-cell" style="border-top:1px solid var(--line-0);padding-top:8px;margin-top:4px"><div class="lbl" style="margin-bottom:6px">Evolución de severidad</div>${severityChartSVG(h)}</div>`:''; })()}
       ${tl?`<div class="detail-tl"><div class="lbl">Cronología</div>${tl}</div>`:''}
     </div>`;
+  animateDetailCharts();
 }
 
 function openSheet() {

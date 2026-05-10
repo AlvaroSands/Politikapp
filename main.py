@@ -1,14 +1,15 @@
 from contextlib import asynccontextmanager
 from datetime import datetime, date
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from actualizador import ejecutar_actualizacion
-from notificaciones import briefing_diario
+from notificaciones import briefing_diario, agregar_suscriptor, eliminar_suscriptor, enviar_a
 import uvicorn
 import json
 import os
 import logging
+import requests
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -35,6 +36,18 @@ async def lifespan(app: FastAPI):
     )
     scheduler.start()
     logger.info("Scheduler iniciado — actualizador RSS ahora y cada 3 horas · briefing diario 6:00 UTC")
+    # Registrar webhook de Telegram
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    if token:
+        try:
+            r = requests.post(
+                f"https://api.telegram.org/bot{token}/setWebhook",
+                json={"url": "https://geopolitikapp.com/webhook/telegram"},
+                timeout=10,
+            )
+            logger.info(f"Telegram webhook: {r.json()}")
+        except Exception as e:
+            logger.warning(f"No se pudo registrar webhook Telegram: {e}")
     yield
     scheduler.shutdown()
 
@@ -166,6 +179,43 @@ Allow: /analisis
 
 Sitemap: https://geopolitikapp.com/sitemap.xml
 """
+
+
+@app.post("/webhook/telegram")
+async def telegram_webhook(request: Request):
+    try:
+        data = await request.json()
+    except Exception:
+        return {"ok": True}
+    message = data.get("message", {})
+    text = (message.get("text") or "").strip()
+    chat_id = message.get("chat", {}).get("id")
+    if not chat_id:
+        return {"ok": True}
+    if text.startswith("/start"):
+        es_nuevo = agregar_suscriptor(chat_id)
+        if es_nuevo:
+            enviar_a(
+                "👋 <b>Bienvenido a Geopolitikapp</b>\n\n"
+                "A partir de ahora recibirás alertas en tiempo real:\n\n"
+                "🔴 Nuevas crisis detectadas\n"
+                "⬆️ Escaladas de conflictos\n"
+                "🔴 Tensiones bilaterales críticas\n"
+                "🌍 Briefing diario a las 8:00h\n\n"
+                "Para darte de baja: /stop\n"
+                "🌐 geopolitikapp.com",
+                chat_id,
+            )
+        else:
+            enviar_a("✅ Ya estás suscrito a las alertas de Geopolitikapp.\n🌐 geopolitikapp.com", chat_id)
+    elif text.startswith("/stop"):
+        eliminar_suscriptor(chat_id)
+        enviar_a(
+            "👋 Te has dado de baja de las alertas de Geopolitikapp.\n"
+            "Para volver a suscribirte: /start",
+            chat_id,
+        )
+    return {"ok": True}
 
 
 if __name__ == "__main__":
