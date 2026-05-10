@@ -829,6 +829,20 @@ map.on('load', () => {
   map.on('mouseenter','crisis-hit', () => map.getCanvas().style.cursor = 'pointer');
   map.on('mouseleave','crisis-hit', () => { if (!map.queryRenderedFeatures(undefined,{layers:['arcs-hit']}).length) map.getCanvas().style.cursor = ''; });
 
+  // Deseleccionar al pinchar en zona vacía del mapa
+  map.on('click', e => {
+    const hit = map.queryRenderedFeatures(e.point, { layers:['crisis-hit'] });
+    if (hit.length) return;
+    if (!ST.selected) return;
+    ST.selected = null;
+    renderArcs(null);
+    renderFeed();
+    renderDetail(null);
+    try { map.setFilter('crisis-sel',['==',['get','id'],'__none__']); } catch(e) {}
+    if (!isMobile()) switchTab('feed');
+    else { mobRenderFeed(); mobRenderDetail(null); }
+  });
+
   animArcs();
   loadData();
   setInterval(loadData, 60000);
@@ -845,7 +859,9 @@ function animArcs() {
   requestAnimationFrame(animArcs);
 }
 function arcColorExpr() {
-  return ['match',['get','nivel'],'rojo','#e05050','naranja','#d9a441','amarillo','#4aa3d9','#64748b'];
+  return ['match',['get','tipo'],
+    'armed','#e05050','diplo','#4aa3d9','econ','#d9a441',
+    'cyber','#b860d4','intel','#4ad48f','#64748b'];
 }
 function emptyFC() { return {type:'FeatureCollection',features:[]}; }
 
@@ -892,7 +908,7 @@ function visibleCrisis() {
 
 function renderAll() {
   renderMarkers();
-  renderArcs();
+  renderArcs(ST.selected || null);
   renderHeat();
   renderFeed();
   renderStats();
@@ -914,16 +930,31 @@ function renderMarkers() {
 }
 
 /* ── ARCS ────────────────────────────────────────────────────── */
-function renderArcs() {
-  if (!ST.data) return;
-  const features = (ST.data.relaciones||[]).map(r => {
-    const from = [r.origen.lng, r.origen.lat];
-    const to   = [r.destino.lng, r.destino.lat];
-    const pts  = gcInterp(from, to, 64);
-    return { type:'Feature', geometry:{type:'LineString', coordinates:pts},
-      properties:{ nivel:r.nivel, tipo:r.tipo, titular:r.titular, origen:r.origen.nombre, destino:r.destino.nombre }};
+function renderArcs(c) {
+  if (!ST.data || !c) {
+    try { map.getSource('arcs').setData(emptyFC()); } catch(e) {}
+    return;
+  }
+  const actorSet = new Set((c.actors||[]).map(a => a.toLowerCase()));
+  const features = [];
+  (ST.data.relaciones||[]).forEach(r => {
+    const origenMatch  = actorSet.has(r.origen.nombre.toLowerCase());
+    const destinoMatch = actorSet.has(r.destino.nombre.toLowerCase());
+    if (!origenMatch || !destinoMatch) return;
+    // Extremo del arco: el país de la relación que NO es el actor principal;
+    // si ambos son actores usamos destino para evitar duplicados.
+    const to = (destinoMatch && !origenMatch)
+      ? [r.origen.lng, r.origen.lat]
+      : [r.destino.lng, r.destino.lat];
+    const pts = gcInterp([c.lng, c.lat], to, 64);
+    features.push({
+      type: 'Feature',
+      geometry: { type: 'LineString', coordinates: pts },
+      properties: { nivel: r.nivel, tipo: c.type, titular: r.titular,
+                    origen: r.origen.nombre, destino: r.destino.nombre }
+    });
   });
-  try { map.getSource('arcs').setData({type:'FeatureCollection',features}); } catch(e) {}
+  try { map.getSource('arcs').setData({ type:'FeatureCollection', features }); } catch(e) {}
 }
 
 function gcInterp(a, b, n) {
@@ -984,6 +1015,7 @@ function selectEvent(c) {
   ST.selected = c;
   renderFeed();
   renderDetail(c);
+  renderArcs(c);
   try { map.setFilter('crisis-sel',['==',['get','id'], c.id]); } catch(e) {}
   if (isMobile()) {
     mobRenderFeed();
@@ -1197,6 +1229,7 @@ function mobUpdateCounts() {
 
 function mobSelectEvent(c) {
   ST.selected = c;
+  renderArcs(c);
   try { map.setFilter('crisis-sel',['==',['get','id'], c.id]); } catch(e) {}
   mobRenderFeed();
   mobRenderDetail(c);
