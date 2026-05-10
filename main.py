@@ -150,9 +150,160 @@ async def pagina_analisis():
         return f.read()
 
 
+def _crisis_page(crisis: dict) -> str:
+    cid      = crisis.get("id", "")
+    title    = crisis.get("title", "")
+    location = crisis.get("location", "")
+    tipo     = crisis.get("type", "diplo")
+    tipo_es  = TYPE_ES.get(tipo, "Crisis")
+    severity = crisis.get("severity", 1)
+    summary  = crisis.get("summary", "")
+    actors   = crisis.get("actors", [])
+    timeline = crisis.get("timeline", [])[:12]
+    hoy      = date.today().isoformat()
+
+    colors = {
+        "armed": "#e05050", "diplo": "#4aa3d9", "econ": "#d9a441",
+        "cyber": "#b860d4", "intel": "#4ad48f",
+    }
+    color    = colors.get(tipo, "#8195a0")
+    sev_str  = "■" * severity + "□" * (5 - severity)
+    meta_desc = f"{tipo_es} en {location}. Severidad {severity}/5. {(summary or '')[:155]}"
+    pub_date  = timeline[-1].get("when", hoy) if timeline else hoy
+    mod_date  = timeline[0].get("when", hoy)  if timeline else hoy
+
+    ld_article = {
+        "@context": "https://schema.org", "@type": "NewsArticle",
+        "headline": title,
+        "description": meta_desc,
+        "url": f"https://geopolitikapp.com/crisis/{cid}",
+        "datePublished": pub_date, "dateModified": mod_date,
+        "publisher": {"@type": "Organization", "name": "Geopolitikapp",
+                      "url": "https://geopolitikapp.com"},
+        "about": {"@type": "Event", "name": title,
+                  "location": {"@type": "Place", "name": location}},
+    }
+    ld_breadcrumb = {
+        "@context": "https://schema.org", "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Inicio",
+             "item": "https://geopolitikapp.com/"},
+            {"@type": "ListItem", "position": 2, "name": "Análisis Regional",
+             "item": "https://geopolitikapp.com/analisis"},
+            {"@type": "ListItem", "position": 3, "name": title,
+             "item": f"https://geopolitikapp.com/crisis/{cid}"},
+        ],
+    }
+
+    actors_html = "".join(
+        f'<span style="display:inline-block;padding:3px 8px;border:1px solid #233339;'
+        f'font-size:10px;letter-spacing:.1em;margin:2px 3px 2px 0;color:#8195a0">{a}</span>'
+        for a in actors
+    )
+
+    tl_items = "".join(
+        f'<div style="padding:8px 0;border-bottom:1px solid #182225">'
+        f'<div style="font-size:9px;color:#4f6168;margin-bottom:3px">{t.get("when","—")} · {t.get("source","—")}</div>'
+        f'<div style="font-size:11px;color:#c1d1d8;line-height:1.5">'
+        f'{"<a href=" + repr(t["url"]) + " target=_blank rel=noopener style=color:#c1d1d8>" + t.get("what","") + "</a>" if t.get("url") and t["url"] != "#" else t.get("what","")}'
+        f'</div></div>'
+        for t in timeline
+    )
+
+    return f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>{title} — {tipo_es} en {location} | Geopolitikapp</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="{meta_desc}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://geopolitikapp.com/crisis/{cid}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="{title} | Geopolitikapp">
+<meta property="og:description" content="{meta_desc}">
+<meta property="og:url" content="https://geopolitikapp.com/crisis/{cid}">
+<meta property="og:site_name" content="Geopolitikapp">
+<script type="application/ld+json">{json.dumps(ld_article, ensure_ascii=False)}</script>
+<script type="application/ld+json">{json.dumps(ld_breadcrumb, ensure_ascii=False)}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
+body{{background:#07090a;color:#c1d1d8;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.6;-webkit-font-smoothing:antialiased}}
+a{{color:inherit;text-decoration:none}}
+.topbar{{display:flex;align-items:center;gap:0;height:52px;background:#0c1214;border-bottom:1px solid #182428;position:sticky;top:0;z-index:10;padding:0 24px}}
+.brand{{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.18em;color:#e8f1f4;margin-right:auto}}
+.nav-link{{padding:0 16px;height:100%;display:flex;align-items:center;font-size:10px;letter-spacing:.14em;color:#8195a0;border-left:1px solid #182428;transition:color .15s}}
+.nav-link:hover{{color:#e8f1f4}}
+.page{{max-width:780px;margin:0 auto;padding:40px 24px 80px}}
+.breadcrumb{{font-size:9px;letter-spacing:.12em;color:#4f6168;margin-bottom:28px}}
+.breadcrumb a{{color:#4f6168}}
+.breadcrumb a:hover{{color:#8195a0}}
+.ribbon{{display:inline-block;padding:3px 10px;font-size:9px;letter-spacing:.18em;margin-bottom:14px;border:1px solid {color};color:{color}}}
+h1{{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:#e8f1f4;line-height:1.3;margin-bottom:8px;letter-spacing:.03em}}
+.meta-loc{{font-size:11px;color:#4f6168;letter-spacing:.1em;margin-bottom:24px}}
+.severity{{display:flex;align-items:center;gap:12px;padding:14px 0;border-top:1px solid #182428;border-bottom:1px solid #182428;margin-bottom:24px}}
+.sev-label{{font-size:9px;letter-spacing:.14em;color:#4f6168}}
+.sev-val{{font-size:13px;letter-spacing:.06em;color:{color}}}
+.section-title{{font-size:9px;letter-spacing:.18em;color:#4f6168;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px dashed #233339}}
+.summary{{font-size:12px;color:#8195a0;line-height:1.7;margin-bottom:28px}}
+.actors{{margin-bottom:28px}}
+.timeline{{margin-bottom:40px}}
+.back-map{{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:1px solid #233339;font-size:10px;letter-spacing:.14em;color:#8195a0;transition:color .15s,border-color .15s;margin-top:12px}}
+.back-map:hover{{color:#e8f1f4;border-color:#4f6168}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">MONITOR GEOPOLÍTICO</div>
+  <a href="/" class="nav-link">← Mapa</a>
+  <a href="/analisis" class="nav-link">Análisis Regional</a>
+</header>
+<main class="page">
+  <nav class="breadcrumb" aria-label="Ruta">
+    <a href="/">Inicio</a> &rsaquo; <a href="/analisis">Análisis Regional</a> &rsaquo; {title}
+  </nav>
+  <div class="ribbon">{tipo_es.upper()}</div>
+  <h1>{title}</h1>
+  <p class="meta-loc">{location}</p>
+  <div class="severity">
+    <span class="sev-label">SEVERIDAD</span>
+    <span class="sev-val">{sev_str}</span>
+    <span class="sev-label">{severity}/5</span>
+  </div>
+  {f'<div class="summary"><h2 class="section-title">Resumen</h2>{summary}</div>' if summary else ''}
+  {f'<div class="actors"><div class="section-title">Actores</div>{actors_html}</div>' if actors else ''}
+  {f'<div class="timeline"><h2 class="section-title">Cronología</h2>{tl_items}</div>' if tl_items else ''}
+  <a href="/" class="back-map">← Ver en el mapa en tiempo real</a>
+</main>
+</body>
+</html>"""
+
+
+@app.get("/crisis/{crisis_id}", response_class=HTMLResponse)
+async def pagina_crisis(crisis_id: str):
+    datos = _leer_datos()
+    crisis = next((c for c in datos.get("crisis", []) if c.get("id") == crisis_id), None)
+    if not crisis:
+        return HTMLResponse(status_code=404, content="<h1>Crisis no encontrada</h1>")
+    return _crisis_page(crisis)
+
+
 @app.get("/sitemap.xml")
 async def sitemap():
-    hoy = date.today().isoformat()
+    hoy   = date.today().isoformat()
+    datos = _leer_datos()
+    crisis_urls = "".join(
+        f"""  <url>
+    <loc>https://geopolitikapp.com/crisis/{c.get('id','')}</loc>
+    <lastmod>{c.get('timeline', [{}])[0].get('when', hoy) if c.get('timeline') else hoy}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>\n"""
+        for c in datos.get("crisis", []) if c.get("id")
+    )
     xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -167,7 +318,7 @@ async def sitemap():
     <changefreq>hourly</changefreq>
     <priority>0.8</priority>
   </url>
-</urlset>"""
+{crisis_urls}</urlset>"""
     return Response(content=xml, media_type="application/xml")
 
 
