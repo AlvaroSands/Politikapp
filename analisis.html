@@ -84,6 +84,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   height:52px;background:var(--bg-1);border-bottom:1px solid var(--line-0);
   position:sticky;top:0;z-index:100;
 }
+.lang-toggle{display:flex;border:1px solid var(--line-1);overflow:hidden;margin:auto 0}
+.lang-btn{padding:0 9px;font-size:9px;letter-spacing:.14em;font-family:inherit;color:var(--text-0);background:none;border:none;cursor:pointer;transition:color .15s,background .15s}
+.lang-btn.active{background:var(--line-2);color:var(--text-3)}
 .brand{display:flex;align-items:center;gap:12px;padding:0 18px;border-right:1px solid var(--line-0)}
 .brand-mark{width:24px;height:24px;background:var(--bg-3);border:1px solid var(--line-2);position:relative;display:flex;align-items:center;justify-content:center}
 .brand-mark::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--accent)}
@@ -181,14 +184,22 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <div class="brand">
     <div class="brand-mark"><span></span></div>
     <div class="brand-text">
-      <div class="t1">MONITOR GEOPOLÍTICO</div>
+      <div class="t1" data-i18n="brand">MONITOR GEOPOLÍTICO</div>
       <div class="t2">geopolitikapp.com · live</div>
     </div>
   </div>
-  <div class="topbar-title">ANÁLISIS REGIONAL</div>
+  <div class="topbar-title" data-i18n="page_title">ANÁLISIS REGIONAL</div>
   <div class="topbar-actions">
     <div class="clock">UTC <span id="clock-utc">—</span></div>
-    <a href="/" class="topbar-btn">
+    <div class="lang-toggle" style="margin:auto 12px">
+      <button class="lang-btn active" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <a href="https://t.me/GeopolitikappBot" target="_blank" rel="noopener" class="topbar-btn" style="color:#54a9eb;border-right:1px solid var(--line-0)" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#54a9eb'">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.496.969z"/></svg>
+      <span data-i18n="tg_alerts">Alertas Telegram</span>
+    </a>
+    <a href="/" class="topbar-btn" data-i18n="back_map">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
       ← Mapa
     </a>
@@ -197,26 +208,67 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <div class="page">
   <div class="page-header">
-    <h1>Análisis por Región</h1>
-    <p>RESUMEN AUTOMÁTICO · DATOS EN TIEMPO REAL · ACTUALIZACIÓN CADA 3 HORAS</p>
+    <h1 data-i18n="h1_title">Análisis por Región</h1>
+    <p data-i18n="subtitle">RESUMEN AUTOMÁTICO · DATOS EN TIEMPO REAL · ACTUALIZACIÓN CADA 3 HORAS</p>
   </div>
 
   <div class="sync-bar">
     <div class="sync-dot"></div>
-    <span>Última sincronización: <span id="last-sync">cargando...</span></span>
-    <span style="margin-left:auto"><span id="total-crisis">—</span> crisis activas globales</span>
+    <span><span data-i18n="last_sync_label">Última sincronización:</span> <span id="last-sync" data-i18n-loading="loading">cargando...</span></span>
+    <span style="margin-left:auto"><span id="total-crisis">—</span> <span data-i18n="active_global">crisis activas globales</span></span>
   </div>
 
   <div class="regions-grid" id="regions-grid">
-    <div class="empty-region">// cargando datos...</div>
+    <div class="empty-region" data-i18n="loading">// cargando datos...</div>
   </div>
 </div>
 
-<footer class="footer">
+<footer class="footer" data-i18n="footer_text">
   geopolitikapp.com · monitor geopolítico en tiempo real · datos actualizados automáticamente
 </footer>
 
 <script>
+/* ── i18n ── */
+const STRINGS = {
+  es: {
+    brand:'MONITOR GEOPOLÍTICO', page_title:'ANÁLISIS REGIONAL',
+    back_map:'← Mapa', tg_alerts:'Alertas Telegram',
+    h1_title:'Análisis por Región',
+    subtitle:'RESUMEN AUTOMÁTICO · DATOS EN TIEMPO REAL · ACTUALIZACIÓN CADA 3 HORAS',
+    last_sync_label:'Última sincronización:', active_global:'crisis activas globales',
+    loading:'// cargando datos...', load_error:'// error cargando datos',
+    no_data:'SIN DATOS', no_active:'// sin crisis activas',
+    active_crises:'crisis activas', avg_sev:'SEVERIDAD MEDIA ·',
+    sev_evolution:'EVOLUCIÓN DE SEVERIDAD (historial)',
+    crises_title:'Crisis activas', latest_news:'Últimas noticias',
+    no_news:'// sin noticias recientes',
+    footer_text:'geopolitikapp.com · monitor geopolítico en tiempo real · datos actualizados automáticamente',
+  },
+  en: {
+    brand:'GEOPOLITICAL MONITOR', page_title:'REGIONAL ANALYSIS',
+    back_map:'← Map', tg_alerts:'Telegram Alerts',
+    h1_title:'Analysis by Region',
+    subtitle:'AUTO SUMMARY · REAL-TIME DATA · UPDATED EVERY 3 HOURS',
+    last_sync_label:'Last sync:', active_global:'active global crises',
+    loading:'// loading data...', load_error:'// error loading data',
+    no_data:'NO DATA', no_active:'// no active crises',
+    active_crises:'active crises', avg_sev:'AVG. SEVERITY ·',
+    sev_evolution:'SEVERITY TREND (history)',
+    crises_title:'Active crises', latest_news:'Latest news',
+    no_news:'// no recent news',
+    footer_text:'geopolitikapp.com · real-time geopolitical monitor · data updated automatically',
+  }
+};
+let _lang = (localStorage.getItem('geo_lang') || (navigator.language.startsWith('es') ? 'es' : 'en'));
+function L(k) { return (STRINGS[_lang]||STRINGS.es)[k] || k; }
+function setLang(lang) {
+  _lang = lang;
+  localStorage.setItem('geo_lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang===lang));
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = L(el.dataset.i18n); });
+}
+
 const TYPE_COLOR = {
   armed:'var(--c-armed)', diplo:'var(--c-diplo)', econ:'var(--c-econ)',
   cyber:'var(--c-cyber)', intel:'var(--c-intel)'
@@ -358,9 +410,9 @@ function renderRegion(key, reg, crisis, historial) {
     return `<div class="region-card">
       <div class="region-header">
         <div class="region-name">${reg.nombre}</div>
-        <div class="region-count">SIN DATOS</div>
+        <div class="region-count">${L('no_data')}</div>
       </div>
-      <div class="empty-region">// sin crisis activas</div>
+      <div class="empty-region">${L('no_active')}</div>
     </div>`;
   }
 
@@ -384,31 +436,31 @@ function renderRegion(key, reg, crisis, historial) {
         ? `<a href="${n.url}" target="_blank" rel="noopener">${n.what}</a>`
         : n.what}</div>
       <div class="news-src">${n.source || '—'}</div>
-    </div>`).join('') : '<div style="color:var(--text-0);font-size:10px;padding:8px 0">// sin noticias recientes</div>';
+    </div>`).join('') : `<div style="color:var(--text-0);font-size:10px;padding:8px 0">${L('no_news')}</div>`;
 
   return `<div class="region-card">
     <div class="region-header">
       <div class="region-name">${reg.nombre}</div>
-      <div class="region-count"><span>${crisis.length}</span> crisis activas</div>
+      <div class="region-count"><span>${crisis.length}</span> ${L('active_crises')}</div>
     </div>
 
     <div class="sev-bar-wrap">
-      <div class="sev-label">SEVERIDAD MEDIA · ${sev.toFixed(1)}/5</div>
+      <div class="sev-label">${L('avg_sev')} ${sev.toFixed(1)}/5</div>
       <div class="sev-track"><div class="sev-fill" style="width:${sevPct}%;background:${color}"></div></div>
     </div>
 
     ${spark ? `<div class="sparkline-wrap">
-      <div class="sparkline-label">EVOLUCIÓN DE SEVERIDAD (historial)</div>
+      <div class="sparkline-label">${L('sev_evolution')}</div>
       ${spark}
     </div>` : ''}
 
     <div class="crisis-list">
-      <div class="crisis-list-title">Crisis activas</div>
+      <div class="crisis-list-title">${L('crises_title')}</div>
       ${crisisItems}
     </div>
 
     <div class="news-section">
-      <div class="news-title">Últimas noticias</div>
+      <div class="news-title">${L('latest_news')}</div>
       ${noticiasHTML}
     </div>
   </div>`;
@@ -425,7 +477,7 @@ async function cargarYRenderizar() {
     const crisis   = datos.crisis || [];
 
     document.getElementById('total-crisis').textContent = crisis.length;
-    document.getElementById('last-sync').textContent = new Date().toLocaleTimeString('es-ES');
+    document.getElementById('last-sync').textContent = new Date().toLocaleTimeString(_lang==='es'?'es-ES':'en-GB');
 
     // Agrupar por región
     const grupos = {};
@@ -442,7 +494,7 @@ async function cargarYRenderizar() {
 
   } catch (e) {
     document.getElementById('regions-grid').innerHTML =
-      '<div class="empty-region">// error cargando datos</div>';
+      `<div class="empty-region">${L('load_error')}</div>`;
   }
 }
 
@@ -459,6 +511,12 @@ tickClock();
 
 cargarYRenderizar();
 setInterval(cargarYRenderizar, 5 * 60 * 1000);
+
+/* ── LANG ── */
+document.querySelectorAll('.lang-btn').forEach(b => {
+  b.addEventListener('click', () => { setLang(b.dataset.lang); cargarYRenderizar(); });
+});
+setLang(_lang);
 </script>
 </body>
 </html>
