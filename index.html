@@ -75,6 +75,30 @@
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
   --sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
 }
+:root[data-theme="light"] {
+  --bg-0: #f2efe8;  --bg-1: #e8e4db;  --bg-2: #ddd8cd;  --bg-3: #d0cab8;
+  --line-0: #c8c2b0; --line-1: #b8b2a0; --line-2: #a8a290;
+  --text-0: #8a8070; --text-1: #6a5e50; --text-2: #3a2e24; --text-3: #1e1610;
+  --accent: #b87820;
+  --c-armed: #c03030; --c-armed-g: rgba(192,48,48,.2);
+  --c-diplo: #1878b8; --c-diplo-g: rgba(24,120,184,.2);
+  --c-econ:  #b87820; --c-econ-g:  rgba(184,120,32,.2);
+  --c-cyber: #8838b8; --c-cyber-g: rgba(136,56,184,.2);
+  --c-intel: #1a9448; --c-intel-g: rgba(26,148,72,.2);
+}
+/* HUD va sobre el mapa oscuro — mantener legible en ambos temas */
+:root[data-theme="light"] .hud { color: rgba(210,225,235,.6); }
+:root[data-theme="light"] .hud .hi { color: rgba(225,235,242,.85); }
+:root[data-theme="light"] .hud .acc { color: #d9a441; }
+:root[data-theme="light"] .hud-corner { border-color: #d9a441; }
+/* Sev-cell activa: texto blanco sobre amber */
+:root[data-theme="light"] .sev-cell.on { color: #fff; }
+/* Botón tema */
+.theme-btn { padding:0 12px; height:100%; font-size:14px; color:var(--text-1); border-left:1px solid var(--line-0); transition:color .15s; }
+.theme-btn:hover { color:var(--text-3); }
+/* Fuente ligeramente más gruesa en tema claro */
+:root[data-theme="light"] body { font-weight: 500; }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
 body { background: var(--bg-0); color: var(--text-2); font-family: var(--mono); font-size: 12px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
@@ -554,6 +578,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
         <button class="lang-btn active" data-lang="es">ES</button>
         <button class="lang-btn" data-lang="en">EN</button>
       </div>
+      <button id="theme-btn" class="theme-btn" title="Cambiar tema">☀</button>
       <a href="https://t.me/GeopolitikappBot" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#54a9eb;border-left:1px solid var(--line-0);transition:color .15s;white-space:nowrap" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#54a9eb'"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.496.969z"/></svg><span data-i18n="tg_alerts">Alertas Telegram</span></a>
       <a href="/analisis" data-i18n="analysis" style="display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-1);border-left:1px solid var(--line-0);transition:color .15s" onmouseover="this.style.color='var(--text-3)'" onmouseout="this.style.color='var(--text-1)'">Análisis Regional ↗</a>
     </div>
@@ -1444,6 +1469,18 @@ document.querySelectorAll('.lang-btn').forEach(b => {
   const browser = navigator.language && navigator.language.startsWith('es') ? 'es' : 'en';
   setLang(saved || browser);
 })();
+
+/* ── THEME ───────────────────────────────────────────────────── */
+function setTheme(t) {
+  localStorage.setItem('geo_theme', t);
+  document.documentElement.dataset.theme = t === 'light' ? 'light' : '';
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = t === 'light' ? '🌙' : '☀';
+}
+document.getElementById('theme-btn').addEventListener('click', function() {
+  setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
+});
+setTheme(localStorage.getItem('geo_theme') || 'dark');
 </script>
 </body>
 </html>
