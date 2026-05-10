@@ -903,33 +903,42 @@ map.on('load', () => {
   }
 
   // ── CONTEXT NODE LAYERS (debajo de las crisis) ───────────────
+  // Dibujar rombos en canvas para no depender de la fuente del tileset
+  (function() {
+    function diamondImg(fill, stroke, size) {
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const x = c.getContext('2d'), h = size / 2;
+      x.beginPath();
+      x.moveTo(h, 2); x.lineTo(size-2, h); x.lineTo(h, size-2); x.lineTo(2, h);
+      x.closePath();
+      x.fillStyle = fill; x.fill();
+      x.strokeStyle = stroke; x.lineWidth = 1.5; x.stroke();
+      return x.getImageData(0, 0, size, size);
+    }
+    map.addImage('ctx-diamond',     diamondImg('#6abed0', 'rgba(0,0,0,0.45)', 18));
+    map.addImage('ctx-diamond-sel', diamondImg('#ffffff', '#6abed0', 24));
+  })();
+
   map.addLayer({ id:'context-sym', type:'symbol', source:'context-pts',
     layout:{
-      'text-field': '◆',
-      'text-size': ['interpolate',['linear'],['zoom'], 1,10, 4,12, 8,15],
-      'text-allow-overlap': true,
-      'text-ignore-placement': true,
+      'icon-image': 'ctx-diamond',
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+      'icon-size': ['interpolate',['linear'],['zoom'], 1,0.75, 4,0.95, 8,1.2],
     },
-    paint:{
-      'text-color': '#6abed0',
-      'text-halo-color': 'rgba(7,9,10,0.75)',
-      'text-halo-width': 1.5,
-    }
+    paint:{ 'icon-opacity': 0.92 }
   });
 
   map.addLayer({ id:'context-sym-sel', type:'symbol', source:'context-pts',
     filter:['==',['get','id'],'__none__'],
     layout:{
-      'text-field': '◆',
-      'text-size': ['interpolate',['linear'],['zoom'], 1,14, 4,17, 8,21],
-      'text-allow-overlap': true,
-      'text-ignore-placement': true,
+      'icon-image': 'ctx-diamond-sel',
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+      'icon-size': ['interpolate',['linear'],['zoom'], 1,0.95, 4,1.15, 8,1.45],
     },
-    paint:{
-      'text-color': '#ffffff',
-      'text-halo-color': '#6abed0',
-      'text-halo-width': 2.5,
-    }
+    paint:{ 'icon-opacity': 1 }
   });
 
   map.addLayer({ id:'context-hit', type:'circle', source:'context-pts',
