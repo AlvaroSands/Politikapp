@@ -18,4 +18,5 @@ importador_masivo.py
 # Runtime generado por el actualizador (no subir al repo)
 pendientes.json
 suscriptores.json
+briefing_ultima_fecha.txt
 .env

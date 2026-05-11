@@ -1,8 +1,9 @@
 from contextlib import asynccontextmanager
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Response
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 from actualizador import ejecutar_actualizacion
 from notificaciones import briefing_diario, agregar_suscriptor, eliminar_suscriptor, enviar_a
 import uvicorn
@@ -15,7 +16,33 @@ from html import escape as _e
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-scheduler = BackgroundScheduler()
+scheduler = BackgroundScheduler(timezone="UTC")
+
+BRIEFING_HORA_UTC = 6
+BRIEFING_MARCA = "briefing_ultima_fecha.txt"
+
+
+def _briefing_ya_enviado_hoy() -> bool:
+    hoy = date.today().isoformat()
+    try:
+        with open(BRIEFING_MARCA, "r") as f:
+            return f.read().strip() == hoy
+    except Exception:
+        return False
+
+
+def _marcar_briefing_enviado():
+    try:
+        with open(BRIEFING_MARCA, "w") as f:
+            f.write(date.today().isoformat())
+    except Exception:
+        pass
+
+
+def _briefing_con_marca():
+    briefing_diario()
+    _marcar_briefing_enviado()
+
 
 TYPE_ES = {
     "armed": "Conflicto armado",
@@ -33,10 +60,19 @@ async def lifespan(app: FastAPI):
         next_run_time=datetime.now()
     )
     scheduler.add_job(
-        briefing_diario, "cron", hour=6, minute=0, id="briefing",
+        _briefing_con_marca,
+        CronTrigger(hour=BRIEFING_HORA_UTC, minute=0, timezone="UTC"),
+        id="briefing",
     )
     scheduler.start()
-    logger.info("Scheduler iniciado — actualizador RSS ahora y cada 3 horas · briefing diario 6:00 UTC")
+    logger.info("Scheduler iniciado — actualizador RSS ahora y cada 3h · briefing diario 6:00 UTC")
+
+    # Recovery: si el servidor arranca después de las 6:00 UTC y el briefing no se envió hoy, enviarlo
+    ahora_utc = datetime.now(timezone.utc)
+    if ahora_utc.hour >= BRIEFING_HORA_UTC and not _briefing_ya_enviado_hoy():
+        logger.info("Briefing pendiente detectado al arrancar — enviando ahora")
+        import threading
+        threading.Thread(target=_briefing_con_marca, daemon=True).start()
     # Registrar webhook de Telegram
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     if token:
