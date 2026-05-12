@@ -69,6 +69,8 @@ FUENTES_RSS = [
     "https://www.stimson.org/feed/",
     "https://carnegieendowment.org/rss/solr/articles",
     "https://www.wilsoncenter.org/rss.xml",
+    "https://geopoliticalfutures.com/feed/",
+    "https://timothyash.substack.com/feed",
     # OSINT / inteligencia verificada
     "https://www.bellingcat.com/feed/",
     "https://www.understandingwar.org/rss.xml",
