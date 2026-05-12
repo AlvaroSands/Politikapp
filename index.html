@@ -99,13 +99,6 @@
 .sat-btn { padding:0 12px; height:100%; font-size:12px; letter-spacing:.12em; font-family:var(--mono); color:var(--text-1); border-left:1px solid var(--line-0); transition:color .15s,border-color .15s; }
 .sat-btn:hover { color:var(--text-3); }
 .sat-btn.active { color:var(--accent); border-left-color:var(--accent); }
-/* Búsqueda booleana en topbar */
-.search-wrap { display:flex; align-items:center; height:100%; border-left:1px solid var(--line-0); padding:0 10px; }
-.search-input { background:transparent; border:none; outline:none; color:var(--text-2); font:inherit; font-size:11px; letter-spacing:.06em; width:160px; transition:width .2s; }
-.search-input::placeholder { color:var(--text-0); }
-.search-input:focus { width:220px; color:var(--text-3); }
-.search-clear { background:none; border:none; cursor:pointer; color:var(--text-0); padding:0 0 0 4px; font-size:13px; line-height:1; display:none; }
-.search-clear.visible { display:inline; }
 /* Fuente ligeramente más gruesa en tema claro */
 :root[data-theme="light"] body { font-weight: 500; }
 
@@ -696,10 +689,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
         <button class="lang-btn active" data-lang="es">ES</button>
         <button class="lang-btn" data-lang="en">EN</button>
       </div>
-      <div class="search-wrap">
-        <input id="search-input" class="search-input" type="text" placeholder="buscar… ej: iran &amp; !diplomacia" autocomplete="off" spellcheck="false">
-        <button id="search-clear" class="search-clear" title="Limpiar">×</button>
-      </div>
       <button id="actors-btn" class="actors-btn" title="Árbol de actores">ACTORES</button>
       <button id="sat-btn" class="sat-btn" title="Vista satélite">SAT</button>
       <button id="theme-btn" class="theme-btn" title="Cambiar tema">☀</button>
@@ -982,8 +971,6 @@ const ST = {
   tlEnd: null,       // Date del evento más reciente (≥ hoy)
   _tlRaf: null,      // handle de requestAnimationFrame
   _tlLastMs: null,   // timestamp del último frame
-  search: '',
-  searchParsed: null,
   actorFilter: null   // objeto actor de actores.json, o null
 };
 
@@ -1439,26 +1426,12 @@ async function loadData() {
   } catch(e) { console.error('Error cargando datos:', e); }
 }
 
-function parseQuery(raw) {
-  const q = raw.trim().toLowerCase();
-  if (!q) return null;
-  return q.split(/\s*\|\s*/).map(group =>
-    group.split(/\s*&\s*|\s+/).filter(Boolean).map(t => ({ neg: t.startsWith('!'), word: t.replace(/^!/, '') }))
-  );
-}
-
-function matchQuery(c, parsed) {
-  if (!parsed) return true;
-  const text = [c.title, c.summary, c.location, ...(c.actors||[]), ...((c.timeline||[]).map(e=>e.what||''))].join(' ').toLowerCase();
-  return parsed.some(andGroup => andGroup.every(({neg,word}) => word && (neg ? !text.includes(word) : text.includes(word))));
-}
 
 function visibleCrisis() {
   if (!ST.data) return [];
   return (ST.data.crisis||[]).filter(c => {
     if (!ST.filters[c.type] || c.severity < ST.sevMin) return false;
     if (c.lat == null || c.lng == null || (c.lat === 20 && c.lng === 0)) return false;
-    if (ST.searchParsed && !matchQuery(c, ST.searchParsed)) return false;
     if (ST.tlMode !== 'all' && ST.tlCursor) {
       const dates = (c.timeline||[]).map(e => e.when).filter(Boolean);
       if (!dates.length) return true; // sin fechas → siempre visible
@@ -2161,29 +2134,6 @@ function setTheme(t) {
   const btn = document.getElementById('theme-btn');
   if (btn) btn.textContent = t === 'light' ? '🌙' : '☀';
 }
-document.getElementById('search-input').addEventListener('input', function() {
-  ST.search = this.value;
-  ST.searchParsed = parseQuery(this.value);
-  document.getElementById('search-clear').classList.toggle('visible', !!this.value);
-  renderAll();
-});
-document.getElementById('search-clear').addEventListener('click', function() {
-  const inp = document.getElementById('search-input');
-  inp.value = ''; ST.search = ''; ST.searchParsed = null;
-  this.classList.remove('visible');
-  inp.focus();
-  renderAll();
-});
-document.addEventListener('keydown', function(e) {
-  if (e.key === '/' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
-    e.preventDefault();
-    document.getElementById('search-input').focus();
-  }
-  if (e.key === 'Escape' && document.activeElement.id === 'search-input') {
-    document.getElementById('search-clear').click();
-    document.getElementById('search-input').blur();
-  }
-});
 document.getElementById('theme-btn').addEventListener('click', function() {
   setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
 });
