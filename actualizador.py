@@ -724,7 +724,12 @@ def ejecutar_actualizacion():
 
             print(f"  ✎ {titulo[:58]}...")
             nivel   = inferir_nivel(titulo)
-            tl_item = {"when": hoy, "what": titulo, "source": nombre_fuente, "url": enlace}
+            pub = getattr(entrada, 'published_parsed', None) or getattr(entrada, 'updated_parsed', None)
+            try:
+                fecha_noticia = date(*pub[:3]).isoformat() if pub else hoy
+            except Exception:
+                fecha_noticia = hoy
+            tl_item = {"when": fecha_noticia, "what": titulo, "source": nombre_fuente, "url": enlace}
 
             bilateral, paises = es_bilateral(titulo)
             if bilateral and len(paises) >= 2:
@@ -735,7 +740,7 @@ def ejecutar_actualizacion():
                     "destino": {"nombre": destino["nombre"], "lat": destino["lat"], "lng": destino["lng"]},
                     "tipo":    "diplomática",
                     "nivel":   nivel,
-                    "fecha":   hoy,
+                    "fecha":   fecha_noticia,
                     "titular": titulo,
                     "fuente":  nombre_fuente,
                     "url":     enlace,
@@ -773,7 +778,7 @@ def ejecutar_actualizacion():
             for node in db.get("context_nodes", []):
                 if any(k.lower() in t_low for k in node.get("keywords", [])):
                     ctx_news[node["id"]].append({
-                        "when": hoy, "what": titulo,
+                        "when": fecha_noticia, "what": titulo,
                         "source": nombre_fuente, "url": enlace
                     })
 

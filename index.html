@@ -109,7 +109,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .app {
   display: grid;
   grid-template-columns: 272px 1fr 364px;
-  grid-template-rows: 52px 1fr 84px;
+  grid-template-rows: 52px 1fr 116px;
   grid-template-areas: "topbar topbar topbar" "left main right" "bottom bottom bottom";
   height: 100vh; width: 100vw;
   gap: 1px; background: var(--line-0);
@@ -332,26 +332,63 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .rbar .n { color:var(--text-0); }
 
 /* ── BOTTOM ───────────────────────────────────────────────────── */
-.bottom { display:grid; grid-template-columns:1fr auto; gap:1px; background:var(--line-0); }
-.timeline-panel { background:var(--bg-1); padding:12px 18px; display:flex; flex-direction:column; justify-content:space-between; }
-.tl-head { display:flex; justify-content:space-between; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-0); }
-.tl-head .acc { color:var(--accent); }
-.tl-track {
-  position:relative; height:22px; margin-top:6px; border:1px solid var(--line-0);
-  background: repeating-linear-gradient(90deg,transparent 0 calc(100%/24 - 1px),var(--line-0) calc(100%/24 - 1px) calc(100%/24));
+.bottom { background:var(--bg-1); border-top:1px solid var(--line-0); }
+.timeline-panel {
+  height:100%; padding:14px 24px 10px;
+  display:flex; flex-direction:column; justify-content:space-between;
 }
-.tl-fill { position:absolute; top:0; bottom:0; background:linear-gradient(90deg,transparent,rgba(217,164,65,.15)); border-right:1px solid var(--accent); }
-.tl-mk { position:absolute; top:-2px; bottom:-2px; width:1px; opacity:.8; }
-.tl-mk[data-type="armed"] { background:var(--c-armed); }
-.tl-mk[data-type="diplo"] { background:var(--c-diplo); }
-.tl-mk[data-type="econ"]  { background:var(--c-econ); }
-.legend-panel { background:var(--bg-1); padding:12px 18px; display:flex; align-items:center; gap:16px; font-size:10px; letter-spacing:.16em; text-transform:uppercase; }
-.tg-btn { margin-left:auto; display:flex; align-items:center; gap:5px; color:#54a9eb; text-decoration:none; border:1px solid rgba(84,169,235,.3); padding:4px 10px; letter-spacing:.1em; transition:border-color .15s,color .15s; white-space:nowrap; }
+.tg-btn { display:flex; align-items:center; gap:5px; color:#54a9eb; text-decoration:none; border:1px solid rgba(84,169,235,.3); padding:5px 12px; letter-spacing:.1em; transition:border-color .15s,color .15s; white-space:nowrap; font-size:11px; }
 .tg-btn:hover { border-color:#54a9eb; color:#fff; }
 .tg-btn svg { flex-shrink:0; }
 .lang-toggle { display:flex; border:1px solid var(--line-1); overflow:hidden; }
-.lang-btn { padding:0 9px; font-size:9px; letter-spacing:.14em; font-family:inherit; color:var(--text-0); background:none; border:none; cursor:pointer; transition:color .15s,background .15s; }
+.lang-btn { padding:0 10px; font-size:10px; letter-spacing:.14em; font-family:inherit; color:var(--text-0); background:none; border:none; cursor:pointer; transition:color .15s,background .15s; }
 .lang-btn.active { background:var(--line-2); color:var(--text-3); }
+
+/* ── TIMELINE INTERACTIVO ─────────────────────────────────────── */
+.tl-ctrls { display:flex; align-items:center; gap:10px; }
+.tl-btn {
+  width:34px; height:34px; border:1px solid var(--line-1);
+  font-size:14px; display:grid; place-items:center; flex-shrink:0;
+  transition:border-color .12s,color .12s;
+}
+.tl-btn:hover { border-color:var(--line-2); color:var(--text-3); }
+.tl-btn.active { border-color:var(--accent); color:var(--accent); }
+.tl-mode-btn {
+  font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  border:1px solid var(--line-1); padding:0 12px; height:34px;
+  white-space:nowrap; transition:border-color .12s,color .12s;
+}
+.tl-mode-btn:hover { border-color:var(--line-2); color:var(--text-3); }
+.tl-mode-btn.acum  { border-color:var(--accent);  color:var(--accent); }
+.tl-mode-btn.daily { border-color:var(--c-diplo);  color:var(--c-diplo); }
+.tl-speed-sel {
+  font:inherit; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  background:transparent; color:var(--text-2); border:1px solid var(--line-1);
+  padding:0 8px; height:34px; cursor:pointer; outline:none;
+}
+.tl-speed-sel option { background:var(--bg-1); }
+.tl-sep { width:1px; height:20px; background:var(--line-1); flex-shrink:0; margin:0 4px; }
+.tl-cursor-lbl { font-size:13px; letter-spacing:.06em; white-space:nowrap; }
+.tl-right { margin-left:auto; display:flex; align-items:center; gap:12px; }
+.tl-legend { display:flex; align-items:center; gap:14px; font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
+.tl-slider-row { display:flex; align-items:center; gap:12px; margin-top:10px; }
+.tl-date-edge { font-size:11px; color:var(--text-0); letter-spacing:.06em; white-space:nowrap; min-width:64px; }
+.tl-date-edge.right { text-align:right; color:var(--accent); }
+#tl-slider {
+  flex:1; height:4px; cursor:pointer;
+  appearance:none; -webkit-appearance:none;
+  border-radius:0; outline:none;
+  background: linear-gradient(90deg, var(--accent) var(--tl-pct,100%), var(--line-1) var(--tl-pct,100%));
+}
+#tl-slider::-webkit-slider-thumb {
+  appearance:none; width:14px; height:14px;
+  background:var(--accent); border-radius:0; cursor:pointer;
+}
+#tl-slider::-moz-range-thumb {
+  width:14px; height:14px; background:var(--accent);
+  border:none; border-radius:0; cursor:pointer;
+}
+#tl-slider:disabled { opacity:.25; cursor:default; }
 .leg-item { display:inline-flex; align-items:center; gap:6px; color:var(--text-1); }
 .leg-sw { width:10px; height:10px; }
 .leg-sw.armed { background:var(--c-armed); } .leg-sw.diplo { background:var(--c-diplo); }
@@ -437,6 +474,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .mob-nav-btn.active { color:var(--text-3); background:var(--bg-2); }
 .mob-nav-btn svg { opacity:.7; }
 .mob-nav-btn.active svg { opacity:1; }
+
+/* Elementos móviles — ocultos en escritorio */
+@media (min-width: 769px) {
+  .mob-sheet, .mob-drawer, .mob-drawer-overlay { display:none !important; }
+}
 
 @media (max-width: 768px) {
   /* Colapsar el grid a pantalla completa con el mapa */
@@ -695,22 +737,39 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   <!-- ── BOTTOM ────────────────────────────────────────────────── -->
   <footer class="bottom">
     <div class="timeline-panel">
-      <div class="tl-head">
-        <span><span data-i18n="tl_label">Línea de tiempo · últimas</span> <span class="acc">72H</span></span>
-        <span id="tl-range">—</span>
+      <div class="tl-ctrls">
+        <button class="tl-btn" id="tl-reset" title="Ir al inicio">⏮</button>
+        <button class="tl-btn" id="tl-play"  title="Reproducir / Pausar">▶</button>
+        <button class="tl-btn" id="tl-end"   title="Ir al final">⏭</button>
+        <div class="tl-sep"></div>
+        <button class="tl-mode-btn" id="tl-mode-btn">TODO</button>
+        <select id="tl-speed-sel" class="tl-speed-sel" title="Velocidad">
+          <option value="3">1×</option>
+          <option value="9">3×</option>
+          <option value="21">7×</option>
+          <option value="60">20×</option>
+        </select>
+        <div class="tl-sep"></div>
+        <span id="tl-cursor-lbl" class="tl-cursor-lbl" style="color:var(--text-1)">— todos los eventos —</span>
+        <div class="tl-right">
+          <div class="tl-legend">
+            <span class="leg-item"><span class="leg-sw armed"></span><span data-i18n="leg_armed">Armado</span></span>
+            <span class="leg-item"><span class="leg-sw diplo"></span><span data-i18n="leg_diplo">Diplomático</span></span>
+            <span class="leg-item"><span class="leg-sw econ"></span><span data-i18n="leg_econ">Económico</span></span>
+            <span class="leg-item"><span class="leg-sw cyber"></span><span data-i18n="leg_cyber">Ciber</span></span>
+            <span class="leg-item"><span class="leg-sw intel"></span><span data-i18n="leg_intel">Intel</span></span>
+            <div class="tl-sep"></div>
+            <span class="leg-item"><span style="display:inline-block;width:8px;height:8px;border:1.5px solid #6abed0;border-radius:50%;margin-right:3px;vertical-align:middle"></span><span data-i18n="leg_ctx">Contexto</span></span>
+            <span class="leg-item"><span class="leg-line militar"></span><span data-i18n="leg_mil">Militar</span></span>
+            <span class="leg-item"><span class="leg-line diplo"></span><span data-i18n="leg_arc_diplo">Arco diplo.</span></span>
+          </div>
+        </div>
       </div>
-      <div class="tl-track" id="tl-track">
-        <div class="tl-fill" style="width:100%"></div>
+      <div class="tl-slider-row">
+        <span id="tl-start-lbl" class="tl-date-edge">—</span>
+        <input type="range" id="tl-slider" min="0" max="1000" value="1000" disabled>
+        <span id="tl-end-lbl" class="tl-date-edge right">HOY</span>
       </div>
-    </div>
-    <div class="legend-panel">
-      <span class="leg-item"><span class="leg-sw armed"></span><span data-i18n="leg_armed">Armado</span></span>
-      <span class="leg-item"><span class="leg-sw diplo"></span><span data-i18n="leg_diplo">Diplomático</span></span>
-      <span class="leg-item"><span class="leg-sw econ"></span><span data-i18n="leg_econ">Económico</span></span>
-      <span class="leg-item"><span class="leg-sw cyber"></span><span data-i18n="leg_cyber">Ciber</span></span>
-      <span class="leg-item" style="margin-left:8px"><span style="display:inline-block;width:8px;height:8px;border:1.5px solid #6abed0;border-radius:50%;margin-right:5px;vertical-align:middle"></span><span data-i18n="leg_ctx">Contexto</span></span>
-      <span class="leg-item" style="margin-left:4px"><span class="leg-line militar"></span><span data-i18n="leg_mil">Militar</span></span>
-      <span class="leg-item"><span class="leg-line diplo"></span><span data-i18n="leg_diplo">Diplomático</span></span>
     </div>
   </footer>
 
@@ -732,7 +791,8 @@ const STRINGS = {
     empty_mob:'// toca un evento o un marcador',
     dist_type:'Distribución por tipo', tl_label:'Línea de tiempo · últimas', tl_today:'HOY',
     leg_armed:'Armado', leg_diplo:'Diplomático', leg_econ:'Económico',
-    leg_cyber:'Ciber', leg_mil:'Militar', tg_alerts:'Alertas Telegram',
+    leg_cyber:'Ciber', leg_intel:'Intel', leg_mil:'Militar', leg_arc_diplo:'Arco diplo.',
+    tg_alerts:'Alertas Telegram',
     mob_map:'Mapa', mob_filters:'Filtros',
     lbl_type:'Tipo', lbl_severity:'Severidad', lbl_updated:'Últ. actualización',
     lbl_source:'Fuente', lbl_actors:'Actores',
@@ -758,7 +818,8 @@ const STRINGS = {
     empty_mob:'// tap an event or a marker',
     dist_type:'Distribution by type', tl_label:'Timeline · last', tl_today:'TODAY',
     leg_armed:'Armed', leg_diplo:'Diplomatic', leg_econ:'Economic',
-    leg_cyber:'Cyber', leg_mil:'Military', tg_alerts:'Telegram Alerts',
+    leg_cyber:'Cyber', leg_intel:'Intel', leg_mil:'Military', leg_arc_diplo:'Arc diplo.',
+    tg_alerts:'Telegram Alerts',
     mob_map:'Map', mob_filters:'Filters',
     lbl_type:'Type', lbl_severity:'Severity', lbl_updated:'Last update',
     lbl_source:'Source', lbl_actors:'Actors',
@@ -788,7 +849,7 @@ function setLang(lang) {
   TYPE_LABELS.econ  = L('t_econ');  TYPE_LABELS.cyber = L('t_cyber');
   TYPE_LABELS.intel = L('t_intel');
   if (ST.data) {
-    renderFeed(); renderStats(); renderTimeline();
+    renderFeed(); renderStats(); tlSyncUI();
     mobRenderFeed(); mobRenderStats();
     ST.selected ? (renderDetail(ST.selected), mobRenderDetail(ST.selected))
                 : renderDetail(null);
@@ -815,7 +876,16 @@ const ST = {
   sevMin: 1,
   selected: null,
   selectedCtx: null,
-  arcOff: 0
+  arcOff: 0,
+  /* timeline animado */
+  tlMode: 'all',     // 'all' | 'accumulate' | 'daily'
+  tlCursor: null,    // Date actual del cursor
+  tlPlaying: false,
+  tlSpeed: 3,        // días por segundo en la animación
+  tlStart: null,     // Date del evento más antiguo
+  tlEnd: null,       // Date del evento más reciente (≥ hoy)
+  _tlRaf: null,      // handle de requestAnimationFrame
+  _tlLastMs: null    // timestamp del último frame
 };
 
 /* ── MAP ─────────────────────────────────────────────────────── */
@@ -1103,6 +1173,7 @@ async function loadData() {
     ST.data = data;
     ST.historial = await rh.json().catch(() => ({}));
     renderAll();
+    tlInitRanges();
     mobRenderAll();
     document.getElementById('last-sync').textContent = new Date().toLocaleTimeString('es-ES');
     document.getElementById('ses-id').textContent = 'GEO-' + new Date().getFullYear() + '-' + String(new Date().getMonth()+1).padStart(2,'0');
@@ -1111,10 +1182,22 @@ async function loadData() {
 
 function visibleCrisis() {
   if (!ST.data) return [];
-  return (ST.data.crisis||[]).filter(c =>
-    ST.filters[c.type] && c.severity >= ST.sevMin &&
-    c.lat != null && c.lng != null && !(c.lat === 20 && c.lng === 0)
-  );
+  return (ST.data.crisis||[]).filter(c => {
+    if (!ST.filters[c.type] || c.severity < ST.sevMin) return false;
+    if (c.lat == null || c.lng == null || (c.lat === 20 && c.lng === 0)) return false;
+    if (ST.tlMode !== 'all' && ST.tlCursor) {
+      const dates = (c.timeline||[]).map(e => e.when).filter(Boolean);
+      if (!dates.length) return true; // sin fechas → siempre visible
+      if (ST.tlMode === 'accumulate') {
+        return dates.some(d => new Date(d+'T12:00Z') <= ST.tlCursor);
+      }
+      if (ST.tlMode === 'daily') {
+        const cur = ST.tlCursor.toISOString().slice(0,10);
+        return dates.some(d => d === cur);
+      }
+    }
+    return true;
+  });
 }
 
 function renderAll() {
@@ -1125,7 +1208,7 @@ function renderAll() {
   renderFeed();
   renderStats();
   updateCounts();
-  renderTimeline();
+  tlSyncUI();
 }
 
 function renderContextNodes() {
@@ -1406,26 +1489,72 @@ function updateCounts() {
   document.getElementById('pill-diplo-n').textContent = all.filter(c=>c.type==='diplo').length;
 }
 
-/* ── TIMELINE ────────────────────────────────────────────────── */
-function renderTimeline() {
+/* ── TIMELINE INTERACTIVO ─────────────────────────────────────── */
+function tlInitRanges() {
   if (!ST.data) return;
-  const track = document.getElementById('tl-track');
-  track.innerHTML = '<div class="tl-fill" style="width:100%"></div>';
-  const now = Date.now();
-  const range = 72*3600*1000;
-  (ST.data.crisis||[]).forEach(c=>{
-    const t = new Date((c.timeline?.[0]?.when||'')+'T12:00Z').getTime();
-    if (!t||isNaN(t)) return;
-    const dt = now - t;
-    if (dt<0||dt>range) return;
-    const pct = 100-(dt/range)*100;
-    const m = document.createElement('div');
-    m.className = 'tl-mk'; m.dataset.type = c.type;
-    m.style.left = pct+'%';
-    track.appendChild(m);
+  let min = null, max = null;
+  (ST.data.crisis||[]).forEach(c => {
+    (c.timeline||[]).forEach(e => {
+      if (!e.when) return;
+      const t = new Date(e.when+'T12:00Z').getTime();
+      if (isNaN(t)) return;
+      if (min === null || t < min) min = t;
+      if (max === null || t > max) max = t;
+    });
   });
-  const _loc = _lang==='es' ? 'es-ES' : 'en-GB';
-  document.getElementById('tl-range').textContent = new Date(now-range).toLocaleDateString(_loc,{day:'2-digit',month:'short'}) + ' → ' + L('tl_today');
+  if (!min) return;
+  ST.tlStart  = new Date(min);
+  ST.tlEnd    = new Date(Math.max(max, Date.now()));
+  ST.tlCursor = new Date(ST.tlEnd);
+  const loc = _lang==='es' ? 'es-ES' : 'en-GB';
+  document.getElementById('tl-start-lbl').textContent =
+    ST.tlStart.toLocaleDateString(loc, {day:'2-digit', month:'short'});
+  document.getElementById('tl-slider').disabled = false;
+  tlSyncUI();
+}
+
+function tlSyncUI() {
+  const slider  = document.getElementById('tl-slider');
+  const curLbl  = document.getElementById('tl-cursor-lbl');
+  if (!ST.tlStart || !ST.tlEnd || ST.tlMode === 'all') {
+    slider.value = 1000;
+    slider.style.setProperty('--tl-pct','100%');
+    curLbl.style.color = 'var(--text-1)';
+    curLbl.textContent = _lang==='es' ? '— todos los eventos —' : '— all events —';
+    return;
+  }
+  const total = ST.tlEnd - ST.tlStart;
+  const pct   = Math.max(0, Math.min(1, (ST.tlCursor - ST.tlStart) / total));
+  slider.value = Math.round(pct * 1000);
+  slider.style.setProperty('--tl-pct', (pct*100).toFixed(1)+'%');
+  const loc = _lang==='es' ? 'es-ES' : 'en-GB';
+  curLbl.style.color = 'var(--accent)';
+  curLbl.textContent = ST.tlCursor.toLocaleDateString(loc, {day:'2-digit', month:'short', year:'numeric'});
+}
+
+function tlStop() {
+  ST.tlPlaying  = false;
+  ST._tlLastMs  = null;
+  if (ST._tlRaf) { cancelAnimationFrame(ST._tlRaf); ST._tlRaf = null; }
+  const btn = document.getElementById('tl-play');
+  btn.textContent = '▶';
+  btn.classList.remove('active');
+}
+
+function tlTick(ts) {
+  if (!ST.tlPlaying) return;
+  if (ST._tlLastMs == null) ST._tlLastMs = ts;
+  const dt      = ts - ST._tlLastMs;
+  ST._tlLastMs  = ts;
+  const advance = (ST.tlSpeed / 1000) * dt * 86400000; // ms avanzados en el tiempo de datos
+  ST.tlCursor   = new Date(Math.min(ST.tlCursor.getTime() + advance, ST.tlEnd.getTime()));
+  if (ST.tlCursor >= ST.tlEnd) {
+    ST.tlCursor = new Date(ST.tlEnd);
+    tlStop();
+  }
+  tlSyncUI();
+  renderMarkers(); renderFeed(); renderHeat(); updateCounts();
+  if (ST.tlPlaying) ST._tlRaf = requestAnimationFrame(tlTick);
 }
 
 /* ── UI WIRING ───────────────────────────────────────────────── */
@@ -1445,6 +1574,67 @@ document.querySelectorAll('.sev-cell').forEach(cell => {
     document.querySelectorAll('.sev-cell').forEach(c => c.classList.toggle('on', +c.dataset.sev >= ST.sevMin));
     renderMarkers(); renderFeed(); renderHeat();
   });
+});
+
+/* ── TIMELINE: WIRING ─────────────────────────────────────────── */
+const _TL_MODES   = ['all','accumulate','daily'];
+const _TL_LABELS  = { es:['TODO','ACUM.','DÍA A DÍA'], en:['ALL','ACCUM.','DAILY'] };
+const _TL_CLASSES = ['','acum','daily'];
+
+function tlSetMode(idx) {
+  ST.tlMode = _TL_MODES[idx];
+  const btn = document.getElementById('tl-mode-btn');
+  btn.className = 'tl-mode-btn ' + _TL_CLASSES[idx];
+  btn.textContent = (_lang==='es' ? _TL_LABELS.es : _TL_LABELS.en)[idx];
+  document.getElementById('tl-slider').disabled = ST.tlMode === 'all';
+  if (ST.tlMode !== 'all' && ST.tlStart && !ST.tlCursor)
+    ST.tlCursor = new Date(ST.tlEnd);
+  tlSyncUI();
+  renderMarkers(); renderFeed(); renderHeat(); updateCounts();
+}
+
+document.getElementById('tl-mode-btn').addEventListener('click', () => {
+  tlStop();
+  tlSetMode((_TL_MODES.indexOf(ST.tlMode) + 1) % _TL_MODES.length);
+});
+
+document.getElementById('tl-slider').addEventListener('input', e => {
+  if (!ST.tlStart) return;
+  const pct   = e.target.value / 1000;
+  ST.tlCursor = new Date(ST.tlStart.getTime() + pct * (ST.tlEnd - ST.tlStart));
+  e.target.style.setProperty('--tl-pct', (pct*100).toFixed(1)+'%');
+  tlSyncUI();
+  renderMarkers(); renderFeed(); renderHeat(); updateCounts();
+});
+
+document.getElementById('tl-play').addEventListener('click', () => {
+  if (ST.tlPlaying) { tlStop(); return; }
+  if (ST.tlMode === 'all') tlSetMode(1); // auto-switch a ACUM.
+  if (ST.tlCursor >= ST.tlEnd) ST.tlCursor = new Date(ST.tlStart);
+  ST.tlPlaying = true;
+  ST._tlLastMs = null;
+  document.getElementById('tl-play').textContent = '⏸';
+  document.getElementById('tl-play').classList.add('active');
+  ST._tlRaf = requestAnimationFrame(tlTick);
+});
+
+document.getElementById('tl-reset').addEventListener('click', () => {
+  tlStop();
+  if (ST.tlMode === 'all') tlSetMode(1);
+  if (ST.tlStart) ST.tlCursor = new Date(ST.tlStart);
+  tlSyncUI();
+  renderMarkers(); renderFeed(); renderHeat(); updateCounts();
+});
+
+document.getElementById('tl-end').addEventListener('click', () => {
+  tlStop();
+  if (ST.tlEnd) ST.tlCursor = new Date(ST.tlEnd);
+  tlSyncUI();
+  renderMarkers(); renderFeed(); renderHeat(); updateCounts();
+});
+
+document.getElementById('tl-speed-sel').addEventListener('change', e => {
+  ST.tlSpeed = +e.target.value;
 });
 
 document.querySelectorAll('.right-tab').forEach(t => {
