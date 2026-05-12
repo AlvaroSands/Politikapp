@@ -1,0 +1,83 @@
+{
+  "categorias": [
+    {
+      "id": "paises",
+      "label_es": "Países",
+      "label_en": "Countries",
+      "actores": [
+        {"id": "eeuu",         "name": "EE.UU.",           "name_en": "USA",          "flag": "🇺🇸", "aliases": ["Estados Unidos", "USA"]},
+        {"id": "rusia",        "name": "Rusia",            "name_en": "Russia",        "flag": "🇷🇺", "aliases": []},
+        {"id": "china",        "name": "China",            "name_en": "China",         "flag": "🇨🇳", "aliases": []},
+        {"id": "iran",         "name": "Irán",             "name_en": "Iran",          "flag": "🇮🇷", "aliases": []},
+        {"id": "israel",       "name": "Israel",           "name_en": "Israel",        "flag": "🇮🇱", "aliases": []},
+        {"id": "ucrania",      "name": "Ucrania",          "name_en": "Ukraine",       "flag": "🇺🇦", "aliases": []},
+        {"id": "india",        "name": "India",            "name_en": "India",         "flag": "🇮🇳", "aliases": []},
+        {"id": "pakistan",     "name": "Pakistán",         "name_en": "Pakistan",      "flag": "🇵🇰", "aliases": []},
+        {"id": "japon",        "name": "Japón",            "name_en": "Japan",         "flag": "🇯🇵", "aliases": []},
+        {"id": "corea-norte",  "name": "Corea del Norte",  "name_en": "North Korea",   "flag": "🇰🇵", "aliases": []},
+        {"id": "corea-sur",    "name": "Corea del Sur",    "name_en": "South Korea",   "flag": "🇰🇷", "aliases": []},
+        {"id": "arabia-saudi", "name": "Arabia Saudí",     "name_en": "Saudi Arabia",  "flag": "🇸🇦", "aliases": []},
+        {"id": "afganistan",   "name": "Afganistán",       "name_en": "Afghanistan",   "flag": "🇦🇫", "aliases": []},
+        {"id": "bosnia",       "name": "Bosnia-Herzegovina","name_en": "Bosnia",       "flag": "🇧🇦", "aliases": []},
+        {"id": "chad",         "name": "Chad",             "name_en": "Chad",          "flag": "🇹🇩", "aliases": []},
+        {"id": "nigeria",      "name": "Nigeria",          "name_en": "Nigeria",       "flag": "🇳🇬", "aliases": []},
+        {"id": "etiopia",      "name": "Etiopía",          "name_en": "Ethiopia",      "flag": "🇪🇹", "aliases": []},
+        {"id": "egipto",       "name": "Egipto",           "name_en": "Egypt",         "flag": "🇪🇬", "aliases": []},
+        {"id": "dinamarca",    "name": "Dinamarca",        "name_en": "Denmark",       "flag": "🇩🇰", "aliases": []},
+        {"id": "taiwan",       "name": "Taiwán",           "name_en": "Taiwan",        "flag": "🇹🇼", "aliases": []},
+        {"id": "libano",       "name": "Líbano",           "name_en": "Lebanon",       "flag": "🇱🇧", "aliases": []},
+        {"id": "palestina",    "name": "Palestina",        "name_en": "Palestine",     "flag": "🇵🇸", "aliases": []},
+        {"id": "uae",          "name": "UAE",              "name_en": "UAE",           "flag": "🇦🇪", "aliases": ["Emiratos"]},
+        {"id": "ru",           "name": "RU",               "name_en": "UK",            "flag": "🇬🇧", "aliases": ["Reino Unido"]}
+      ]
+    },
+    {
+      "id": "alianzas",
+      "label_es": "Alianzas & Orgs.",
+      "label_en": "Alliances & Orgs.",
+      "actores": [
+        {"id": "otan",           "name": "OTAN",              "name_en": "NATO",            "flag": "🤝", "aliases": ["NATO"]},
+        {"id": "ue",             "name": "UE",                "name_en": "EU",              "flag": "🇪🇺", "aliases": ["Unión Europea"]},
+        {"id": "onu",            "name": "ONU",               "name_en": "UN",              "flag": "🌐", "aliases": ["Naciones Unidas", "UN"]},
+        {"id": "oea",            "name": "OEA",               "name_en": "OAS",             "flag": "🌎", "aliases": []},
+        {"id": "mnjtf",          "name": "MNJTF",             "name_en": "MNJTF",           "flag": "🪖", "aliases": []},
+        {"id": "icc",            "name": "ICC",               "name_en": "ICC",             "flag": "⚖️", "aliases": ["Corte Penal Internacional"]},
+        {"id": "coalicion-naval","name": "Coalición naval",   "name_en": "Naval coalition", "flag": "⚓", "aliases": []},
+        {"id": "aes",            "name": "AES (Alianza del Sahel)", "name_en": "AES (Sahel Alliance)", "flag": "🏴", "aliases": ["Alianza del Sahel"]},
+        {"id": "issp",           "name": "ISSP",              "name_en": "ISSP",            "flag": "🔵", "aliases": []},
+        {"id": "mss",            "name": "Misión MSS",        "name_en": "MSS Mission",     "flag": "🛡️", "aliases": ["MSS"]}
+      ]
+    },
+    {
+      "id": "grupos",
+      "label_es": "Grupos Armados",
+      "label_en": "Armed Groups",
+      "actores": [
+        {"id": "hamas",    "name": "Hamás",               "name_en": "Hamas",               "flag": "⚔️", "aliases": ["Hamas"]},
+        {"id": "hezbollah","name": "Hezbollah",           "name_en": "Hezbollah",           "flag": "⚔️", "aliases": []},
+        {"id": "huthis",   "name": "Hutíes (Yemen)",      "name_en": "Houthis (Yemen)",     "flag": "⚔️", "aliases": ["Hutíes", "Houthi"]},
+        {"id": "boko",     "name": "Boko Haram",          "name_en": "Boko Haram",          "flag": "⚔️", "aliases": []},
+        {"id": "jnim",     "name": "JNIM",                "name_en": "JNIM",                "flag": "⚔️", "aliases": []},
+        {"id": "rsf",      "name": "RSF (Paramilitares)", "name_en": "RSF (Paramilitaries)","flag": "⚔️", "aliases": ["RSF"]},
+        {"id": "saf",      "name": "SAF (Ejército sudanés)","name_en": "SAF (Sudanese Army)","flag": "🪖", "aliases": ["SAF"]},
+        {"id": "taliban",  "name": "Talibán",             "name_en": "Taliban",             "flag": "⚔️", "aliases": ["Taliban"]},
+        {"id": "wagner",   "name": "Rusia (Wagner)",      "name_en": "Russia (Wagner)",     "flag": "⚔️", "aliases": ["Wagner"]},
+        {"id": "choneros", "name": "Los Choneros",        "name_en": "Los Choneros",        "flag": "⚔️", "aliases": []},
+        {"id": "g9",       "name": "Bandas criminales (G9)","name_en": "Criminal gangs (G9)","flag": "⚔️", "aliases": ["G9"]}
+      ]
+    },
+    {
+      "id": "politicos",
+      "label_es": "Actores Políticos",
+      "label_en": "Political Actors",
+      "actores": [
+        {"id": "orban",    "name": "Orbán (Fidesz)",   "name_en": "Orbán (Fidesz)",    "flag": "🏛️", "aliases": ["Orban"]},
+        {"id": "magyar",   "name": "Magyar (oposición)","name_en": "Magyar (opposition)","flag": "🏛️", "aliases": []},
+        {"id": "s-duterte","name": "Sara Duterte",      "name_en": "Sara Duterte",      "flag": "🏛️", "aliases": []},
+        {"id": "marcos",   "name": "Gobierno Marcos",   "name_en": "Marcos Government", "flag": "🏛️", "aliases": ["Marcos"]},
+        {"id": "noboa",    "name": "Gobierno Noboa",    "name_en": "Noboa Government",  "flag": "🏛️", "aliases": ["Noboa"]},
+        {"id": "ejec",     "name": "Ejército EC",       "name_en": "Ecuadorian Army",   "flag": "🪖", "aliases": []}
+      ]
+    }
+  ]
+}

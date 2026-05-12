@@ -190,6 +190,15 @@ async def api_historial():
         return {}
 
 
+@app.get("/actores.json")
+async def api_actores():
+    try:
+        with open("actores.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {"categorias": []}
+
+
 @app.get("/", response_class=HTMLResponse)
 async def pagina_principal():
     with open("index.html", "r", encoding="utf-8") as f:

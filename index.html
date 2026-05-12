@@ -322,7 +322,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .detail-actors { padding:12px 16px; border-bottom:1px solid var(--line-0); }
 .detail-actors .lbl { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-0); margin-bottom:8px; }
 .actor-tags { display:flex; flex-wrap:wrap; gap:4px; }
-.actor-tag { font-size:10px; padding:3px 8px; border:1px solid var(--line-2); color:var(--text-1); letter-spacing:.06em; text-transform:uppercase; }
+.actor-tag { font-size:10px; padding:3px 8px; border:1px solid var(--line-2); color:var(--text-1); letter-spacing:.06em; text-transform:uppercase; cursor:pointer; transition:border-color .12s,color .12s; }
+.actor-tag:hover { color:var(--accent); border-color:var(--accent); }
 .detail-tl { padding:12px 16px 16px; }
 .detail-tl .lbl { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-0); margin-bottom:10px; }
 .tl-item { display:grid; grid-template-columns:82px 1fr; gap:8px; padding:6px 0; border-top:1px dashed var(--line-1); font-size:11px; }
@@ -529,6 +530,71 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .mk-wrap { width:44px; height:44px; }
   .mk-ring:nth-child(3) { width:42px; height:42px; }
 }
+
+/* ── PANEL DE ACTORES ─────────────────────────────────────────── */
+.actor-panel {
+  position:absolute; top:0; left:0; bottom:0; width:272px;
+  background:rgba(7,9,10,.97); border-right:1px solid var(--line-1);
+  z-index:100; transform:translateX(-104%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto; display:flex; flex-direction:column;
+  backdrop-filter:blur(10px);
+}
+.actor-panel.open { transform:translateX(0); }
+:root[data-theme="light"] .actor-panel { background:rgba(232,228,219,.97); }
+.actor-panel-hd {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px; border-bottom:1px solid var(--line-1);
+  font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--text-0); flex-shrink:0;
+}
+.actor-panel-hd .apclose { font-size:16px; color:var(--text-1); line-height:1; }
+.actor-panel-hd .apclose:hover { color:var(--text-3); }
+.actor-filter-bar {
+  padding:10px 16px; border-bottom:1px solid var(--line-0);
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  background:rgba(217,164,65,.07); flex-shrink:0;
+}
+.actor-filter-lbl { font-size:10px; color:var(--accent); letter-spacing:.06em; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.actor-filter-clear { font-size:10px; color:var(--text-1); border:1px solid var(--line-1); padding:3px 8px; letter-spacing:.1em; text-transform:uppercase; flex-shrink:0; transition:color .12s,border-color .12s; }
+.actor-filter-clear:hover { color:var(--text-3); border-color:var(--line-2); }
+.actor-cat-hd {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px 8px; cursor:pointer; user-select:none;
+  font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-0);
+  border-top:1px solid var(--line-0);
+}
+.actor-cat-hd:first-child { border-top:0; }
+.actor-cat-hd .badge { font-size:9px; color:var(--text-1); border:1px solid var(--line-1); padding:1px 5px; letter-spacing:.1em; }
+.actor-cat-hd .chevron { font-size:10px; transition:transform .15s; }
+.actor-cat-hd.collapsed .chevron { transform:rotate(-90deg); }
+.actor-cat-body { display:flex; flex-direction:column; gap:2px; padding:0 8px 10px; }
+.actor-cat-body.hidden { display:none; }
+.actor-node {
+  display:grid; grid-template-columns:22px 1fr auto; align-items:center; gap:7px;
+  padding:7px 8px; border:1px solid transparent; cursor:pointer; user-select:none;
+  transition:background .12s,border-color .12s;
+}
+.actor-node:hover { background:var(--bg-2); border-color:var(--line-0); }
+.actor-node.active { background:var(--bg-2); border-color:var(--accent); }
+.actor-node .aflag { font-size:13px; text-align:center; }
+.actor-node .aname { font-size:11px; color:var(--text-2); letter-spacing:.02em; }
+.actor-node.active .aname { color:var(--accent); }
+.actor-node .acnt { font-size:10px; color:var(--text-0); font-variant-numeric:tabular-nums; }
+.actor-node .acnt.has { color:var(--accent); font-weight:600; }
+/* Botón ACTORES en topbar */
+.actors-btn { padding:0 12px; height:100%; font-size:12px; letter-spacing:.12em; font-family:var(--mono); color:var(--text-1); border-left:1px solid var(--line-0); transition:color .15s,border-color .15s; white-space:nowrap; }
+.actors-btn:hover { color:var(--text-3); }
+.actors-btn.active { color:var(--accent); border-left-color:var(--accent); }
+/* Banda de filtro activo en el feed */
+.feed-actor-bar {
+  padding:9px 16px; border-bottom:1px solid var(--line-0);
+  background:rgba(217,164,65,.06);
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+}
+.feed-actor-bar .fab-lbl { font-size:10px; color:var(--accent); letter-spacing:.06em; flex:1; }
+.feed-actor-bar .fab-clear { font-size:10px; color:var(--text-1); border:1px solid var(--line-1); padding:2px 7px; letter-spacing:.1em; text-transform:uppercase; transition:color .12s,border-color .12s; }
+.feed-actor-bar .fab-clear:hover { color:var(--text-3); border-color:var(--line-2); }
 </style>
 </head>
 <body>
@@ -634,6 +700,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
         <input id="search-input" class="search-input" type="text" placeholder="buscar… ej: iran &amp; !diplomacia" autocomplete="off" spellcheck="false">
         <button id="search-clear" class="search-clear" title="Limpiar">×</button>
       </div>
+      <button id="actors-btn" class="actors-btn" title="Árbol de actores">ACTORES</button>
       <button id="sat-btn" class="sat-btn" title="Vista satélite">SAT</button>
       <button id="theme-btn" class="theme-btn" title="Cambiar tema">☀</button>
       <a href="https://t.me/GeopolitikappBot" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#54a9eb;border-left:1px solid var(--line-0);transition:color .15s;white-space:nowrap" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#54a9eb'"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.496.969z"/></svg><span data-i18n="tg_alerts">Alertas Telegram</span></a>
@@ -701,6 +768,19 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   <!-- ── MAP ───────────────────────────────────────────────────── -->
   <main class="main">
     <div id="map"></div>
+
+    <!-- ── ACTOR PANEL (overlay flotante) ───────────────────────── -->
+    <div id="actor-panel" class="actor-panel">
+      <div class="actor-panel-hd">
+        <span>Actores</span>
+        <button class="apclose" id="actor-panel-close" title="Cerrar">✕</button>
+      </div>
+      <div id="actor-filter-bar" class="actor-filter-bar" style="display:none">
+        <span id="actor-filter-lbl" class="actor-filter-lbl">—</span>
+        <button class="actor-filter-clear" id="actor-filter-clear">✕ Limpiar</button>
+      </div>
+      <div id="actor-tree"></div>
+    </div>
     <div class="hud-corner tl"></div>
     <div class="hud-corner tr"></div>
     <div class="hud-corner bl"></div>
@@ -863,6 +943,7 @@ function setLang(lang) {
   TYPE_LABELS.armed = L('t_armed'); TYPE_LABELS.diplo = L('t_diplo');
   TYPE_LABELS.econ  = L('t_econ');  TYPE_LABELS.cyber = L('t_cyber');
   TYPE_LABELS.intel = L('t_intel');
+  if (document.getElementById('actor-panel').classList.contains('open')) renderActorPanel();
   if (ST.data) {
     renderFeed(); renderStats(); tlSyncUI();
     mobRenderFeed(); mobRenderStats();
@@ -902,8 +983,108 @@ const ST = {
   _tlRaf: null,      // handle de requestAnimationFrame
   _tlLastMs: null,   // timestamp del último frame
   search: '',
-  searchParsed: null
+  searchParsed: null,
+  actorFilter: null   // objeto actor de actores.json, o null
 };
+
+/* ── ACTORES ─────────────────────────────────────────────────── */
+let _actores = null;
+
+async function loadActores() {
+  try {
+    const r = await fetch('/actores.json?t=' + Date.now());
+    _actores = await r.json();
+    if (document.getElementById('actor-panel').classList.contains('open')) renderActorPanel();
+  } catch(e) {}
+}
+
+function actorMatchesCrisis(actor, crisis) {
+  const names = [actor.name, ...(actor.aliases||[])].map(s => s.toLowerCase());
+  return (crisis.actors||[]).some(ca => {
+    const cl = ca.toLowerCase();
+    return names.some(n => n === cl || cl.includes(n) || n.includes(cl));
+  });
+}
+
+function actorCrisisCount(actor) {
+  if (!ST.data) return 0;
+  return (ST.data.crisis||[]).filter(c => actorMatchesCrisis(actor, c)).length;
+}
+
+function renderActorPanel() {
+  const tree = document.getElementById('actor-tree');
+  if (!tree || !_actores) return;
+  const cats = _actores.categorias || [];
+  tree.innerHTML = cats.map(cat => {
+    const label = _lang === 'en' ? cat.label_en : cat.label_es;
+    const body = cat.actores.map(actor => {
+      const cnt = actorCrisisCount(actor);
+      const isActive = ST.actorFilter && ST.actorFilter.id === actor.id;
+      const name = _lang === 'en' ? (actor.name_en || actor.name) : actor.name;
+      return `<div class="actor-node${isActive?' active':''}" data-actor-id="${actor.id}" data-cat-id="${cat.id}">
+        <span class="aflag">${actor.flag||''}</span>
+        <span class="aname">${name}</span>
+        <span class="acnt${cnt>0?' has':''}">${cnt}</span>
+      </div>`;
+    }).join('');
+    return `<div class="actor-cat-hd" data-cat="${cat.id}">
+        <span>${label}</span>
+        <div style="display:flex;align-items:center;gap:8px"><span class="badge">${cat.actores.length}</span><span class="chevron">▾</span></div>
+      </div>
+      <div class="actor-cat-body" id="actor-cat-${cat.id}">${body}</div>`;
+  }).join('');
+
+  tree.querySelectorAll('.actor-node').forEach(el => {
+    el.addEventListener('click', () => {
+      const cat = (_actores.categorias||[]).find(c => c.id === el.dataset.catId);
+      const actor = cat ? cat.actores.find(a => a.id === el.dataset.actorId) : null;
+      if (!actor) return;
+      ST.actorFilter && ST.actorFilter.id === actor.id ? clearActorFilter() : applyActorFilter(actor);
+    });
+  });
+  tree.querySelectorAll('.actor-cat-hd').forEach(hd => {
+    hd.addEventListener('click', () => {
+      const body = document.getElementById('actor-cat-' + hd.dataset.cat);
+      if (body) body.classList.toggle('hidden');
+      hd.classList.toggle('collapsed');
+    });
+  });
+}
+
+function applyActorFilter(actor) {
+  ST.actorFilter = actor;
+  renderActorPanel();
+  const bar = document.getElementById('actor-filter-bar');
+  const lbl = document.getElementById('actor-filter-lbl');
+  if (bar && lbl) {
+    const name = _lang === 'en' ? (actor.name_en || actor.name) : actor.name;
+    const cnt = actorCrisisCount(actor);
+    lbl.textContent = `${actor.flag||''} ${name} · ${cnt} crisis`;
+    bar.style.display = 'flex';
+  }
+  renderMarkers();
+  renderFeed();
+  renderHeat();
+}
+
+function clearActorFilter() {
+  ST.actorFilter = null;
+  renderActorPanel();
+  const bar = document.getElementById('actor-filter-bar');
+  if (bar) bar.style.display = 'none';
+  renderMarkers();
+  renderFeed();
+  renderHeat();
+}
+
+function toggleActorPanel() {
+  const panel = document.getElementById('actor-panel');
+  const btn   = document.getElementById('actors-btn');
+  if (!panel) return;
+  const open = panel.classList.toggle('open');
+  if (btn) btn.classList.toggle('active', open);
+  if (open && _actores) renderActorPanel();
+}
 
 /* ── MAP ─────────────────────────────────────────────────────── */
 const _mob = window.innerWidth <= 768;
@@ -933,7 +1114,7 @@ ST.popup = new maplibregl.Popup({ closeButton:false, closeOnClick:false, offset:
 
 /* Fallback: si el mapa tarda más de 5s, carga datos igualmente */
 const _dataFallback = setTimeout(() => {
-  if (!_dataLoaded) { loadData(); setInterval(loadData, 60000); }
+  if (!_dataLoaded) { loadData(); loadActores(); setInterval(loadData, 60000); }
 }, 5000);
 
 function makeCrisisIcon(type, sel, sz) {
@@ -1172,6 +1353,7 @@ map.on('load', () => {
 
   animArcs();
   loadData();
+  loadActores();
   setInterval(loadData, 60000);
 });
 
@@ -1318,13 +1500,22 @@ function renderContextNodes() {
 
 /* ── MARKERS (WebGL circle layers — sincronizados con el globo) ── */
 function renderMarkers() {
-  const features = visibleCrisis().map(c => ({
-    type:'Feature',
-    geometry:{ type:'Point', coordinates:[c.lng, c.lat] },
-    properties:{ id:c.id, type:c.type, severity:c.severity }
-  }));
+  const vis = visibleCrisis();
+  const hasFilter = !!ST.actorFilter;
+  const features = vis.map(c => {
+    const dim = hasFilter && !actorMatchesCrisis(ST.actorFilter, c) ? 1 : 0;
+    return {
+      type:'Feature',
+      geometry:{ type:'Point', coordinates:[c.lng, c.lat] },
+      properties:{ id:c.id, type:c.type, severity:c.severity, dim }
+    };
+  });
   try { map.getSource('crisis-pts').setData({type:'FeatureCollection',features}); } catch(e) {}
-  // Actualizar capa de selección
+  // Opacidad: crisis no coincidentes → 0.15 cuando hay filtro activo
+  const opacityExpr = hasFilter ? ['case',['==',['get','dim'],1],0.15,1] : 1;
+  try { map.setPaintProperty('crisis-icons','icon-opacity', opacityExpr); } catch(e) {}
+  // Anillos solo para crisis coincidentes
+  try { map.setFilter('crisis-rings', hasFilter ? ['==',['get','dim'],0] : null); } catch(e) {}
   const selId = ST.selected ? ST.selected.id : '__none__';
   try { map.setFilter('crisis-icons-sel',['==',['get','id'], selId]); } catch(e) {}
 }
@@ -1387,8 +1578,20 @@ function renderHeat() {
 /* ── FEED ────────────────────────────────────────────────────── */
 function renderFeed() {
   const list = document.getElementById('feed-list');
-  const items = visibleCrisis().slice().sort((a,b) => b.severity - a.severity);
-  list.innerHTML = items.map(c => `
+  let items = visibleCrisis().slice().sort((a,b) => b.severity - a.severity);
+
+  // Banda de filtro por actor
+  let filterBar = '';
+  if (ST.actorFilter) {
+    items = items.filter(c => actorMatchesCrisis(ST.actorFilter, c));
+    const name = _lang === 'en' ? (ST.actorFilter.name_en || ST.actorFilter.name) : ST.actorFilter.name;
+    filterBar = `<div class="feed-actor-bar">
+      <span class="fab-lbl">${ST.actorFilter.flag||''} ${name} · ${items.length}</span>
+      <button class="fab-clear" onclick="clearActorFilter()">✕</button>
+    </div>`;
+  }
+
+  list.innerHTML = filterBar + items.map(c => `
     <div class="feed-item${ST.selected && ST.selected.id===c.id?' selected':''}" data-type="${c.type}" data-id="${c.id}">
       <div class="dot"></div>
       <div>
@@ -1985,6 +2188,26 @@ document.getElementById('theme-btn').addEventListener('click', function() {
   setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
 });
 document.getElementById('sat-btn').addEventListener('click', switchBasemap);
+document.getElementById('actors-btn').addEventListener('click', toggleActorPanel);
+document.getElementById('actor-panel-close').addEventListener('click', toggleActorPanel);
+document.getElementById('actor-filter-clear').addEventListener('click', clearActorFilter);
+
+// Clic en actor-tag del panel de detalle → activa filtro
+document.addEventListener('click', e => {
+  const tag = e.target.closest('.actor-tag');
+  if (!tag || !_actores) return;
+  const name = tag.textContent.trim().toLowerCase();
+  for (const cat of (_actores.categorias||[])) {
+    for (const actor of (cat.actores||[])) {
+      const names = [actor.name, ...(actor.aliases||[])].map(s => s.toLowerCase());
+      if (names.some(n => n === name || name.includes(n) || n.includes(name))) {
+        if (!document.getElementById('actor-panel').classList.contains('open')) toggleActorPanel();
+        applyActorFilter(actor);
+        return;
+      }
+    }
+  }
+});
 setTheme(localStorage.getItem('geo_theme') || 'dark');
 </script>
 </body>
