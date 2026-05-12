@@ -437,6 +437,126 @@
       ]
     },
     {
+      "id": "conflicto-israel-libano-2026",
+      "type": "armed",
+      "severity": 4,
+      "title": "Israel-Líbano: Frente Abierto con Hezbollah",
+      "location": "Sur del Líbano · Beirut",
+      "lat": 33.35,
+      "lng": 35.50,
+      "actors": ["Israel", "Hezbollah", "Líbano", "ONU"],
+      "summary": "Israel mantiene un frente activo en el sur del Líbano independiente al de Gaza. Al menos 39 muertos en territorio libanés. Pese a una tregua negociada en Washington, los combates continúan con bombardeos israelíes y amenazas de nuevos desplazamientos masivos.",
+      "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "Israel mata a 6 personas en el sur del Líbano y amenaza con nuevos desplazamientos; 39 muertos totales desde la última escalada",
+          "source": "Al Jazeera / BBC",
+          "url": "#"
+        },
+        {
+          "when": "2026-05-12",
+          "what": "Tregua Israel-Hezbollah de 10 días extendida tres semanas tras negociaciones en Washington, pero los combates no cesan",
+          "source": "BBC Middle East",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "pakistan-afghanistan-ataques-2026",
+      "type": "armed",
+      "severity": 4,
+      "title": "Pakistán Bombardea Afganistán: 269 Civiles Muertos",
+      "location": "Frontera Pakistán-Afganistán",
+      "lat": 33.60,
+      "lng": 69.50,
+      "actors": ["Pakistán", "Afganistán", "Talibán"],
+      "summary": "Pakistán lanzó ataques aéreos sobre territorio afgano destruyendo un centro de rehabilitación y matando a 269 afganos. Las familias exigen investigación internacional por posible crimen de guerra. Las relaciones Islamabad-Kabul están al borde de la ruptura.",
+      "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "Pakistán ataca un centro de rehabilitación en Afganistán matando a 269 afganos; familias exigen investigación por posible crimen de guerra",
+          "source": "BBC / AP",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "eeuu-groenlandia-bases-2026",
+      "type": "diplo",
+      "severity": 3,
+      "title": "EE.UU. Negocia Bases Militares en Groenlandia",
+      "location": "Groenlandia · Ártico",
+      "lat": 72.00,
+      "lng": -40.00,
+      "actors": ["EE.UU.", "Dinamarca", "OTAN"],
+      "summary": "EE.UU. negocia en secreto la apertura de tres bases militares en Groenlandia, territorio autónomo de Dinamarca. La iniciativa refuerza la postura ártica de la OTAN frente a Rusia y reabre la tensión diplomática con Copenhague sobre la soberanía del territorio.",
+      "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "EE.UU. en negociaciones reservadas para abrir tres nuevas bases militares en Groenlandia; implicaciones para la seguridad ártica y la relación con Dinamarca",
+          "source": "BBC World",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "crisis-politica-filipinas-2026",
+      "type": "diplo",
+      "severity": 2,
+      "title": "Filipinas: Destitución de Sara Duterte y Crisis Constitucional",
+      "location": "Manila · Filipinas",
+      "lat": 14.60,
+      "lng": 120.98,
+      "actors": ["Sara Duterte", "Gobierno Marcos", "ICC"],
+      "summary": "La vicepresidenta Sara Duterte es destituida por segunda vez, lo que podría inhabilitarla para las próximas elecciones presidenciales. Su padre, el expresidente Rodrigo Duterte, enfrenta cargos en la CPI por la guerra contra las drogas. El país atraviesa su mayor crisis constitucional en décadas.",
+      "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "Sara Duterte destituida por segunda vez; su principal escudero en la guerra contra las drogas intenta eludir el arresto de la CPI refugiándose en el Senado",
+          "source": "BBC Asia / Al Jazeera",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "bosnia-crisis-dayton-2026",
+      "type": "diplo",
+      "severity": 2,
+      "title": "Bosnia: El Alto Representante de Paz Dimite",
+      "location": "Sarajevo · Bosnia-Herzegovina",
+      "lat": 43.85,
+      "lng": 18.36,
+      "actors": ["Bosnia-Herzegovina", "Republika Srpska", "UE", "EE.UU."],
+      "summary": "Christian Schmidt, el alto representante internacional que supervisa los Acuerdos de Dayton, dimite sin apoyo de EE.UU. El futuro del mecanismo de paz balcánico queda en el aire en un momento en que Dodik (Republika Srpska) presiona para erosionar el acuerdo de paz de 1995.",
+      "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "El alto representante de paz en Bosnia, Christian Schmidt, dimite; surgen preguntas sobre el futuro del mecanismo de supervisión de los Acuerdos de Dayton sin respaldo estadounidense",
+          "source": "BBC World",
+          "url": "#"
+        }
+      ]
+    },
+    {
+      "id": "lago-chad-boko-haram-2026",
+      "type": "armed",
+      "severity": 3,
+      "title": "Lago Chad: Conflicto Transfronterizo y Boko Haram",
+      "location": "Lago Chad · Cuenca del Lago",
+      "lat": 13.30,
+      "lng": 14.00,
+      "actors": ["Chad", "Nigeria", "Boko Haram", "MNJTF"],
+      "summary": "Chad lanza ataques aéreos contra posiciones de Boko Haram en la cuenca del lago, matando a unas 40 personas entre las que se cuentan pescadores nigerianos. El conflicto transfronterizo sigue sin resolución en una de las zonas más pobres del mundo, con cuatro países afectados: Nigeria, Chad, Níger y Camerún.",
+      "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "Ataques aéreos de Chad contra Boko Haram matan a decenas de pescadores nigerianos en el lago; unas 40 personas muertas o desaparecidas",
+          "source": "BBC Africa",
+          "url": "#"
+        }
+      ]
+    },
+    {
       "id": "china-estrategia-energetica",
       "type": "econ",
       "severity": 2,

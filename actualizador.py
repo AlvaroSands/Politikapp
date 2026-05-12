@@ -284,6 +284,13 @@ CRISIS_KEYWORDS = {
     # Entradas de cyber/intel
     "ciber-ataques-estado":       ["cyberattack", "ciberataque", "ransomware", "hack", "espionage", "espionaje", "apt", "malware", "exploit", "phishing", "ddos", "critical infrastructure"],
     "operaciones-inteligencia":   ["intelligence", "inteligencia", "spy", "espía", "leak", "filtración", "covert", "clandestine", "surveillance", "cia", "mi6", "fsb", "svr", "mossad"],
+    # Nuevas crisis añadidas 12 mayo 2026
+    "conflicto-israel-libano-2026":   ["lebanon", "líbano", "libano", "hezbollah", "hizbulá", "south lebanon", "sur del líbano", "beirut", "dahiyeh", "nasrallah"],
+    "pakistan-afghanistan-ataques-2026": ["pakistan", "afghanistan", "afganistán", "afghan", "afgano", "taliban", "talibán", "khyber", "nangarhar", "kabul", "islamabad", "pakistan strike"],
+    "eeuu-groenlandia-bases-2026":    ["greenland", "groenlandia", "nuuk", "arctic base", "base ártica", "arctic military", "denmark greenland", "groenlandia base"],
+    "crisis-politica-filipinas-2026": ["philippines", "filipinas", "duterte", "sara duterte", "marcos", "manila", "philippine president", "icc philippines"],
+    "bosnia-crisis-dayton-2026":      ["bosnia", "sarajevo", "dayton", "republika srpska", "dodik", "high representative", "alto representante", "balkans peace", "schmidt bosnia"],
+    "lago-chad-boko-haram-2026":      ["boko haram", "lake chad", "lago chad", "chad nigeria", "nigeria chad", "mnjtf", "borno", "diffa", "lake chad basin"],
 }
 
 # ── KEYWORDS BILATERALES ────────────────────────────────────────────────────
