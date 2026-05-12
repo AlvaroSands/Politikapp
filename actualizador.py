@@ -302,18 +302,70 @@ KEYWORDS_AMARILLO= ["talks", "negotiations", "agreement", "diplomat", "summit", 
 
 # Keywords para inferir el tipo de nueva crisis
 KEYWORDS_TIPO = {
-    "cyber": ["cyberattack", "ciberataque", "ransomware", "malware", "hack", "apt", "exploit",
-               "vulnerability", "cve", "breach", "phishing", "ddos", "critical infrastructure",
-               "zero-day", "zero day", "spyware", "botnet", "data breach"],
-    "intel": ["spy", "espionage", "intelligence", "espionaje", "inteligencia", "leak", "infiltrat",
-               "covert", "clandestine", "surveillance", "intercept", "defect", "mole", "cia",
-               "mi6", "fsb", "svr", "mossad", "bnd", "disinformation", "desinformación", "psyop"],
-    "armed": ["war", "guerra", "attack", "ataque", "bombing", "bombardeo", "troops", "troops",
-               "offensive", "invasion", "airstrike", "artillery", "missile", "conflict", "batalla",
-               "soldiers", "killed", "muertos", "ceasefire", "frontline"],
-    "econ":  ["sanctions", "sanciones", "tariff", "arancel", "trade", "comercio", "export",
-               "import", "embargo", "gdp", "recession", "currency", "debt", "deuda", "imf",
-               "world bank", "economic crisis", "crisis económica"],
+    "cyber": [
+        "cyberattack", "ciberataque", "ransomware", "malware", "hack", "apt", "exploit",
+        "vulnerability", "cve", "data breach", "phishing", "ddos", "critical infrastructure",
+        "zero-day", "zero day", "spyware", "botnet", "cyber attack", "cyber incident",
+        "critical system", "power grid", "infrastructure attack",
+    ],
+    "intel": [
+        # Redes de espionaje y agentes
+        "spy ring", "red de espías", "espionage network", "red de espionaje",
+        "spy arrested", "spy caught", "spy charged", "espía detenido", "espía arrestado",
+        "charged with espionage", "acusado de espionaje",
+        # Filtraciones de documentos clasificados
+        "classified documents", "documentos clasificados",
+        "intelligence leak", "leaked intelligence", "leaked classified",
+        "state secrets", "secretos de estado", "classified information disclosed",
+        # Desertores y agentes dobles
+        "defector", "double agent", "agente doble", "mole inside", "informant exposed",
+        # Operaciones encubiertas reveladas
+        "covert operation revealed", "intelligence operation exposed",
+        "secret program exposed", "cia operation", "programa secreto revelado",
+        # Vigilancia y escuchas
+        "surveillance program", "mass surveillance", "wiretapping scandal",
+        # Desinformación como operación de inteligencia
+        "disinformation campaign", "campaña de desinformación",
+        "influence operation", "operación de influencia", "psyop",
+        # Ciber-espionaje (prioridad sobre cyber por su componente de inteligencia)
+        "cyber espionage", "ciberespionaje", "state-sponsored hacking", "nation-state hackers",
+    ],
+    "armed": [
+        "war", "guerra", "attack", "ataque", "bombing", "bombardeo", "offensive",
+        "invasion", "airstrike", "artillery", "missile", "conflict", "batalla",
+        "soldiers", "killed", "muertos", "ceasefire", "frontline", "troops deployed",
+        "military strike", "air strike", "ground offensive", "naval blockade",
+        "ataque militar", "bombardeo", "ofensiva",
+    ],
+    "econ": [
+        "sanctions", "sanciones", "tariff", "arancel", "trade war", "guerra comercial",
+        "export ban", "import ban", "embargo", "gdp", "recession", "currency crisis",
+        "debt default", "deuda", "imf bailout", "world bank", "economic crisis",
+        "crisis económica", "financial crisis", "crisis financiera", "oil price",
+        "energy crisis", "crisis energética",
+    ],
+    "diplo": [
+        # Expulsiones y retiros de personal diplomático
+        "expels diplomat", "expels ambassador", "expulsa diplomático", "expulsa embajador",
+        "persona non grata",
+        "recalls ambassador", "ambassador recalled", "retira embajador",
+        "withdraws ambassador", "llamado a consultas",
+        # Convocatorias formales
+        "summons ambassador", "summon ambassador", "convoca embajador", "summons envoy",
+        # Protestas y notas diplomáticas formales
+        "diplomatic protest", "protesta diplomática", "nota de protesta",
+        "formal complaint", "queja formal", "diplomatic note", "lodges protest",
+        # Ruptura o suspensión de relaciones
+        "breaks diplomatic", "severs diplomatic", "suspend diplomatic relations",
+        "ruptura diplomática", "rompe relaciones", "suspende relaciones",
+        "corta relaciones", "freeze diplomatic",
+        # Cierre de embajadas y consulados
+        "closes embassy", "shuts embassy", "cierra embajada",
+        "embassy closed", "embajada cerrada", "consulate closed",
+        # Incidente diplomático explícito
+        "diplomatic incident", "incidente diplomático", "diplomatic crisis",
+        "crisis diplomática",
+    ],
 }
 
 # ── FUNCIONES AUXILIARES ────────────────────────────────────────────────────
@@ -415,7 +467,7 @@ def inferir_tipo(texto):
     for tipo, kws in KEYWORDS_TIPO.items():
         if any(k in t for k in kws):
             return tipo
-    return "diplo"
+    return None  # sin clasificación reconocida → no es una crisis geopolítica
 
 
 def inferir_severidad(texto, menciones):
@@ -455,9 +507,10 @@ def clasificar_crisis(titulo):
 
 # ── LÓGICA DE AUTO-CREACIÓN ─────────────────────────────────────────────────
 
-UMBRAL_MENCIONES = 3   # cuántas veces debe aparecer el evento
-UMBRAL_FUENTES   = 2   # en cuántas fuentes distintas (mínimo)
-CADUCIDAD_DIAS   = 14  # descartar candidatos más viejos
+UMBRAL_MENCIONES     = 6   # cuántas veces debe aparecer el evento
+UMBRAL_FUENTES       = 3   # en cuántas fuentes distintas (mínimo)
+CADUCIDAD_DIAS       = 14  # descartar candidatos más viejos
+MAX_CRISIS_POR_CICLO = 3   # límite de nuevas crisis auto-creadas por ejecución
 
 
 def limpiar_pendientes_caducados(pendientes):
@@ -471,7 +524,7 @@ def registrar_candidato(titulo, fuente, url, pendientes, ids_existentes):
     Retorna el candidato si alcanza el umbral, o None.
     """
     for p in pendientes:
-        if similitud(titulo, p["titulo_base"]) > 0.42:
+        if similitud(titulo, p["titulo_base"]) > 0.60:
             if fuente not in p["fuentes"]:
                 p["fuentes"].append(fuente)
             p["menciones"] += 1
@@ -486,6 +539,10 @@ def registrar_candidato(titulo, fuente, url, pendientes, ids_existentes):
     if not paises:
         return None  # sin país reconocido no puede ser crisis geopolítica
 
+    tipo = inferir_tipo(titulo)
+    if tipo is None:
+        return None  # titular no clasificable → no se registra como candidato
+
     id_tent = slugify(titulo)
 
     # Evitar duplicados con crisis ya existentes
@@ -495,7 +552,7 @@ def registrar_candidato(titulo, fuente, url, pendientes, ids_existentes):
     pendientes.append({
         "id_tentativo": id_tent,
         "titulo_base":  titulo,
-        "tipo":         inferir_tipo(titulo),
+        "tipo":         tipo,
         "titulos":      [titulo],
         "fuentes":      [fuente],
         "urls":         [url],
@@ -694,11 +751,15 @@ def ejecutar_actualizacion():
                     promovido = registrar_candidato(
                         titulo, nombre_fuente, enlace, pendientes, ids_existentes | ids_promovidos
                     )
-                    if promovido and promovido["id_tentativo"] not in ids_promovidos:
+                    if (promovido
+                            and promovido["id_tentativo"] not in ids_promovidos
+                            and len(ids_promovidos) < MAX_CRISIS_POR_CICLO):
                         promover_candidato(promovido, db)
                         ids_promovidos.add(promovido["id_tentativo"])
                         pendientes.remove(promovido)
                         nuevas += 1
+                    elif promovido and len(ids_promovidos) >= MAX_CRISIS_POR_CICLO:
+                        print(f"  🛑 Cap de {MAX_CRISIS_POR_CICLO} crisis/ciclo alcanzado, candidato queda en pendientes")
 
             # Recolectar para context nodes (independiente de la clasificación de crisis)
             t_low = titulo.lower()
@@ -741,14 +802,15 @@ def ejecutar_actualizacion():
                 promovido = registrar_candidato(
                     titulo, nombre_src, enlace, pendientes, ids_existentes | ids_promovidos
                 )
-                if promovido and promovido["id_tentativo"] not in ids_promovidos:
-                    # Respetar tipo_hint del scraper si no hay señal clara
-                    if promovido["tipo"] == "diplo":
-                        promovido["tipo"] = tipo_hint
+                if (promovido
+                        and promovido["id_tentativo"] not in ids_promovidos
+                        and len(ids_promovidos) < MAX_CRISIS_POR_CICLO):
                     promover_candidato(promovido, db)
                     ids_promovidos.add(promovido["id_tentativo"])
                     pendientes.remove(promovido)
                     nuevas += 1
+                elif promovido and len(ids_promovidos) >= MAX_CRISIS_POR_CICLO:
+                    print(f"  🛑 Cap de {MAX_CRISIS_POR_CICLO} crisis/ciclo alcanzado, candidato queda en pendientes")
 
             # Recolectar para context nodes
             t_low = titulo.lower()

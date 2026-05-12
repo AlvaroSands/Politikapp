@@ -11,6 +11,10 @@
     {
       "fecha": "2026-05-11",
       "severity": 5
+    },
+    {
+      "fecha": "2026-05-12",
+      "severity": 5
     }
   ],
   "iran-ormuz-2026": [
@@ -24,6 +28,10 @@
     },
     {
       "fecha": "2026-05-11",
+      "severity": 5
+    },
+    {
+      "fecha": "2026-05-12",
       "severity": 5
     }
   ],
@@ -39,6 +47,10 @@
     {
       "fecha": "2026-05-11",
       "severity": 5
+    },
+    {
+      "fecha": "2026-05-12",
+      "severity": 5
     }
   ],
   "sudan-guerra-civil-2026": [
@@ -52,6 +64,10 @@
     },
     {
       "fecha": "2026-05-11",
+      "severity": 4
+    },
+    {
+      "fecha": "2026-05-12",
       "severity": 4
     }
   ],
@@ -67,6 +83,10 @@
     {
       "fecha": "2026-05-11",
       "severity": 4
+    },
+    {
+      "fecha": "2026-05-12",
+      "severity": 4
     }
   ],
   "conflicto-mar-rojo-huties": [
@@ -80,6 +100,10 @@
     },
     {
       "fecha": "2026-05-11",
+      "severity": 4
+    },
+    {
+      "fecha": "2026-05-12",
       "severity": 4
     }
   ],
@@ -95,6 +119,10 @@
     {
       "fecha": "2026-05-11",
       "severity": 4
+    },
+    {
+      "fecha": "2026-05-12",
+      "severity": 4
     }
   ],
   "conflicto-ecuador": [
@@ -108,6 +136,10 @@
     },
     {
       "fecha": "2026-05-11",
+      "severity": 3
+    },
+    {
+      "fecha": "2026-05-12",
       "severity": 3
     }
   ],
@@ -123,6 +155,10 @@
     {
       "fecha": "2026-05-11",
       "severity": 3
+    },
+    {
+      "fecha": "2026-05-12",
+      "severity": 3
     }
   ],
   "corea-norte-misiles-2026": [
@@ -136,6 +172,10 @@
     },
     {
       "fecha": "2026-05-11",
+      "severity": 3
+    },
+    {
+      "fecha": "2026-05-12",
       "severity": 3
     }
   ],
@@ -151,6 +191,10 @@
     {
       "fecha": "2026-05-11",
       "severity": 3
+    },
+    {
+      "fecha": "2026-05-12",
+      "severity": 3
     }
   ],
   "cambio-politico-hungria": [
@@ -164,6 +208,10 @@
     },
     {
       "fecha": "2026-05-11",
+      "severity": 2
+    },
+    {
+      "fecha": "2026-05-12",
       "severity": 2
     }
   ],
@@ -179,6 +227,10 @@
     {
       "fecha": "2026-05-11",
       "severity": 3
+    },
+    {
+      "fecha": "2026-05-12",
+      "severity": 3
     }
   ],
   "china-estrategia-energetica": [
@@ -192,6 +244,10 @@
     },
     {
       "fecha": "2026-05-11",
+      "severity": 2
+    },
+    {
+      "fecha": "2026-05-12",
       "severity": 2
     }
   ]
