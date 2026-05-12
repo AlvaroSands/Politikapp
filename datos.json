@@ -14,8 +14,14 @@
         "OTAN",
         "UE"
       ],
-      "summary": "Frente activo de ~1.000 km con intercambios de artillería y drones diarios. Alto el fuego negociado por Trump de 3 días (9-11 mayo) con intercambio de 1.000 prisioneros. Rusia perdió 116 km² netos en abril según el ISW.",
+      "summary": "Frente activo de ~1.000 km con intercambios de artillería y drones diarios. El alto el fuego de 3 días mediado por Trump (9-11 mayo) expiró sin acuerdo: Rusia reanudó los ataques el 12 de mayo. Rusia perdió 116 km² netos en abril según el ISW.",
       "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "El alto el fuego de tres días expira con una nueva oleada de ataques rusos; Ucrania y Rusia siguen combatiendo pese a la mediación de EE.UU.",
+          "source": "Reuters / BBC",
+          "url": "#"
+        },
         {
           "when": "2026-05-08",
           "what": "Trump anuncia alto el fuego de tres días (9-11 mayo) con intercambio de 1.000 prisioneros por bando",
@@ -56,8 +62,20 @@
         "UE",
         "Arabia Saudí"
       ],
-      "summary": "Intercambio de fuego entre EE.UU. e Irán en el estrecho. Negociación de moratoria nuclear de 12-15 años. El cierre de Ormuz cuesta a Europa ~1.000 millones € diarios en sobrecostes energéticos.",
+      "summary": "Guerra activa entre EE.UU. e Irán en el Estrecho de Ormuz. Irán rechaza la propuesta de paz de EE.UU. y amenaza con acelerar su programa nuclear. Trump afirma que el alto el fuego está en 'soporte vital'. El cierre del estrecho cuesta a Europa ~1.000 millones € diarios en sobrecostes energéticos.",
       "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "Irán califica de 'totalmente inaceptable' la propuesta de paz de EE.UU. y amenaza con acelerar el programa de armas nucleares si Trump lanza nuevos ataques",
+          "source": "Reuters / AP",
+          "url": "#"
+        },
+        {
+          "when": "2026-05-12",
+          "what": "Trump afirma que el alto el fuego con Irán está en 'soporte vital masivo' tras rechazar Teherán las propuestas de paz",
+          "source": "Reuters",
+          "url": "#"
+        },
         {
           "when": "2026-05-08",
           "what": "Trump amenaza con bombardeos a 'nivel mucho más alto' si Irán no acepta la moratoria nuclear de 12-15 años",
@@ -99,8 +117,14 @@
         "Egipto",
         "ONU"
       ],
-      "summary": "72.599 palestinos muertos desde el 7 de octubre de 2023. Bloqueo total de ayuda humanitaria por más de 11 semanas consecutivas. 90% de la población desplazada sin agua ni atención médica.",
+      "summary": "Más de 72.500 palestinos muertos desde el 7-O. Bloqueo total de ayuda humanitaria por más de 11 semanas. La UE aprueba (12 mayo) sanciones a colonos israelíes en Cisjordania tras levantar Hungría el veto. El 90% de la población sigue desplazada sin agua ni atención médica.",
       "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "La UE aprueba sanciones a colonos israelíes en Cisjordania tras levantar el nuevo gobierno de Hungría el veto que los bloqueaba",
+          "source": "Politico / Reuters",
+          "url": "#"
+        },
         {
           "when": "2026-05-08",
           "what": "72.599 palestinos muertos desde el 7-O; bloqueo total de ayuda por más de 11 semanas",
