@@ -64,7 +64,7 @@
 <style>
 :root {
   --bg-0: #07090a;  --bg-1: #0c1214;  --bg-2: #11191c;  --bg-3: #182225;
-  --line-0: #182428; --line-1: #233339; --line-2: #314449;
+  --line-0: #223840; --line-1: #2e4e5c; --line-2: #3a6270;
   --text-0: #4f6168; --text-1: #8195a0; --text-2: #c1d1d8; --text-3: #e8f1f4;
   --c-armed:  #e05050; --c-armed-g:  rgba(224,80,80,.4);
   --c-diplo:  #4aa3d9; --c-diplo-g:  rgba(74,163,217,.4);
@@ -77,7 +77,7 @@
 }
 :root[data-theme="light"] {
   --bg-0: #f2efe8;  --bg-1: #e8e4db;  --bg-2: #ddd8cd;  --bg-3: #d0cab8;
-  --line-0: #c8c2b0; --line-1: #b8b2a0; --line-2: #a8a290;
+  --line-0: #a8a090; --line-1: #948c7a; --line-2: #807666;
   --text-0: #8a8070; --text-1: #6a5e50; --text-2: #3a2e24; --text-3: #1e1610;
   --accent: #b87820;
   --c-armed: #c03030; --c-armed-g: rgba(192,48,48,.2);
@@ -96,6 +96,9 @@
 /* Botón tema */
 .theme-btn { padding:0 12px; height:100%; font-size:14px; color:var(--text-1); border-left:1px solid var(--line-0); transition:color .15s; }
 .theme-btn:hover { color:var(--text-3); }
+.sat-btn { padding:0 12px; height:100%; font-size:12px; letter-spacing:.12em; font-family:var(--mono); color:var(--text-1); border-left:1px solid var(--line-0); transition:color .15s,border-color .15s; }
+.sat-btn:hover { color:var(--text-3); }
+.sat-btn.active { color:var(--accent); border-left-color:var(--accent); }
 /* Fuente ligeramente más gruesa en tema claro */
 :root[data-theme="light"] body { font-weight: 500; }
 
@@ -112,7 +115,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   grid-template-rows: 52px 1fr 116px;
   grid-template-areas: "topbar topbar topbar" "left main right" "bottom bottom bottom";
   height: 100vh; width: 100vw;
-  gap: 1px; background: var(--line-0);
+  gap: 2px; background: var(--line-0);
 }
 .topbar { grid-area: topbar; background: var(--bg-1); }
 .left   { grid-area: left;   background: var(--bg-1); overflow-y: auto; }
@@ -620,6 +623,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
         <button class="lang-btn active" data-lang="es">ES</button>
         <button class="lang-btn" data-lang="en">EN</button>
       </div>
+      <button id="sat-btn" class="sat-btn" title="Vista satélite">SAT</button>
       <button id="theme-btn" class="theme-btn" title="Cambiar tema">☀</button>
       <a href="https://t.me/GeopolitikappBot" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#54a9eb;border-left:1px solid var(--line-0);transition:color .15s;white-space:nowrap" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#54a9eb'"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.496.969z"/></svg><span data-i18n="tg_alerts">Alertas Telegram</span></a>
       <a href="/analisis" data-i18n="analysis" style="display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-1);border-left:1px solid var(--line-0);transition:color .15s" onmouseover="this.style.color='var(--text-3)'" onmouseout="this.style.color='var(--text-1)'">Análisis Regional ↗</a>
@@ -692,7 +696,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     <div class="hud-corner br"></div>
     <div class="hud hud-tl">
       <div><span class="hi">VISTA</span> GLOBO 3D · MAPLIBRE GL</div>
-      <div style="margin-top:4px"><span class="hi">ESTILO</span> DARK MATTER · CARTO</div>
+      <div style="margin-top:4px"><span class="hi">ESTILO</span> <span id="hud-style-lbl">DATAVIZ DARK · MAPTILER</span></div>
     </div>
     <div class="hud hud-tr">
       <div><span class="hi">SES</span> <span class="acc" id="ses-id">GEO-2026</span></div>
@@ -891,10 +895,22 @@ const ST = {
 /* ── MAP ─────────────────────────────────────────────────────── */
 const _mob = window.innerWidth <= 768;
 let _dataLoaded = false;
+const MT_KEY = 'MG4XC4VywrZBmsv79BxT';
+let _basemap  = 'dark';
+const MT_STYLES = {
+  dark:      `https://api.maptiler.com/maps/dataviz-dark/style.json?key=${MT_KEY}`,
+  outdoor:   `https://api.maptiler.com/maps/outdoor-v2/style.json?key=${MT_KEY}`,
+  satellite: `https://api.maptiler.com/maps/hybrid/style.json?key=${MT_KEY}`
+};
+const MT_ORDER  = ['dark','outdoor','satellite'];
+const MT_LABELS = { dark:'DARK', outdoor:'TOPO', satellite:'SAT' };
+const MT_HUD    = { dark:'DATAVIZ DARK · MAPTILER', outdoor:'OUTDOOR V2 · MAPTILER', satellite:'HYBRID · MAPTILER' };
+const crisisColor = ['match',['get','type'],
+  'armed','#e05050','diplo','#4aa3d9','econ','#d9a441','cyber','#4ad9a4','intel','#a44ad9','#64748b'];
 
 const map = new maplibregl.Map({
   container:'map',
-  style:'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+  style: MT_STYLES.dark,
   center:[22,24], zoom: _mob ? 1.5 : 2.3, minZoom:1.2, maxZoom:16,
   projection: _mob ? 'mercator' : 'globe',
   antialias: !_mob
@@ -907,15 +923,49 @@ const _dataFallback = setTimeout(() => {
   if (!_dataLoaded) { loadData(); setInterval(loadData, 60000); }
 }, 5000);
 
-map.on('load', () => {
-  clearTimeout(_dataFallback);
+function makeCrisisIcon(type, sel, sz) {
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = sz;
+  const g = cv.getContext('2d'), h = sz / 2, r = sz * (sel ? 0.43 : 0.37);
+  const FILL = {armed:'#e05050',diplo:'#4aa3d9',econ:'#d9a441',cyber:'#b860d4',intel:'#4ad48f'};
+  g.fillStyle   = FILL[type] || '#64748b';
+  g.strokeStyle = sel ? '#ffffff' : 'rgba(255,255,255,0.88)';
+  g.lineWidth   = sel ? 2.5 : 1.8;
+  g.lineJoin    = 'round';
+  g.beginPath();
+  if (type === 'armed') {
+    // Rombo — símbolo militar clásico
+    g.moveTo(h, h-r); g.lineTo(h+r*0.78, h); g.lineTo(h, h+r); g.lineTo(h-r*0.78, h);
+  } else if (type === 'diplo') {
+    // Círculo — neutralidad diplomática
+    g.arc(h, h, r, 0, Math.PI*2);
+  } else if (type === 'econ') {
+    // Triángulo hacia arriba — indicador económico
+    g.moveTo(h, h-r); g.lineTo(h+r, h+r*0.72); g.lineTo(h-r, h+r*0.72);
+  } else if (type === 'cyber') {
+    // Hexágono — digital/tecnológico
+    for (let i=0;i<6;i++){const a=Math.PI/3*i-Math.PI/6;i?g.lineTo(h+r*Math.cos(a),h+r*Math.sin(a)):g.moveTo(h+r*Math.cos(a),h+r*Math.sin(a));}
+  } else if (type === 'intel') {
+    // Pentágono — inteligencia/espionaje
+    for (let i=0;i<5;i++){const a=2*Math.PI/5*i-Math.PI/2;i?g.lineTo(h+r*Math.cos(a),h+r*Math.sin(a)):g.moveTo(h+r*Math.cos(a),h+r*Math.sin(a));}
+  } else {
+    g.arc(h, h, r, 0, Math.PI*2);
+  }
+  g.closePath(); g.fill(); g.stroke();
+  return g.getImageData(0, 0, sz, sz);
+}
 
+function initLayers() {
   if (!_mob) {
     try {
+      const isLight = _basemap === 'outdoor';
       map.setFog({
-        'space-color':'#00000a', 'star-intensity':0.7,
-        'horizon-blend':0.03, 'high-color':'#000e1a',
-        'color':'#000810', 'range':[0.8,8]
+        'space-color':    isLight ? '#c8d8e8' : '#00000a',
+        'star-intensity': _basemap === 'dark' ? 0.7 : 0.05,
+        'horizon-blend':  0.03,
+        'high-color':     isLight ? '#b8cce0' : '#000e1a',
+        'color':          isLight ? '#dce8f0' : '#000810',
+        'range': [0.8,8]
       });
     } catch(e) {}
     try {
@@ -928,10 +978,9 @@ map.on('load', () => {
     } catch(e) {}
   }
 
-  map.addSource('arcs',        { type:'geojson', data:emptyFC() });
-  map.addSource('heat',        { type:'geojson', data:emptyFC() });
-  map.addSource('context-pts', { type:'geojson', data:emptyFC() });
-  map.addSource('crisis-pts',  { type:'geojson', data:emptyFC() });
+  ['arcs','heat','context-pts','crisis-pts'].forEach(id => {
+    if (!map.getSource(id)) map.addSource(id, { type:'geojson', data:emptyFC() });
+  });
 
   map.addLayer({ id:'heatmap', type:'heatmap', source:'heat', maxzoom:7, paint:{
     'heatmap-weight':1,
@@ -954,26 +1003,6 @@ map.on('load', () => {
     paint:{'line-color':'transparent','line-width':14,'line-opacity':0}
   });
 
-  map.on('mouseenter','arcs-hit', e => {
-    map.getCanvas().style.cursor = 'pointer';
-    const p = e.features[0].properties;
-    ST.popup.setLngLat(e.lngLat)
-      .setHTML(`<b>${p.origen}</b> ↔ <b>${p.destino}</b><br><span style="color:var(--text-0);font-size:10px">${p.titular}</span>`)
-      .addTo(map);
-  });
-  map.on('mousemove','arcs-hit', e => ST.popup.isOpen() && ST.popup.setLngLat(e.lngLat));
-  map.on('mouseleave','arcs-hit', () => { map.getCanvas().style.cursor=''; ST.popup.remove(); });
-
-  if (!_mob) {
-    map.on('mousemove', e => {
-      const {lng,lat} = e.lngLat;
-      document.getElementById('coord-live').textContent =
-        `${Math.abs(lat).toFixed(2)}°${lat>=0?'N':'S'}  ${Math.abs(lng).toFixed(2)}°${lng>=0?'E':'W'}`;
-    });
-  }
-
-  // ── CONTEXT NODE LAYERS (debajo de las crisis) ───────────────
-  // Dibujar rombos en canvas para no depender de la fuente del tileset
   (function() {
     function diamondImg(fill, stroke, size) {
       const c = document.createElement('canvas');
@@ -999,7 +1028,6 @@ map.on('load', () => {
     },
     paint:{ 'icon-opacity': 0.92 }
   });
-
   map.addLayer({ id:'context-sym-sel', type:'symbol', source:'context-pts',
     filter:['==',['get','id'],'__none__'],
     layout:{
@@ -1010,10 +1038,83 @@ map.on('load', () => {
     },
     paint:{ 'icon-opacity': 1 }
   });
-
   map.addLayer({ id:'context-hit', type:'circle', source:'context-pts',
     paint:{'circle-radius':18,'circle-opacity':0,'circle-stroke-opacity':0}
   });
+
+  // Iconos diferenciados por tipo de crisis
+  const TYPES = ['armed','diplo','econ','cyber','intel'];
+  TYPES.forEach(t => {
+    map.addImage(`crisis-${t}`,     makeCrisisIcon(t, false, 28));
+    map.addImage(`crisis-sel-${t}`, makeCrisisIcon(t, true,  28));
+  });
+
+  // Anillo pulsante (animado en animArcs)
+  map.addLayer({ id:'crisis-rings', type:'circle', source:'crisis-pts', paint:{
+    'circle-radius': 8,
+    'circle-color': 'transparent',
+    'circle-stroke-width': 1.5,
+    'circle-stroke-color': crisisColor,
+    'circle-stroke-opacity': 0
+  }});
+  // Iconos con forma geométrica por tipo
+  map.addLayer({ id:'crisis-icons', type:'symbol', source:'crisis-pts',
+    layout:{
+      'icon-image': ['concat','crisis-',['get','type']],
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+      'icon-size': ['interpolate',['linear'],['zoom'], 1,0.52, 4,0.68, 8,0.90],
+    }
+  });
+  // Icono seleccionado (más grande, borde blanco sólido)
+  map.addLayer({ id:'crisis-icons-sel', type:'symbol', source:'crisis-pts',
+    filter:['==',['get','id'],'__none__'],
+    layout:{
+      'icon-image': ['concat','crisis-sel-',['get','type']],
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+      'icon-size': ['interpolate',['linear'],['zoom'], 1,0.75, 4,0.95, 8,1.18],
+    }
+  });
+  // Área de click ampliada (invisible)
+  map.addLayer({ id:'crisis-hit', type:'circle', source:'crisis-pts',
+    paint:{'circle-radius':18,'circle-opacity':0,'circle-stroke-opacity':0}
+  });
+
+}
+
+function switchBasemap() {
+  _basemap = MT_ORDER[(MT_ORDER.indexOf(_basemap) + 1) % MT_ORDER.length];
+  map.once('style.load', () => { initLayers(); if (ST.data) renderAll(); });
+  map.setStyle(MT_STYLES[_basemap], { diff: false });
+  const btn = document.getElementById('sat-btn');
+  btn.textContent = MT_LABELS[_basemap];
+  btn.classList.toggle('active', _basemap !== 'dark');
+  const lbl = document.getElementById('hud-style-lbl');
+  if (lbl) lbl.textContent = MT_HUD[_basemap];
+}
+
+map.on('load', () => {
+  clearTimeout(_dataFallback);
+  initLayers();
+
+  map.on('mouseenter','arcs-hit', e => {
+    map.getCanvas().style.cursor = 'pointer';
+    const p = e.features[0].properties;
+    ST.popup.setLngLat(e.lngLat)
+      .setHTML(`<b>${p.origen}</b> ↔ <b>${p.destino}</b><br><span style="color:var(--text-0);font-size:10px">${p.titular}</span>`)
+      .addTo(map);
+  });
+  map.on('mousemove','arcs-hit', e => ST.popup.isOpen() && ST.popup.setLngLat(e.lngLat));
+  map.on('mouseleave','arcs-hit', () => { map.getCanvas().style.cursor=''; ST.popup.remove(); });
+
+  if (!_mob) {
+    map.on('mousemove', e => {
+      const {lng,lat} = e.lngLat;
+      document.getElementById('coord-live').textContent =
+        `${Math.abs(lat).toFixed(2)}°${lat>=0?'N':'S'}  ${Math.abs(lng).toFixed(2)}°${lng>=0?'E':'W'}`;
+    });
+  }
 
   map.on('click','context-hit', e => {
     if (!e.features.length) return;
@@ -1031,42 +1132,6 @@ map.on('load', () => {
   map.on('mousemove','context-hit', e => ST.popup.isOpen() && ST.popup.setLngLat(e.lngLat));
   map.on('mouseleave','context-hit', () => { map.getCanvas().style.cursor=''; ST.popup.remove(); });
 
-  const crisisColor = ['match',['get','type'],
-    'armed','#e05050','diplo','#4aa3d9','econ','#d9a441','cyber','#4ad9a4','intel','#a44ad9','#64748b'];
-
-  // Anillo pulsante (animado desde animArcs)
-  map.addLayer({ id:'crisis-rings', type:'circle', source:'crisis-pts', paint:{
-    'circle-radius': 8,
-    'circle-color': 'transparent',
-    'circle-stroke-width': 1.5,
-    'circle-stroke-color': crisisColor,
-    'circle-stroke-opacity': 0
-  }});
-
-  // Punto base
-  map.addLayer({ id:'crisis-dots', type:'circle', source:'crisis-pts', paint:{
-    'circle-radius': ['interpolate',['linear'],['zoom'], 1,4, 4,5, 8,7],
-    'circle-color': crisisColor,
-    'circle-stroke-width': 1.5,
-    'circle-stroke-color': 'rgba(255,255,255,0.35)'
-  }});
-
-  // Punto seleccionado (encima)
-  map.addLayer({ id:'crisis-sel', type:'circle', source:'crisis-pts',
-    filter:['==',['get','id'],'__none__'],
-    paint:{
-      'circle-radius': ['interpolate',['linear'],['zoom'], 1,7, 4,9, 8,12],
-      'circle-color': crisisColor,
-      'circle-stroke-width': 2,
-      'circle-stroke-color': 'white'
-    }
-  });
-
-  // Área de click ampliada (invisible)
-  map.addLayer({ id:'crisis-hit', type:'circle', source:'crisis-pts',
-    paint:{'circle-radius':18,'circle-opacity':0,'circle-stroke-opacity':0}
-  });
-
   map.on('click','crisis-hit', e => {
     if (!e.features.length) return;
     const id = e.features[0].properties.id;
@@ -1076,7 +1141,6 @@ map.on('load', () => {
   map.on('mouseenter','crisis-hit', () => map.getCanvas().style.cursor = 'pointer');
   map.on('mouseleave','crisis-hit', () => { if (!map.queryRenderedFeatures(undefined,{layers:['arcs-hit']}).length) map.getCanvas().style.cursor = ''; });
 
-  // Deseleccionar al pinchar en zona vacía del mapa
   map.on('click', e => {
     const hitCrisis = map.queryRenderedFeatures(e.point, { layers:['crisis-hit'] });
     const hitCtx    = map.queryRenderedFeatures(e.point, { layers:['context-hit'] });
@@ -1087,7 +1151,7 @@ map.on('load', () => {
     renderArcs(null);
     renderFeed();
     renderDetail(null);
-    try { map.setFilter('crisis-sel',['==',['get','id'],'__none__']); } catch(e) {}
+    try { map.setFilter('crisis-icons-sel',['==',['get','id'],'__none__']); } catch(e) {}
     try { map.setFilter('context-sym-sel',['==',['get','id'],'__none__']); } catch(e) {}
     if (!isMobile()) switchTab('feed');
     else { mobRenderFeed(); mobRenderDetail(null); }
@@ -1234,7 +1298,7 @@ function renderMarkers() {
   try { map.getSource('crisis-pts').setData({type:'FeatureCollection',features}); } catch(e) {}
   // Actualizar capa de selección
   const selId = ST.selected ? ST.selected.id : '__none__';
-  try { map.setFilter('crisis-sel',['==',['get','id'], selId]); } catch(e) {}
+  try { map.setFilter('crisis-icons-sel',['==',['get','id'], selId]); } catch(e) {}
 }
 
 /* ── ARCS ────────────────────────────────────────────────────── */
@@ -1324,7 +1388,7 @@ function selectEvent(c) {
   renderFeed();
   renderDetail(c);
   renderArcs(c);
-  try { map.setFilter('crisis-sel',['==',['get','id'], c.id]); } catch(e) {}
+  try { map.setFilter('crisis-icons-sel',['==',['get','id'], c.id]); } catch(e) {}
   if (isMobile()) {
     mobRenderFeed();
     mobRenderDetail(c);
@@ -1375,7 +1439,7 @@ function selectCtx(node) {
   ST.selectedCtx = node;
   renderArcs(null);
   renderFeed();
-  try { map.setFilter('crisis-sel',['==',['get','id'],'__none__']); } catch(e) {}
+  try { map.setFilter('crisis-icons-sel',['==',['get','id'],'__none__']); } catch(e) {}
   renderContextNodes();
   renderDetailCtx(node);
   if (isMobile()) {
@@ -1730,7 +1794,7 @@ function mobUpdateCounts() {
 function mobSelectEvent(c) {
   ST.selected = c;
   renderArcs(c);
-  try { map.setFilter('crisis-sel',['==',['get','id'], c.id]); } catch(e) {}
+  try { map.setFilter('crisis-icons-sel',['==',['get','id'], c.id]); } catch(e) {}
   mobRenderFeed();
   mobRenderDetail(c);
   mobSwitchSheetTab('detail');
@@ -1869,6 +1933,7 @@ function setTheme(t) {
 document.getElementById('theme-btn').addEventListener('click', function() {
   setTheme(document.documentElement.dataset.theme === 'light' ? 'dark' : 'light');
 });
+document.getElementById('sat-btn').addEventListener('click', switchBasemap);
 setTheme(localStorage.getItem('geo_theme') || 'dark');
 </script>
 </body>
