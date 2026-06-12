@@ -15,6 +15,10 @@
     {
       "fecha": "2026-05-12",
       "severity": 5
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 5
     }
   ],
   "iran-ormuz-2026": [
@@ -32,6 +36,10 @@
     },
     {
       "fecha": "2026-05-12",
+      "severity": 5
+    },
+    {
+      "fecha": "2026-06-12",
       "severity": 5
     }
   ],
@@ -51,6 +59,10 @@
     {
       "fecha": "2026-05-12",
       "severity": 5
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 5
     }
   ],
   "sudan-guerra-civil-2026": [
@@ -68,6 +80,10 @@
     },
     {
       "fecha": "2026-05-12",
+      "severity": 4
+    },
+    {
+      "fecha": "2026-06-12",
       "severity": 4
     }
   ],
@@ -87,6 +103,10 @@
     {
       "fecha": "2026-05-12",
       "severity": 4
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 5
     }
   ],
   "conflicto-mar-rojo-huties": [
@@ -105,6 +125,10 @@
     {
       "fecha": "2026-05-12",
       "severity": 4
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 1
     }
   ],
   "violencia-haiti": [
@@ -123,6 +147,10 @@
     {
       "fecha": "2026-05-12",
       "severity": 4
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 1
     }
   ],
   "conflicto-ecuador": [
@@ -140,6 +168,10 @@
     },
     {
       "fecha": "2026-05-12",
+      "severity": 3
+    },
+    {
+      "fecha": "2026-06-12",
       "severity": 3
     }
   ],
@@ -159,6 +191,10 @@
     {
       "fecha": "2026-05-12",
       "severity": 3
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 4
     }
   ],
   "corea-norte-misiles-2026": [
@@ -176,6 +212,10 @@
     },
     {
       "fecha": "2026-05-12",
+      "severity": 3
+    },
+    {
+      "fecha": "2026-06-12",
       "severity": 3
     }
   ],
@@ -195,6 +235,10 @@
     {
       "fecha": "2026-05-12",
       "severity": 3
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 3
     }
   ],
   "cambio-politico-hungria": [
@@ -213,6 +257,10 @@
     {
       "fecha": "2026-05-12",
       "severity": 2
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 1
     }
   ],
   "crisis-energetica-europa": [
@@ -231,6 +279,10 @@
     {
       "fecha": "2026-05-12",
       "severity": 3
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 1
     }
   ],
   "china-estrategia-energetica": [
@@ -248,6 +300,46 @@
     },
     {
       "fecha": "2026-05-12",
+      "severity": 2
+    },
+    {
+      "fecha": "2026-06-12",
+      "severity": 1
+    }
+  ],
+  "eeuu-groenlandia-bases-2026": [
+    {
+      "fecha": "2026-06-12",
+      "severity": 1
+    }
+  ],
+  "lago-chad-boko-haram-2026": [
+    {
+      "fecha": "2026-06-12",
+      "severity": 1
+    }
+  ],
+  "conflicto-israel-libano-2026": [
+    {
+      "fecha": "2026-06-12",
+      "severity": 4
+    }
+  ],
+  "pakistan-afghanistan-ataques-2026": [
+    {
+      "fecha": "2026-06-12",
+      "severity": 4
+    }
+  ],
+  "crisis-politica-filipinas-2026": [
+    {
+      "fecha": "2026-06-12",
+      "severity": 2
+    }
+  ],
+  "bosnia-crisis-dayton-2026": [
+    {
+      "fecha": "2026-06-12",
       "severity": 2
     }
   ]

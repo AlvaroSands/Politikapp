@@ -17,6 +17,114 @@
       "summary": "Frente activo de ~1.000 km con intercambios de artillería y drones diarios. El alto el fuego de 3 días mediado por Trump (9-11 mayo) expiró sin acuerdo: Rusia reanudó los ataques el 12 de mayo. Rusia perdió 116 km² netos en abril según el ISW.",
       "timeline": [
         {
+          "when": "2026-06-12",
+          "what": "Latvian Defense Minister Arrives in Ukraine on First Official Foreign Visit",
+          "source": "Kyiv Post",
+          "url": "https://www.kyivpost.com/post/78068"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Sweden Warns Russia Could Test NATO in Near Future",
+          "source": "Kyiv Post",
+          "url": "https://www.kyivpost.com/post/78070"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Ukraine Aims to Fill Up to Half of Assault Infantry Positions With Foreign Recruits",
+          "source": "Kyiv Post",
+          "url": "https://www.kyivpost.com/post/78073"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Ukraine Signs Nearly 20 Joint Defense Production Agreements With EU Countries",
+          "source": "Kyiv Post",
+          "url": "https://www.kyivpost.com/post/78074"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "US Secretary of State Congratulates Russians on Russia Day",
+          "source": "Kyiv Post",
+          "url": "https://www.kyivpost.com/post/78075"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Ucrania irrumpe con sus drones en el Día de Rusia un mes después del desfile de la Victoria sin tanques",
+          "source": "Internacional",
+          "url": "https://www.lavanguardia.com/internacional/20260612/11563379/ucrania-irrumpe-con-sus-drones-en-el-dia-de-rusia-un-mes-despues-del-desfile-de-la-victoria-sin-tanques.html"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "EN DIRECT, guerre en Ukraine : l’UE va reprendre lundi les négociations sur l’adhésion de Kiev",
+          "source": "International : Toute l’actualité sur Le Monde.fr.",
+          "url": "https://www.lemonde.fr/international/live/2026/06/12/en-direct-guerre-en-ukraine-l-ue-va-reprendre-lundi-les-negociations-sur-l-adhesion-de-kiev_6698620_3210.html"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Ukraine civilian casualty toll in May highest in four years, UN monitors say",
+          "source": "UN News - Global perspective Human stories",
+          "url": "https://news.un.org/feed/view/en/story/2026/06/1167707"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "EU-Ukraine to Launch Accession Talks on Rights, Rule of Law",
+          "source": "Human Rights Watch News",
+          "url": "https://www.hrw.org/news/2026/06/12/eu-ukraine-to-launch-accession-talks-on-rights-rule-of-law"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Why a tiny river on Russia’s border tests China’s ties with Kim Jong-un",
+          "source": "News - South China Morning Post",
+          "url": "https://www.scmp.com/news/china/diplomacy/article/3356890/why-tiny-river-russias-border-tests-chinas-ties-kim-jong-un?utm_source=rss_feed"
+        },
+        {
+          "when": "2026-05-26",
+          "what": "Banned Russian Submunitions Found After Mali’s Military Announces Airstrikes",
+          "source": "bellingcat",
+          "url": "https://www.bellingcat.com/news/africa/2026/05/26/banned-russian-submunitions-found-after-malis-military-announces-airstrikes/"
+        },
+        {
+          "when": "2026-05-15",
+          "what": "Ukraine - recovery and reconstruction",
+          "source": "@tashecon blog",
+          "url": "https://timothyash.substack.com/p/ukraine-recovery-and-reconstruction"
+        },
+        {
+          "when": "2026-05-18",
+          "what": "Europe needs to learn from Turkiye and Ukraine",
+          "source": "@tashecon blog",
+          "url": "https://timothyash.substack.com/p/europe-needs-to-learn-from-turkiye"
+        },
+        {
+          "when": "2026-05-20",
+          "what": "U.K. cocks up on Russian sanctions",
+          "source": "@tashecon blog",
+          "url": "https://timothyash.substack.com/p/uk-cocks-up-on-russian-sanctions"
+        },
+        {
+          "when": "2026-06-01",
+          "what": "Deterring Russia Beneath the Waves: Securing NATO’s Critical Undersea Infrastructure",
+          "source": "RAND Commentary",
+          "url": "https://www.rand.org/pubs/commentary/2026/06/deterring-russia-beneath-the-waves-securing-natos-critical.html"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Ukraine’s defense AI chief predicts ‘new paradigm’ of warfare",
+          "source": "Defense News",
+          "url": "https://www.defensenews.com/global/europe/2026/06/12/ukraines-defense-ai-chief-predicts-new-paradigm-of-warfare/"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "The Evolution of Ukraine’s Asymmetrical Combat Tactics",
+          "source": "War on the Rocks",
+          "url": "https://warontherocks.com/the-evolution-of-ukraines-asymmetrical-combat-tactics/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "How Russia Could Escalate",
+          "source": "Foreign Policy",
+          "url": "https://foreignpolicy.com/2026/06/12/russia-ukraine-escalation-trump-europe-nato/"
+        },
+        {
           "when": "2026-05-12",
           "what": "El alto el fuego de tres días expira con una nueva oleada de ataques rusos; Ucrania y Rusia siguen combatiendo pese a la mediación de EE.UU.",
           "source": "Reuters / BBC",
@@ -46,7 +154,15 @@
           "source": "Al Jazeera",
           "url": "https://www.aljazeera.com/news/2026/5/6/russia-tells-diplomats-to-leave-kyiv-in-case-moscow-launches-mass-strikes"
         }
-      ]
+      ],
+      "severity_base": 5,
+      "estado": "activa",
+      "actividad": {
+        "score": 12.88,
+        "fuentes_7d": 9,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 13
+      }
     },
     {
       "id": "iran-ormuz-2026",
@@ -65,42 +181,158 @@
       "summary": "Guerra activa entre EE.UU. e Irán en el Estrecho de Ormuz. Irán rechaza la propuesta de paz de EE.UU. y amenaza con acelerar su programa nuclear. Trump afirma que el alto el fuego está en 'soporte vital'. El cierre del estrecho cuesta a Europa ~1.000 millones € diarios en sobrecostes energéticos.",
       "timeline": [
         {
-          "when": "2026-05-12",
-          "what": "Irán califica de 'totalmente inaceptable' la propuesta de paz de EE.UU. y amenaza con acelerar el programa de armas nucleares si Trump lanza nuevos ataques",
-          "source": "Reuters / AP",
-          "url": "#"
+          "when": "2026-06-12",
+          "what": "Trump cancels further Iran strikes. And, U.S. men's soccer takes on Paraguay",
+          "source": "NPR Topics: World",
+          "url": "https://www.npr.org/2026/06/12/g-s1-127711/up-first-newsletter-iran-peace-national-intelligence-director-world-cup"
         },
         {
-          "when": "2026-05-12",
-          "what": "Trump afirma que el alto el fuego con Irán está en 'soporte vital masivo' tras rechazar Teherán las propuestas de paz",
-          "source": "Reuters",
-          "url": "#"
+          "when": "2026-06-12",
+          "what": "Trump grouses about ‘weak and pathetic’ Iran, dismisses ‘leaked’ deal",
+          "source": "POLITICO",
+          "url": "https://www.politico.com/news/2026/06/12/trump-iran-peace-deal-leak-00960515?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication"
         },
         {
-          "when": "2026-05-08",
-          "what": "Trump amenaza con bombardeos a 'nivel mucho más alto' si Irán no acepta la moratoria nuclear de 12-15 años",
-          "source": "CNBC",
-          "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"
+          "when": "2026-06-12",
+          "what": "Iran-Krieg: Der schwierige Weg zur Einigung",
+          "source": "Deutsche Welle: DW.com Deutsch",
+          "url": "https://www.dw.com/de/iran-krieg-der-schwierige-weg-zur-einigung/a-77522216?maca=de-rss-de-all-1119-rdf"
         },
         {
-          "when": "2026-05-07",
-          "what": "EE.UU. e Irán intercambian fuego en el Estrecho; negociación de memorando de 14 puntos en curso",
-          "source": "CNBC",
-          "url": "https://www.cnbc.com/2026/05/07/iran-war-hormuz-strait-ceasefire-trump.html"
+          "when": "2026-06-12",
+          "what": "Iran-US deal: What are the main sticking points?",
+          "source": "Deutsche Welle",
+          "url": "https://www.dw.com/en/iran-us-deal-what-are-the-main-sticking-points/a-77526613?maca=en-rss-en-all-1573-rdf"
         },
         {
-          "when": "2026-05-06",
-          "what": "Irán propone reabrir Ormuz antes de tratar el asunto nuclear en una segunda fase",
-          "source": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/5/6/has-the-us-accepted-irans-demand-to-settle-hormuz-first-nuclear-later"
+          "when": "2026-06-12",
+          "what": "Iran, US say deal to end war 'has never been closer'",
+          "source": "Deutsche Welle",
+          "url": "https://www.dw.com/en/iran-us-say-deal-to-end-war-has-never-been-closer/live-77520654?maca=en-rss-en-all-1573-rdf"
         },
         {
-          "when": "2026-04-14",
-          "what": "Dos petroleros sancionados atraviesan el estrecho pese al bloqueo militar de EE.UU.",
-          "source": "La Sexta",
-          "url": "#"
+          "when": "2026-06-11",
+          "what": "Cómo es el dron marítimo con el que EE.UU. rescató a los tripulantes del helicóptero Apache derribado en el estrecho de Ormuz",
+          "source": "BBC Mundo",
+          "url": "https://www.bbc.com/mundo/articles/c4gypx283p5o?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Trump cancela \"los ataques programados\" contra Irán",
+          "source": "Mundo",
+          "url": "https://www.elconfidencial.com/mundo/2026-06-11/la-escalada-no-cesa-trump-promete-mas-ataques-contra-iran-y-amenaza-con-tomar-la-isla-de-kharg_4371301/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Maintes fois promis, l’accord de paix entre l’Iran et les Etats-Unis semble se rapprocher",
+          "source": "Libération",
+          "url": "https://www.liberation.fr/international/moyen-orient/maintes-fois-promis-laccord-de-paix-entre-liran-et-les-etats-unis-semble-se-rapprocher-20260612_TRZLDYX3LFBDZCCD3OWMPSPHSI/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "EN DIRECT - Guerre au Moyen-Orient : l’accord en discussion avec l’Iran «inclut le Liban», selon un haut responsable américain",
+          "source": "Libération",
+          "url": "https://www.liberation.fr/international/moyen-orient/en-direct-guerre-au-moyen-orient-liran-na-pas-encore-de-conclusion-definitive-sur-laccord-annonce-par-trump-20260612_IMUVVNVYIRDUVCPBTWIVXXZPN4/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Accord \"imminent\" avec l’Iran ? Trump brouille les pistes avec ses revirements incessants",
+          "source": "France 24 - Infos, news & actualités - L'information internationale en direct",
+          "url": "https://www.france24.com/fr/moyen-orient/20260612-accord-imminent-avec-l-iran-trump-brouille-les-pistes-avec-ses-revirements-incessants"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Iran says peace deal with US ‘never been closer’, as Pakistan says final text agreed on",
+          "source": "News - South China Morning Post",
+          "url": "https://www.scmp.com/news/world/middle-east/article/3356974/iran-says-peace-deal-us-never-been-closer-pakistan-says-final-text-agreed?utm_source=rss_feed"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Switzerland offers to host possible US-Iran MoU signing",
+          "source": "Section Feed",
+          "url": "https://www.middleeasteye.net/live-blog/live-blog-update/switzerland-offers-host-possible-us-iran-mou-signing"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "US officials say Hormuz oil flows reaching half of pre-war levels",
+          "source": "Section Feed",
+          "url": "https://www.middleeasteye.net/news/us-officials-say-hormuz-oil-flows-reaching-half-pre-war-levels"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Pakistani foreign minister heads to Geneva amid US-Iran talks: Report",
+          "source": "Section Feed",
+          "url": "https://www.middleeasteye.net/live-blog/live-blog-update/pakistan-foreign-minister-heads-geneva-amid-us-iran-talks-report"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "UAE agrees to release billions for Iran amid US-Israeli war: Report",
+          "source": "Section Feed",
+          "url": "https://www.middleeasteye.net/live-blog/live-blog-update/uae-agrees-release-billions-iran-amid-us-israeli-war-report"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "How the Gulf will manage collective security after the Iran war ends",
+          "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/6/12/how-the-gulf-will-manage-collective-security-after-the-iran-war-ends?traffic_source=rss"
+        },
+        {
+          "when": "2026-04-24",
+          "what": "“Make Iran Ungovernable” – Tracking Efforts To Destroy Iran’s Police Infrastructure",
+          "source": "bellingcat",
+          "url": "https://www.bellingcat.com/news/2026/04/24/make-iran-ungovernable-tracking-efforts-to-destroy-irans-police-infrastructure/"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "War, Diplomacy and Managing Iran",
+          "source": "Geopolitical Futures",
+          "url": "https://geopoliticalfutures.com/war-diplomacy-and-managing-iran/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Daily Memo: Details of Proposed US-Iran Deal",
+          "source": "Geopolitical Futures",
+          "url": "https://geopoliticalfutures.com/daily-memo-details-of-proposed-us-iran-deal/"
+        },
+        {
+          "when": "2026-05-19",
+          "what": "Clearing Mines in the Strait of Hormuz: Q&amp;A with Scott Savitz",
+          "source": "RAND Commentary",
+          "url": "https://www.rand.org/pubs/commentary/2026/05/demining-the-strait-of-hormuz-qa-with-scott-savitz.html"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Kroenig interviewed on BBC on Iran negotiations",
+          "source": "Atlantic Council",
+          "url": "https://www.atlanticcouncil.org/insight-impact/in-the-news/kroenig-interviewed-on-bbc-on-iran-negotiations/"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Trump vows to seize Iran’s Kharg Island",
+          "source": "Defense News",
+          "url": "https://www.defensenews.com/news/pentagon-congress/2026/06/11/trump-vows-to-seize-irans-kharg-island/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Missile Defense Worked Against Iran. It Might Not Work Against China.",
+          "source": "Foreign Policy",
+          "url": "https://foreignpolicy.com/2026/06/12/iran-war-us-china-taiwan-missile-defense-radar-interceptors/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "US-Iran peace deal text agreed, says Pakistan’s PM",
+          "source": "World",
+          "url": "https://www.ft.com/content/b91fc27b-8e50-48c1-b9e6-0c93aea19b76"
         }
-      ]
+      ],
+      "severity_base": 5,
+      "estado": "activa",
+      "actividad": {
+        "score": 30.68,
+        "fuentes_7d": 16,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 22
+      }
     },
     {
       "id": "oriente-medio-gaza",
@@ -119,6 +351,66 @@
       ],
       "summary": "Más de 72.500 palestinos muertos desde el 7-O. Bloqueo total de ayuda humanitaria por más de 11 semanas. La UE aprueba (12 mayo) sanciones a colonos israelíes en Cisjordania tras levantar Hungría el veto. El 90% de la población sigue desplazada sin agua ni atención médica.",
       "timeline": [
+        {
+          "when": "2026-06-12",
+          "what": "La ONU documenta ejecuciones, torturas y violencia sexual de Hamas contra palestinos en Gaza",
+          "source": "Internacional",
+          "url": "https://www.lavanguardia.com/internacional/20260612/11562441/onu-documenta-ejecuciones-torturas-violencia-sexual-hamas-palestinos-gaza.html"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Cochav Elkayam-Levy, la principal autora del informe sobre el 7-O: \"El terror sexual fue una estrategia planificada de Hamas para maximizar el dolor y sufrimiento\"",
+          "source": "Internacional // elmundo",
+          "url": "https://www.elmundo.es/internacional/2026/06/11/6a29b874e9cf4a6d688b4586.html"
+        },
+        {
+          "when": "2026-06-10",
+          "what": "Acceleration of Israel’s ethnic cleansing of Palestinians must spur global action to halt West Bank annexation",
+          "source": "Latest - Amnesty International",
+          "url": "https://www.amnesty.org/en/latest/news/2026/06/acceleration-of-israels-ethnic-cleansing-of-palestinians-must-spur-global-action-to-halt-west-bank-annexation/"
+        },
+        {
+          "when": "2026-06-10",
+          "what": "Israel’s ethnic cleansing of West Bank Bedouin and herding communities",
+          "source": "Latest - Amnesty International",
+          "url": "https://www.amnesty.org/en/latest/research/2026/06/israel-west-bank-ethnic-cleansing/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Ireland-Israel match moved behind closed doors amid Gaza genocide protests",
+          "source": "Section Feed",
+          "url": "https://www.middleeasteye.net/live-blog/live-blog-update/ireland-israel-match-moved-behind-closed-doors-amid-gaza-genocide"
+        },
+        {
+          "when": "2025-01-27",
+          "what": "Palestinians Stream Back to Northern Gaza on Foot",
+          "source": "WSJ.com: World News",
+          "url": "https://www.wsj.com/articles/palestinians-flock-back-to-northern-gaza-on-foot-after-hostage-release-breakthrough-3f60e2db"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Palestinian and Israeli civil society groups urge G7 to take action on Gaza",
+          "source": "Europe | The Guardian",
+          "url": "https://www.theguardian.com/world/2026/jun/12/palestinian-israeli-civil-society-groups-g7-summit-gaza"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Israel Is Building Army Base in Jenin, Flouting 1990s Pact With Palestinians",
+          "source": "NYT > World News",
+          "url": "https://www.nytimes.com/2026/06/12/world/middleeast/israel-base-jenin-oslo.html"
+        },
+        {
+          "when": "2026-06-09",
+          "what": "Bowen: Trump and Netanyahu wanted to reshape the Middle East - now they risk a permacrisis",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/cjdgl548x3eo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Vance says Israeli PM Netanyahu 'has got some things wrong'",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/c9q2lq3vv7zo?at_medium=RSS&at_campaign=rss"
+        },
         {
           "when": "2026-05-12",
           "what": "La UE aprueba sanciones a colonos israelíes en Cisjordania tras levantar el nuevo gobierno de Hungría el veto que los bloqueaba",
@@ -149,7 +441,15 @@
           "source": "BBC World",
           "url": "#"
         }
-      ]
+      ],
+      "severity_base": 5,
+      "estado": "activa",
+      "actividad": {
+        "score": 7.24,
+        "fuentes_7d": 7,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 6
+      }
     },
     {
       "id": "sudan-guerra-civil-2026",
@@ -168,6 +468,18 @@
       "summary": "El 61,7% de la población padece inseguridad alimentaria aguda. Sudán acusa a Emiratos y Etiopía de suministrar drones atacando el aeropuerto de Jartum. El comandante de las RSF promete pelear 'hasta 2040'.",
       "timeline": [
         {
+          "when": "2026-06-12",
+          "what": "Krieg im Sudan: Wer mehr zahlt, gewinnt?",
+          "source": "Deutsche Welle: DW.com Deutsch",
+          "url": "https://www.dw.com/de/krieg-im-sudan-wer-mehr-zahlt-gewinnt/a-77521845?maca=de-rss-de-all-1119-rdf"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Deadly Sudan drone strike targets funeral procession",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/c70yeee2jvqo?at_medium=RSS&at_campaign=rss"
+        },
+        {
           "when": "2026-05-08",
           "what": "61,7% de la población sudanesa padece inseguridad alimentaria; RSF promete pelear hasta 2040",
           "source": "Al Jazeera",
@@ -185,7 +497,15 @@
           "source": "US News",
           "url": "https://www.usnews.com/news/world/articles/2026-05-04/drones-shatter-months-of-relative-calm-in-khartoum-hit-airport"
         }
-      ]
+      ],
+      "severity_base": 4,
+      "estado": "activa",
+      "actividad": {
+        "score": 3.34,
+        "fuentes_7d": 2,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 2
+      }
     },
     {
       "id": "sahel-mali-yihadistas-2026",
@@ -204,6 +524,30 @@
       "summary": "El ministro de Defensa de Mali muerto en ataque yihadista. JNIM lanza ofensivas coordinadas en Gao, Menaka y Kidal. ISSP ataca por primera vez el aeropuerto internacional de Niamey.",
       "timeline": [
         {
+          "when": "2026-06-12",
+          "what": "Sahel juntas are 'crushing' basic freedoms",
+          "source": "Deutsche Welle",
+          "url": "https://www.dw.com/en/sahel-juntas-are-crushing-basic-freedoms/a-77500618?maca=en-rss-en-all-1573-rdf"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "In Mali, Turkey Sees an Opening",
+          "source": "Geopolitical Futures",
+          "url": "https://geopoliticalfutures.com/in-mali-turkey-sees-an-opening/"
+        },
+        {
+          "when": "2026-06-08",
+          "what": "Bandits in north-west Nigeria abduct villagers they invited to discuss peace talks",
+          "source": "World news | The Guardian",
+          "url": "https://www.theguardian.com/world/2026/jun/08/bandits-in-north-west-nigeria-abduct-villagers-they-invited-to-discuss-peace-talks"
+        },
+        {
+          "when": "2026-06-09",
+          "what": "Who is the Somali referee barred from entering the US for the World Cup?",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/c8j27zkp94zo?at_medium=RSS&at_campaign=rss"
+        },
+        {
           "when": "2026-05-01",
           "what": "AES confirma ataques aéreos conjuntos en Mali (Gao, Menaka, Kidal) tras ofensivas yihadistas",
           "source": "Africanews",
@@ -221,55 +565,15 @@
           "source": "Critical Threats / ACLED",
           "url": "https://www.criticalthreats.org/analysis/sudan-rsf-saf-ethiopia-tplf-drc-m23-rwanda-mali-jnim-fla-russia-madagascar-france-africa-file-may-7-2026"
         }
-      ]
-    },
-    {
-      "id": "conflicto-mar-rojo-huties",
-      "type": "armed",
-      "severity": 4,
-      "title": "Crisis Naval en el Mar Rojo: Hutíes",
-      "location": "Mar Rojo · Bab el-Mandeb · Yemen",
-      "lat": 15.3,
-      "lng": 41.8,
-      "actors": [
-        "Hutíes (Yemen)",
-        "EE.UU.",
-        "RU",
-        "Coalición naval"
       ],
-      "summary": "Ataques de misiles hutíes obligan a desviar rutas comerciales globales. Los seguros marítimos han subido un 340%. Vinculado directamente al conflicto de Gaza como 'frente de presión'.",
-      "timeline": [
-        {
-          "when": "2026-03-18",
-          "what": "Misiles hutíes obligan a desviar nuevas rutas comerciales; seguros marítimos suben un 340%",
-          "source": "El País",
-          "url": "#"
-        }
-      ]
-    },
-    {
-      "id": "violencia-haiti",
-      "type": "armed",
-      "severity": 4,
-      "title": "Colapso Institucional en Haití",
-      "location": "Puerto Príncipe · Haití",
-      "lat": 18.5392,
-      "lng": -72.3364,
-      "actors": [
-        "Bandas criminales (G9)",
-        "Misión MSS",
-        "OEA",
-        "EE.UU."
-      ],
-      "summary": "Las bandas criminales controlan más del 80% de Puerto Príncipe. La misión multinacional de seguridad (MSS) desplegada con apoyo de Kenia opera con recursos limitados. Consejo de transición con dificultades para instalarse.",
-      "timeline": [
-        {
-          "when": "2026-04-05",
-          "what": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición",
-          "source": "France 24",
-          "url": "#"
-        }
-      ]
+      "severity_base": 4,
+      "estado": "activa",
+      "actividad": {
+        "score": 2.84,
+        "fuentes_7d": 4,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 2
+      }
     },
     {
       "id": "conflicto-ecuador",
@@ -287,12 +591,26 @@
       "summary": "El gobierno de Noboa mantiene el estado de excepción. El ejército asaltó las principales cárceles bajo control de organizaciones criminales vinculadas a carteles mexicanos y albaneses.",
       "timeline": [
         {
+          "when": "2026-06-12",
+          "what": "Quién era Monika Silva Koniuszek, la activista polaca hallada muerta en Ecuador (y por qué la fiscalía pide ayuda internacional para la investigación)",
+          "source": "BBC Mundo",
+          "url": "https://www.bbc.com/mundo/articles/cy5vl9wl6ngo?at_medium=RSS&at_campaign=rss"
+        },
+        {
           "when": "2026-03-30",
           "what": "El ejército asalta las principales cárceles bajo control de organizaciones criminales",
           "source": "EFE",
           "url": "#"
         }
-      ]
+      ],
+      "severity_base": 3,
+      "estado": "activa",
+      "actividad": {
+        "score": 1.0,
+        "fuentes_7d": 1,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 1
+      }
     },
     {
       "id": "india-pakistan-sindoor-2026",
@@ -309,6 +627,24 @@
       "summary": "Un año después de la Operación Sindoor, el alto el fuego se mantiene pero India mantiene suspendido el Tratado de las Aguas del Indo. Pakistán lo califica de 'amenaza existencial' para su agricultura.",
       "timeline": [
         {
+          "when": "2026-06-12",
+          "what": "Pakistan’s Evictions Harming People in Poverty",
+          "source": "Human Rights Watch News",
+          "url": "https://www.hrw.org/news/2026/06/12/pakistans-evictions-harming-people-in-poverty"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "India’s West Bengal pushes out Muslim Bangladeshis",
+          "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
+          "url": "https://www.aljazeera.com/video/newsfeed/2026/6/12/indias-west-bengal-pushes-out-muslim-bangladeshis?traffic_source=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "More time needed for deadly Air India crash inquiry, officials say",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/cnv93899vzqo?at_medium=RSS&at_campaign=rss"
+        },
+        {
           "when": "2026-05-07",
           "what": "Aniversario de la Operación Sindoor: India mantiene suspendido el Tratado de las Aguas del Indo",
           "source": "DD News / Dawn",
@@ -320,7 +656,15 @@
           "source": "Washington Post",
           "url": "https://www.washingtonpost.com/opinions/2026/05/05/year-later-india-pakistan-ceasefire-is-holding-so-far/"
         }
-      ]
+      ],
+      "severity_base": 3,
+      "estado": "activa",
+      "actividad": {
+        "score": 3.0,
+        "fuentes_7d": 3,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 3
+      }
     },
     {
       "id": "corea-norte-misiles-2026",
@@ -340,6 +684,18 @@
       "summary": "Rusia transfirió tecnología de guiado a Corea del Norte: el misil KN-23 pasó de 1.500 m de margen de error a menos de 100 m. Más misiles lanzados en 2026 que en todo 2025.",
       "timeline": [
         {
+          "when": "2026-06-12",
+          "what": "Ousted South Korean President Yoon given prison term for drone flights over Pyongyang",
+          "source": "NPR Topics: World",
+          "url": "https://www.npr.org/2026/06/12/nx-s1-5856122/ousted-south-korean-president-yoon-prison-drone-flights-pyongyang"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Xi draws a line on North Korea’s alliance demands",
+          "source": "The Interpreter",
+          "url": "https://www.lowyinstitute.org/the-interpreter/xi-draws-a-line-on-north-korea-s-alliance-demands"
+        },
+        {
           "when": "2026-05-07",
           "what": "Rusia mejoró la precisión del misil KN-23 norcoreano de 1.500 m a menos de 100 m de error",
           "source": "FDD",
@@ -351,7 +707,15 @@
           "source": "AEI / FDD",
           "url": "https://www.aei.org/articles/korean-peninsula-update-may-5-2026/"
         }
-      ]
+      ],
+      "severity_base": 3,
+      "estado": "activa",
+      "actividad": {
+        "score": 1.78,
+        "fuentes_7d": 2,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 2
+      }
     },
     {
       "id": "tension-estrecho-taiwan",
@@ -370,6 +734,18 @@
       "summary": "Xi insiste ante Trump en que Taiwán es la cuestión 'más importante' en la relación bilateral. Récord de cazas del EPL cruzando la línea media del estrecho. La guerra de Irán abre una ventana estratégica para China.",
       "timeline": [
         {
+          "when": "2026-06-11",
+          "what": "Taiwan opposition leader says Xi meeting avoided 'reunification' talk",
+          "source": "NPR Topics: World",
+          "url": "https://www.npr.org/2026/06/11/g-s1-127478/taiwan-opposition-leader-says-xi-meeting-avoided-reunification-talk"
+        },
+        {
+          "when": "2026-06-08",
+          "what": "Report: China’s maritime outposts could distract Taiwan’s allies if Beijing invades",
+          "source": "Radio Free Asia",
+          "url": "https://rfa.org/english/southchinasea/2026/06/08/south-china-sea-outpost-taiwan/"
+        },
+        {
           "when": "2026-05-08",
           "what": "Xi insiste ante Trump en que Taiwán es la cuestión 'más importante' en la relación bilateral",
           "source": "AEI",
@@ -381,60 +757,15 @@
           "source": "ABC",
           "url": "#"
         }
-      ]
-    },
-    {
-      "id": "cambio-politico-hungria",
-      "type": "diplo",
-      "severity": 2,
-      "title": "Caída Histórica de Orbán en Hungría",
-      "location": "Budapest · Europa Central",
-      "lat": 47.4979,
-      "lng": 19.0402,
-      "actors": [
-        "Magyar (oposición)",
-        "Orbán (Fidesz)",
-        "UE"
       ],
-      "summary": "Magyar entierra 16 años del ultraderechismo de Orbán con una victoria electoral incontestable. La UE recupera un aliado clave en el este europeo en plena guerra de Ucrania.",
-      "timeline": [
-        {
-          "when": "2026-04-14",
-          "what": "Magyar entierra 16 años del ultraderechista Orbán en Hungría con una incontestable victoria electoral",
-          "source": "Público",
-          "url": "#"
-        }
-      ]
-    },
-    {
-      "id": "crisis-energetica-europa",
-      "type": "econ",
-      "severity": 3,
-      "title": "Crisis de Dependencia Energética Europea",
-      "location": "Europa · mercados de gas",
-      "lat": 50.0,
-      "lng": 10.0,
-      "actors": [
-        "UE",
-        "EE.UU.",
-        "Irán",
-        "Rusia"
-      ],
-      "summary": "Europa huyó del gas ruso para comprar gas estadounidense; el conflicto de Ormuz demuestra que fue una trampa de dependencia. España tiene la energía más barata de Europa gracias a las renovables.",
-      "timeline": [
-        {
-          "when": "2026-04-01",
-          "what": "Europa huyó del gas ruso para echarse en brazos de EEUU. La guerra de Irán demuestra que fue una trampa",
-          "source": "Xataka",
-          "url": "https://www.xataka.com/energia/europa-huyo-gas-rusia-para-echarse-brazos-eeuu-tercera-guerra-golfo-demuestra-que-fue-trampa"
-        },
-        {
-          "when": "2026-03-18",
-          "what": "España tiene la energía mayorista más barata de Europa en plena crisis de Ormuz gracias a las renovables",
-          "source": "Xataka",
-          "url": "https://www.xataka.com/energia/espana-ha-encontrado-salvavidas-inesperado-crisis-ormuz-como-nuestra-luz-hoy-envidia-europa"
-        }
-      ]
+      "severity_base": 3,
+      "estado": "activa",
+      "actividad": {
+        "score": 1.15,
+        "fuentes_7d": 2,
+        "dias_sin_noticias": 1,
+        "noticias_24h": 1
+      }
     },
     {
       "id": "conflicto-israel-libano-2026",
@@ -443,10 +774,33 @@
       "title": "Israel-Líbano: Frente Abierto con Hezbollah",
       "location": "Sur del Líbano · Beirut",
       "lat": 33.35,
-      "lng": 35.50,
-      "actors": ["Israel", "Hezbollah", "Líbano", "ONU"],
+      "lng": 35.5,
+      "actors": [
+        "Israel",
+        "Hezbollah",
+        "Líbano",
+        "ONU"
+      ],
       "summary": "Israel mantiene un frente activo en el sur del Líbano independiente al de Gaza. Al menos 39 muertos en territorio libanés. Pese a una tregua negociada en Washington, los combates continúan con bombardeos israelíes y amenazas de nuevos desplazamientos masivos.",
       "timeline": [
+        {
+          "when": "2026-05-14",
+          "what": "Satellite Imagery Shows Ongoing Demolitions Across Southern Lebanon",
+          "source": "bellingcat",
+          "url": "https://www.bellingcat.com/news/2026/05/14/satellite-imagery-shows-ongoing-demolitions-across-southern-lebanon/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Don’t Invite Syria Back Into Lebanon",
+          "source": "Foreign Policy",
+          "url": "https://foreignpolicy.com/2026/06/12/syria-trump-sharaa-hezbollah-lebanon/"
+        },
+        {
+          "when": "2026-06-10",
+          "what": "Israeli strikes in southern Lebanon kill 17, reports say",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/cpq3d44l907o?at_medium=RSS&at_campaign=rss"
+        },
         {
           "when": "2026-05-12",
           "what": "Israel mata a 6 personas en el sur del Líbano y amenaza con nuevos desplazamientos; 39 muertos totales desde la última escalada",
@@ -459,7 +813,15 @@
           "source": "BBC Middle East",
           "url": "#"
         }
-      ]
+      ],
+      "severity_base": 4,
+      "estado": "activa",
+      "actividad": {
+        "score": 1.61,
+        "fuentes_7d": 2,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 1
+      }
     },
     {
       "id": "pakistan-afghanistan-ataques-2026",
@@ -467,37 +829,42 @@
       "severity": 4,
       "title": "Pakistán Bombardea Afganistán: 269 Civiles Muertos",
       "location": "Frontera Pakistán-Afganistán",
-      "lat": 33.60,
-      "lng": 69.50,
-      "actors": ["Pakistán", "Afganistán", "Talibán"],
+      "lat": 33.6,
+      "lng": 69.5,
+      "actors": [
+        "Pakistán",
+        "Afganistán",
+        "Talibán"
+      ],
       "summary": "Pakistán lanzó ataques aéreos sobre territorio afgano destruyendo un centro de rehabilitación y matando a 269 afganos. Las familias exigen investigación internacional por posible crimen de guerra. Las relaciones Islamabad-Kabul están al borde de la ruptura.",
       "timeline": [
+        {
+          "when": "2026-06-11",
+          "what": "‘Grave concern’ after dozens of women arrested in Afghanistan for dress violations",
+          "source": "UN News - Global perspective Human stories",
+          "url": "https://news.un.org/feed/view/en/story/2026/06/1167699"
+        },
+        {
+          "when": "2026-06-10",
+          "what": "Afghanistan: New code enabling child marriage compounds dismal situation for women’s and girls’ rights",
+          "source": "Latest - Amnesty International",
+          "url": "https://www.amnesty.org/en/latest/news/2026/06/afghanistan-new-code-enabling-child-marriage-compounds-dismal-situation-for-womens-and-girls-rights/"
+        },
         {
           "when": "2026-05-12",
           "what": "Pakistán ataca un centro de rehabilitación en Afganistán matando a 269 afganos; familias exigen investigación por posible crimen de guerra",
           "source": "BBC / AP",
           "url": "#"
         }
-      ]
-    },
-    {
-      "id": "eeuu-groenlandia-bases-2026",
-      "type": "diplo",
-      "severity": 3,
-      "title": "EE.UU. Negocia Bases Militares en Groenlandia",
-      "location": "Groenlandia · Ártico",
-      "lat": 72.00,
-      "lng": -40.00,
-      "actors": ["EE.UU.", "Dinamarca", "OTAN"],
-      "summary": "EE.UU. negocia en secreto la apertura de tres bases militares en Groenlandia, territorio autónomo de Dinamarca. La iniciativa refuerza la postura ártica de la OTAN frente a Rusia y reabre la tensión diplomática con Copenhague sobre la soberanía del territorio.",
-      "timeline": [
-        {
-          "when": "2026-05-12",
-          "what": "EE.UU. en negociaciones reservadas para abrir tres nuevas bases militares en Groenlandia; implicaciones para la seguridad ártica y la relación con Dinamarca",
-          "source": "BBC World",
-          "url": "#"
-        }
-      ]
+      ],
+      "severity_base": 4,
+      "estado": "activa",
+      "actividad": {
+        "score": 1.39,
+        "fuentes_7d": 2,
+        "dias_sin_noticias": 1,
+        "noticias_24h": 1
+      }
     },
     {
       "id": "crisis-politica-filipinas-2026",
@@ -505,18 +872,36 @@
       "severity": 2,
       "title": "Filipinas: Destitución de Sara Duterte y Crisis Constitucional",
       "location": "Manila · Filipinas",
-      "lat": 14.60,
+      "lat": 14.6,
       "lng": 120.98,
-      "actors": ["Sara Duterte", "Gobierno Marcos", "ICC"],
+      "actors": [
+        "Sara Duterte",
+        "Gobierno Marcos",
+        "ICC"
+      ],
       "summary": "La vicepresidenta Sara Duterte es destituida por segunda vez, lo que podría inhabilitarla para las próximas elecciones presidenciales. Su padre, el expresidente Rodrigo Duterte, enfrenta cargos en la CPI por la guerra contra las drogas. El país atraviesa su mayor crisis constitucional en décadas.",
       "timeline": [
+        {
+          "when": "2026-06-11",
+          "what": "The Philippines has a golden chance to get Pax Silica right",
+          "source": "The Interpreter",
+          "url": "https://www.lowyinstitute.org/the-interpreter/the-philippines-has-a-golden-chance-to-get-pax-silica-right"
+        },
         {
           "when": "2026-05-12",
           "what": "Sara Duterte destituida por segunda vez; su principal escudero en la guerra contra las drogas intenta eludir el arresto de la CPI refugiándose en el Senado",
           "source": "BBC Asia / Al Jazeera",
           "url": "#"
         }
-      ]
+      ],
+      "severity_base": 2,
+      "estado": "activa",
+      "actividad": {
+        "score": 0.78,
+        "fuentes_7d": 1,
+        "dias_sin_noticias": 1,
+        "noticias_24h": 1
+      }
     },
     {
       "id": "bosnia-crisis-dayton-2026",
@@ -526,276 +911,214 @@
       "location": "Sarajevo · Bosnia-Herzegovina",
       "lat": 43.85,
       "lng": 18.36,
-      "actors": ["Bosnia-Herzegovina", "Republika Srpska", "UE", "EE.UU."],
+      "actors": [
+        "Bosnia-Herzegovina",
+        "Republika Srpska",
+        "UE",
+        "EE.UU."
+      ],
       "summary": "Christian Schmidt, el alto representante internacional que supervisa los Acuerdos de Dayton, dimite sin apoyo de EE.UU. El futuro del mecanismo de paz balcánico queda en el aire en un momento en que Dodik (Republika Srpska) presiona para erosionar el acuerdo de paz de 1995.",
       "timeline": [
+        {
+          "when": "2026-06-12",
+          "what": "Informe desde Los Ángeles: EE. UU. y Canadá debutan en el Mundial contra Paraguay y Bosnia",
+          "source": "France 24 - Noticias y actualidad internacional en vivo",
+          "url": "https://www.france24.com/es/video/20260612-informe-desde-los-%C3%A1ngeles-ee-uu-y-canad%C3%A1-debutan-en-el-mundial-contra-paraguay-y-bosnia"
+        },
         {
           "when": "2026-05-12",
           "what": "El alto representante de paz en Bosnia, Christian Schmidt, dimite; surgen preguntas sobre el futuro del mecanismo de supervisión de los Acuerdos de Dayton sin respaldo estadounidense",
           "source": "BBC World",
           "url": "#"
         }
-      ]
-    },
-    {
-      "id": "lago-chad-boko-haram-2026",
-      "type": "armed",
-      "severity": 3,
-      "title": "Lago Chad: Conflicto Transfronterizo y Boko Haram",
-      "location": "Lago Chad · Cuenca del Lago",
-      "lat": 13.30,
-      "lng": 14.00,
-      "actors": ["Chad", "Nigeria", "Boko Haram", "MNJTF"],
-      "summary": "Chad lanza ataques aéreos contra posiciones de Boko Haram en la cuenca del lago, matando a unas 40 personas entre las que se cuentan pescadores nigerianos. El conflicto transfronterizo sigue sin resolución en una de las zonas más pobres del mundo, con cuatro países afectados: Nigeria, Chad, Níger y Camerún.",
-      "timeline": [
-        {
-          "when": "2026-05-12",
-          "what": "Ataques aéreos de Chad contra Boko Haram matan a decenas de pescadores nigerianos en el lago; unas 40 personas muertas o desaparecidas",
-          "source": "BBC Africa",
-          "url": "#"
-        }
-      ]
-    },
-    {
-      "id": "china-estrategia-energetica",
-      "type": "econ",
-      "severity": 2,
-      "title": "China Aprovecha la Crisis Energética Global",
-      "location": "Pekín · Asia-Pacífico",
-      "lat": 39.9042,
-      "lng": 116.4074,
-      "actors": [
-        "China",
-        "EE.UU.",
-        "Rusia",
-        "Arabia Saudí"
       ],
-      "summary": "China lleva años preparándose para una crisis energética global y ahora recoge sus frutos: compra energía rusa a precios de saldo mientras Occidente paga tarifas récord. Cumbre Trump-Xi (14-15 mayo) con Taiwán, aranceles e Irán en la agenda.",
-      "timeline": [
-        {
-          "when": "2026-05-08",
-          "what": "Cumbre Trump-Xi (14-15 mayo): Irán, aranceles, Taiwán y tierras raras centran la agenda",
-          "source": "CNBC / CSIS",
-          "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"
-        },
-        {
-          "when": "2026-03-24",
-          "what": "China lleva años preparándose para una gran crisis energética global y ahora recoge sus frutos",
-          "source": "Xataka",
-          "url": "https://www.xataka.com/energia/china-lleva-anos-preparandose-pacientemente-para-gran-crisis-energetica-global-ahora-recoge-sus-frutos"
-        }
-      ]
+      "severity_base": 2,
+      "estado": "activa",
+      "actividad": {
+        "score": 1.0,
+        "fuentes_7d": 1,
+        "dias_sin_noticias": 0,
+        "noticias_24h": 1
+      }
     }
   ],
   "relaciones": [
     {
-      "id_relacion": "eeuu-rusia-ceasefire-may2026",
+      "id_relacion": "rel-rusia-ucrania",
       "origen": {
-        "nombre": "EE.UU.",
-        "lat": 38.8951,
-        "lng": -77.0364
+        "nombre": "Rusia",
+        "lat": 55.76,
+        "lng": 37.62
       },
       "destino": {
-        "nombre": "Rusia",
-        "lat": 55.7558,
-        "lng": 37.6173
+        "nombre": "Ucrania",
+        "lat": 48.38,
+        "lng": 31.17
+      },
+      "tipo": "diplomática",
+      "nivel": "rojo",
+      "fecha": "2026-06-12",
+      "titular": "Putin Threatens to Intensify Attacks on Ukraine’s Infrastructure",
+      "fuente": "Kyiv Post",
+      "url": "https://www.kyivpost.com/post/78072",
+      "eventos": [
+        {
+          "fecha": "2026-06-12",
+          "nivel": "rojo",
+          "titular": "Putin Threatens to Intensify Attacks on Ukraine’s Infrastructure",
+          "fuente": "Kyiv Post",
+          "url": "https://www.kyivpost.com/post/78072",
+          "tipo": "diplomática"
+        }
+      ]
+    },
+    {
+      "id_relacion": "rel-china-eeuu",
+      "origen": {
+        "nombre": "EE.UU.",
+        "lat": 38.9,
+        "lng": -77.04
+      },
+      "destino": {
+        "nombre": "China",
+        "lat": 39.9,
+        "lng": 116.41
       },
       "tipo": "diplomática",
       "nivel": "naranja",
-      "fecha": "2026-05-08",
-      "titular": "Trump media alto el fuego de 3 días Rusia-Ucrania (9-11 mayo)",
-      "fuente": "Al Jazeera",
-      "url": "https://www.aljazeera.com/news/2026/5/8/trump-announces-three-day-ceasefire-in-russia-ukraine-war"
+      "fecha": "2026-06-12",
+      "titular": "US-China talks need to be ‘institutionalised’ to ease tensions in AI era: Haass",
+      "fuente": "News - South China Morning Post",
+      "url": "https://www.scmp.com/economy/global-economy/article/3356910/us-china-talks-need-be-institutionalised-ease-tensions-ai-era-haass?utm_source=rss_feed",
+      "eventos": [
+        {
+          "fecha": "2026-06-12",
+          "nivel": "naranja",
+          "titular": "US-China talks need to be ‘institutionalised’ to ease tensions in AI era: Haass",
+          "fuente": "News - South China Morning Post",
+          "url": "https://www.scmp.com/economy/global-economy/article/3356910/us-china-talks-need-be-institutionalised-ease-tensions-ai-era-haass?utm_source=rss_feed",
+          "tipo": "diplomática"
+        }
+      ]
     },
     {
-      "id_relacion": "choque-eeuu-iran-2026",
+      "id_relacion": "rel-eeuu-irán",
       "origen": {
-        "nombre": "EE.UU.",
-        "lat": 38.8951,
-        "lng": -77.0364
-      },
-      "destino": {
         "nombre": "Irán",
-        "lat": 35.6892,
-        "lng": 51.389
+        "lat": 35.69,
+        "lng": 51.39
       },
-      "tipo": "militar",
-      "nivel": "rojo",
-      "fecha": "2026-05-07",
-      "titular": "Intercambio de fuego EE.UU.-Irán en Ormuz; negociación de moratoria nuclear 12-15 años",
-      "fuente": "CNBC",
-      "url": "https://www.cnbc.com/2026/05/07/iran-war-hormuz-strait-ceasefire-trump.html"
-    },
-    {
-      "id_relacion": "trump-xi-cumbre-may2026",
-      "origen": {
+      "destino": {
         "nombre": "EE.UU.",
-        "lat": 38.8951,
-        "lng": -77.0364
-      },
-      "destino": {
-        "nombre": "China",
-        "lat": 39.9042,
-        "lng": 116.4074
-      },
-      "tipo": "diplomática",
-      "nivel": "naranja",
-      "fecha": "2026-05-08",
-      "titular": "Cumbre Trump-Xi en Pekín (14-15 mayo): Irán, aranceles, Taiwán y tierras raras",
-      "fuente": "CNBC / CSIS",
-      "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"
-    },
-    {
-      "id_relacion": "russia-corea-norte-tecnologia-may2026",
-      "origen": {
-        "nombre": "Rusia",
-        "lat": 55.7558,
-        "lng": 37.6173
-      },
-      "destino": {
-        "nombre": "Corea del Norte",
-        "lat": 39.0392,
-        "lng": 125.7625
-      },
-      "tipo": "militar",
-      "nivel": "rojo",
-      "fecha": "2026-05-07",
-      "titular": "Rusia transfiere tecnología de guiado a Corea del Norte: KN-23 pasa de 1.500 m a menos de 100 m de precisión",
-      "fuente": "FDD",
-      "url": "https://www.fdd.org/analysis/2026/05/07/russian-security-assistance-is-creating-problems-on-the-korean-peninsula/"
-    },
-    {
-      "id_relacion": "china-taiwan-may2026",
-      "origen": {
-        "nombre": "China",
-        "lat": 39.9042,
-        "lng": 116.4074
-      },
-      "destino": {
-        "nombre": "Taiwán",
-        "lat": 23.6978,
-        "lng": 120.9605
-      },
-      "tipo": "militar",
-      "nivel": "naranja",
-      "fecha": "2026-05-08",
-      "titular": "Xi insiste ante Trump en que Taiwán es la cuestión 'más importante'",
-      "fuente": "AEI",
-      "url": "https://www.aei.org/articles/china-taiwan-update-may-8-2026/"
-    },
-    {
-      "id_relacion": "sudan-uae-drones-may2026",
-      "origen": {
-        "nombre": "Emiratos Árabes",
-        "lat": 24.4764,
-        "lng": 54.3705
-      },
-      "destino": {
-        "nombre": "Sudán",
-        "lat": 15.5518,
-        "lng": 32.5324
-      },
-      "tipo": "militar",
-      "nivel": "rojo",
-      "fecha": "2026-05-05",
-      "titular": "Sudán acusa a Emiratos de suministrar drones para atacar el aeropuerto de Jartum",
-      "fuente": "Al Jazeera",
-      "url": "https://www.aljazeera.com/news/2026/5/5/sudan-accuses-ethiopia-uae-of-being-behind-recent-drone-attacks"
-    },
-    {
-      "id_relacion": "india-pakistan-may2026",
-      "origen": {
-        "nombre": "India",
-        "lat": 20.5937,
-        "lng": 78.9629
-      },
-      "destino": {
-        "nombre": "Pakistán",
-        "lat": 30.3753,
-        "lng": 69.3451
-      },
-      "tipo": "diplomática",
-      "nivel": "naranja",
-      "fecha": "2026-05-07",
-      "titular": "India mantiene suspendido el Tratado de las Aguas del Indo un año después de la Operación Sindoor",
-      "fuente": "DD News / Chatham House",
-      "url": "https://ddnews.gov.in/en/india-reiterates-indus-water-treaty-to-remain-in-abeyance/"
-    },
-    {
-      "id_relacion": "diplomacia-espana-china",
-      "origen": {
-        "nombre": "España",
-        "lat": 40.4168,
-        "lng": -3.7038
-      },
-      "destino": {
-        "nombre": "China",
-        "lat": 39.9042,
-        "lng": 116.4074
+        "lat": 38.9,
+        "lng": -77.04
       },
       "tipo": "diplomática",
       "nivel": "amarillo",
-      "fecha": "2026-04-14",
-      "titular": "Xi sitúa a España en el 'lado correcto de la historia'; Sánchez pide mayor implicación para frenar la guerra de Irán",
-      "fuente": "Público",
-      "url": "#"
+      "fecha": "2026-06-12",
+      "titular": "Iran and US confirm they are on cusp of new ceasefire, as they fight to frame terms",
+      "fuente": "Section Feed",
+      "url": "https://www.middleeasteye.net/news/iran-and-us-confirm-they-are-cusp-new-ceasefire-they-fight-frame-terms",
+      "eventos": [
+        {
+          "fecha": "2026-06-12",
+          "nivel": "amarillo",
+          "titular": "Iran and US confirm they are on cusp of new ceasefire, as they fight to frame terms",
+          "fuente": "Section Feed",
+          "url": "https://www.middleeasteye.net/news/iran-and-us-confirm-they-are-cusp-new-ceasefire-they-fight-frame-terms",
+          "tipo": "diplomática"
+        },
+        {
+          "fecha": "2026-06-12",
+          "nivel": "amarillo",
+          "titular": "Informe desde Washington: los puntos del acuerdo al que habrían llegado Irán y EE. UU.",
+          "fuente": "France 24 - Noticias y actualidad internacional en vivo",
+          "url": "https://www.france24.com/es/video/20260612-informe-desde-washington-los-puntos-del-acuerdo-al-que-habr%C3%ADan-llegado-ir%C3%A1n-y-ee-uu",
+          "tipo": "diplomática"
+        },
+        {
+          "fecha": "2026-06-12",
+          "nivel": "amarillo",
+          "titular": "Estados Unidos e Irán aseguran que el acuerdo está “más cerca que nunca” pero discrepan sobre su contenido",
+          "fuente": "Internacional en EL PAÍS",
+          "url": "https://elpais.com/internacional/2026-06-12/estados-unidos-e-iran-aseguran-que-el-acuerdo-esta-mas-cerca-que-nunca-pero-discrepan-sobre-su-contenido.html",
+          "tipo": "diplomática"
+        },
+        {
+          "fecha": "2026-06-12",
+          "nivel": "amarillo",
+          "titular": "Atrapados sin salida: por qué ha sido imposible un acuerdo de Donald Trump con Irán",
+          "fuente": "Internacional // elmundo",
+          "url": "https://www.elmundo.es/internacional/2026/06/11/6a2ae52321efa070708b4592.html",
+          "tipo": "diplomática"
+        },
+        {
+          "fecha": "2026-06-12",
+          "nivel": "amarillo",
+          "titular": "Irán difunde un borrador de acuerdo con EE.UU. pero Trump advierte que no refleja la verdad",
+          "fuente": "Internacional",
+          "url": "https://www.lavanguardia.com/internacional/20260612/11563135/borrador-acuerdo-paz-iran-ee-uu-libano-ormuz.html",
+          "tipo": "diplomática"
+        }
+      ]
     },
     {
-      "id_relacion": "choque-eeuu-vaticano",
+      "id_relacion": "rel-eeuu-pakistán",
       "origen": {
+        "nombre": "Pakistán",
+        "lat": 30.38,
+        "lng": 69.35
+      },
+      "destino": {
         "nombre": "EE.UU.",
-        "lat": 38.8951,
-        "lng": -77.0364
-      },
-      "destino": {
-        "nombre": "Vaticano",
-        "lat": 41.9029,
-        "lng": 12.4534
+        "lat": 38.9,
+        "lng": -77.04
       },
       "tipo": "diplomática",
-      "nivel": "naranja",
-      "fecha": "2026-04-13",
-      "titular": "El papa León XIV responde a Trump: 'No tengo miedo. Seguiré hablando contra la guerra'",
-      "fuente": "El País",
-      "url": "#"
+      "nivel": "amarillo",
+      "fecha": "2026-06-12",
+      "titular": "Pakistán afirma que EEUU e Irán han llegado a un acuerdo: \"La paz nunca ha estado tan cerca\"",
+      "fuente": "Mundo",
+      "url": "https://www.elconfidencial.com/mundo/2026-06-12/una-pausa-intranquila-estamos-ahora-mas-cerca-fin-de-la-guerra-eeuu-iran_4371434/",
+      "eventos": [
+        {
+          "fecha": "2026-06-12",
+          "nivel": "amarillo",
+          "titular": "Pakistán afirma que EEUU e Irán han llegado a un acuerdo: \"La paz nunca ha estado tan cerca\"",
+          "fuente": "Mundo",
+          "url": "https://www.elconfidencial.com/mundo/2026-06-12/una-pausa-intranquila-estamos-ahora-mas-cerca-fin-de-la-guerra-eeuu-iran_4371434/",
+          "tipo": "diplomática"
+        }
+      ]
     },
     {
-      "id_relacion": "tension-espana-israel",
+      "id_relacion": "rel-irán-pakistán",
       "origen": {
-        "nombre": "España",
-        "lat": 40.4168,
-        "lng": -3.7038
+        "nombre": "Pakistán",
+        "lat": 30.38,
+        "lng": 69.35
       },
       "destino": {
-        "nombre": "Israel",
-        "lat": 31.7683,
-        "lng": 35.2137
+        "nombre": "Irán",
+        "lat": 35.69,
+        "lng": 51.39
       },
       "tipo": "diplomática",
-      "nivel": "naranja",
-      "fecha": "2026-04-10",
-      "titular": "Israel llama a consultas a su embajadora tras el cruce de declaraciones sobre Gaza",
-      "fuente": "El Mundo",
-      "url": "#"
-    },
-    {
-      "id_relacion": "tension-ecuador-mexico",
-      "origen": {
-        "nombre": "Ecuador",
-        "lat": -0.2298,
-        "lng": -78.5249
-      },
-      "destino": {
-        "nombre": "México",
-        "lat": 19.4326,
-        "lng": -99.1332
-      },
-      "tipo": "diplomática",
-      "nivel": "rojo",
-      "fecha": "2026-04-06",
-      "titular": "México rompe relaciones tras el histórico asalto policial a su embajada en Quito",
-      "fuente": "CNN en Español",
-      "url": "#"
+      "nivel": "amarillo",
+      "fecha": "2026-06-12",
+      "titular": "Pakistán anuncia que EE.UU. e Irán han consensuado el texto de un acuerdo de paz",
+      "fuente": "Internacional",
+      "url": "https://www.lavanguardia.com/internacional/20260612/11563475/pakistan-anuncia-ee-uu-e-iran-han-consensuado-texto-acuerdo-paz.html",
+      "eventos": [
+        {
+          "fecha": "2026-06-12",
+          "nivel": "amarillo",
+          "titular": "Pakistán anuncia que EE.UU. e Irán han consensuado el texto de un acuerdo de paz",
+          "fuente": "Internacional",
+          "url": "https://www.lavanguardia.com/internacional/20260612/11563475/pakistan-anuncia-ee-uu-e-iran-han-consensuado-texto-acuerdo-paz.html",
+          "tipo": "diplomática"
+        }
+      ]
     }
   ],
   "context_nodes": [
@@ -823,7 +1146,38 @@
       ],
       "role_es": "La administración Trump aplica aranceles del 145% a China y recorta la ayuda multilateral. Principal proveedor de armamento a Ucrania y ancla del sistema OTAN-Quad. Su política de 'America First' remodela los equilibrios geopolíticos globales.",
       "role_en": "The Trump administration imposes 145% tariffs on China and cuts multilateral aid. Primary arms supplier to Ukraine and anchor of the NATO-Quad alliance system. Its 'America First' policy is reshaping global geopolitical balances.",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-09",
+          "what": "Bowen: Trump and Netanyahu wanted to reshape the Middle East - now they risk a permacrisis",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/cjdgl548x3eo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-10",
+          "what": "Trump targeting immigrants from countries hit most by climate shocks",
+          "source": "World news | The Guardian",
+          "url": "https://www.theguardian.com/us-news/2026/jun/10/trump-administration-immigrants-climate-crisis"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "US-Iran peace deal remains elusive as Trump and Tehran trade conflicting claims",
+          "source": "Middle East and north Africa | The Guardian",
+          "url": "https://www.theguardian.com/world/2026/jun/12/us-iran-peace-deal-remains-elusive-as-trump-and-tehran-trade-conflicting-claims"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Chaotic talks on a US-Iran deal continue on the Trump rollercoaster",
+          "source": "Middle East and north Africa | The Guardian",
+          "url": "https://www.theguardian.com/world/2026/jun/12/trump-rollercoaster-deal-us-iran"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Iran-US war latest: White House reveal details of deal to reopen Strait of Hormuz",
+          "source": "The Independent World",
+          "url": "https://www.independent.co.uk/news/world/middle-east/iran-us-war-live-trump-airstrikes-threat-israel-hormuz-deal-b2994438.html"
+        }
+      ]
     },
     {
       "id": "ctx-alemania",
@@ -846,7 +1200,38 @@
       ],
       "role_es": "El canciller Merz impulsa un fondo especial de 100.000M€ para defensa tras décadas de infrafinanciación. Mayor economía de la UE en recesión industrial acelerada por la crisis energética post-Ucrania. Primer donante europeo de armamento pesado a Kiev.",
       "role_en": "Chancellor Merz drives a special €100bn defense fund after decades of underfunding. The EU's largest economy is in industrial recession accelerated by the post-Ukraine energy crisis. Europe's top supplier of heavy weapons to Kyiv.",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-11",
+          "what": "German, Spanish FCAS companies rally to preserve breakthrough fighter tech",
+          "source": "Defense News",
+          "url": "https://www.defensenews.com/global/europe/2026/06/11/german-spanish-fcas-companies-rally-to-preserve-breakthrough-fighter-tech/"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Del efecto llamada al efecto expulsión: Alemania endurece su política migratoria",
+          "source": "Internacional // elmundo",
+          "url": "https://www.elmundo.es/internacional/2026/06/11/6a296439e9cf4a7a648b4572.html"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "German students up in arms about funding cuts",
+          "source": "Deutsche Welle",
+          "url": "https://www.dw.com/en/german-students-up-in-arms-about-funding-cuts/a-77528594?maca=en-rss-en-all-1573-rdf"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "German court holds Google liable for fake AI answers",
+          "source": "Deutsche Welle",
+          "url": "https://www.dw.com/en/german-court-holds-google-liable-for-fake-ai-answers/a-77527661?maca=en-rss-en-all-1573-rdf"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Berlin attacks Cypriot EU budget proposal as ‘unaffordable’",
+          "source": "POLITICO",
+          "url": "https://www.politico.eu/article/berlin-attacks-cypriot-eu-budget-proposal-as-unaffordable/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication"
+        }
+      ]
     },
     {
       "id": "ctx-francia",
@@ -869,7 +1254,38 @@
       ],
       "role_es": "Única potencia nuclear de la UE tras el Brexit. Completó el repliegue del Sahel (Mali, Níger, Burkina) en 2024. Macron propone un escudo nuclear europeo como alternativa a la dependencia estratégica de EEUU.",
       "role_en": "The EU's sole nuclear power since Brexit. Completed its Sahel withdrawal (Mali, Niger, Burkina) in 2024. Macron is proposing a European nuclear umbrella as an alternative to US strategic dependence.",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-12",
+          "what": "French town buries murdered child as questions mount over police failings",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/cy9rq21dqego?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "French singer Patrick Bruel under formal investigation for rape",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/c3ey8d3jwglo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "France accuses Israeli firm of interfering in Scottish elections and targeting SNP",
+          "source": "Europe | The Guardian",
+          "url": "https://www.theguardian.com/uk-news/2026/jun/12/france-accuses-israeli-firm-interfering-scottish-elections-john-swinney-snp"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Paris defense show may be last chance to buy before war, CEO says",
+          "source": "Defense News",
+          "url": "https://www.defensenews.com/global/europe/2026/06/12/paris-defense-show-may-be-last-chance-to-buy-before-war-ceo-says/"
+        },
+        {
+          "when": "2026-06-10",
+          "what": "Prabowo in Paris: liberté, égalité, and the autonomy that isn’t",
+          "source": "The Interpreter",
+          "url": "https://www.lowyinstitute.org/the-interpreter/prabowo-in-paris-liberte-egalite-and-the-autonomy-that-isn-t"
+        }
+      ]
     },
     {
       "id": "ctx-reino-unido",
@@ -893,7 +1309,38 @@
       ],
       "role_es": "Starmer busca un 'reinicio' con la UE sin renunciar al Brexit. Segundo mayor donante de armamento a Ucrania tras EEUU. Mantiene una de las capacidades de inteligencia más potentes del mundo (GCHQ, Five Eyes).",
       "role_en": "Starmer seeks a 'reset' with the EU without reversing Brexit. Second-largest arms donor to Ukraine after the US. Operates one of the world's most powerful intelligence networks (GCHQ, Five Eyes).",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-11",
+          "what": "Family of British toddler criticises police as Australian inquiry into cold case murders begins",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/c0rygl7y1l0o?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "London council takes possession of property linked to Sierra Leone's First Lady",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/clyxkeny8x6o?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Bring the Kids and Grab Some Barbecue: A Day at the Ukrainian Drone Races",
+          "source": "NYT > World News",
+          "url": "https://www.nytimes.com/2026/06/12/world/europe/ukraine-drone-races.html"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "London council seizes social housing flat rented by Sierra Leone first lady",
+          "source": "World news | The Guardian",
+          "url": "https://www.theguardian.com/society/2026/jun/11/london-council-seizes-social-housing-flat-sierra-leone-first-lady"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "UK defence funding crisis has been a long time coming",
+          "source": "Europe | The Guardian",
+          "url": "https://www.theguardian.com/politics/2026/jun/11/uk-defence-funding-john-healey-keir-starmer-offer"
+        }
+      ]
     },
     {
       "id": "ctx-polonia",
@@ -938,7 +1385,38 @@
       ],
       "role_es": "Única OTAN que mantiene comercio activo con Rusia y acoge el TurkStream. Erdogan actúa como mediador en las negociaciones Ucrania-Rusia. Controla el acceso al Mar Negro mediante la Convención de Montreux.",
       "role_en": "The only NATO member maintaining active trade with Russia and hosting TurkStream. Erdogan acts as mediator in Ukraine-Russia negotiations. Controls Black Sea access through the Montreux Convention.",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-12",
+          "what": "Nigerian man unable to claim Italian lottery win gains residency permit",
+          "source": "Europe | The Guardian",
+          "url": "https://www.theguardian.com/world/2026/jun/12/nigerian-man-unable-to-claim-italian-lottery-win-gains-residency-permit"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "The Gulf Arab States Need a Shield Built for Limited Trust",
+          "source": "War on the Rocks",
+          "url": "https://warontherocks.com/the-gulf-arab-states-need-a-shield-built-for-limited-trust/"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Xi’s Summit with Kim: Views from the Neighborhood",
+          "source": "The Diplomat",
+          "url": "https://thediplomat.com/2026/06/xis-summit-with-kim-views-from-the-neighborhood/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Dispatch from Istanbul: Why Turkey is throwing its weight behind ‘zero waste’ ahead of COP31",
+          "source": "Atlantic Council",
+          "url": "https://www.atlanticcouncil.org/dispatches/dispatch-from-istanbul-why-turkey-is-throwing-its-weight-behind-zero-waste-ahead-of-cop31/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Seven charts that will define France’s G7 summit",
+          "source": "Atlantic Council",
+          "url": "https://www.atlanticcouncil.org/dispatches/seven-charts-that-will-define-frances-g7-summit/"
+        }
+      ]
     },
     {
       "id": "ctx-arabia-saudi",
@@ -961,7 +1439,32 @@
       ],
       "role_es": "MBS consolida el poder y lanza una diversificación económica masiva (Vision 2030, NEOM). Negocia la normalización con Israel condicionada a avances hacia un estado palestino. Lidera la OPEP+ con cortes de producción para sostener el crudo.",
       "role_en": "MBS consolidates power and launches massive economic diversification (Vision 2030, NEOM). Negotiates normalization with Israel contingent on Palestinian state progress. Leads OPEC+ with production cuts to support oil prices.",
-      "news": []
+      "news": [
+        {
+          "when": "2025-01-27",
+          "what": "Italy Supports Saudi Arabia Joining Fighter-Jet Program, PM Meloni Says",
+          "source": "WSJ.com: World News",
+          "url": "https://www.wsj.com/articles/italy-supports-saudi-arabia-joining-gcap-fighter-jet-program-pm-meloni-says-bbd9cec1"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "The Gulf Arab States Need a Shield Built for Limited Trust",
+          "source": "War on the Rocks",
+          "url": "https://warontherocks.com/the-gulf-arab-states-need-a-shield-built-for-limited-trust/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "How the Gulf will manage collective security after the Iran war ends",
+          "source": "Al Jazeera – Breaking News, World News and Video from Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/6/12/how-the-gulf-will-manage-collective-security-after-the-iran-war-ends?traffic_source=rss"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Gulf States: Phone searches, arrests exacerbate existing restrictions on trade unions, expression",
+          "source": "Latest - Amnesty International",
+          "url": "https://www.amnesty.org/en/latest/news/2026/06/gulf-states-phone-searches-arrests-exacerbate-existing-restrictions-on-trade-unions-expression/"
+        }
+      ]
     },
     {
       "id": "ctx-brasil",
@@ -984,7 +1487,14 @@
       ],
       "role_es": "Lula se posiciona como principal mediador del Sur Global en la guerra de Ucrania. Impulsa la expansión de los BRICS y un sistema de pagos alternativo al dólar. La Amazonia como recurso estratégico en negociaciones climáticas globales.",
       "role_en": "Lula positions himself as the Global South's chief mediator in the Ukraine war. Drives BRICS expansion and a dollar-alternative payment system. The Amazon as a strategic asset in global climate negotiations.",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-12",
+          "what": "As the US targets Brazil’s payment system, Europe should pay close attention",
+          "source": "Atlantic Council",
+          "url": "https://www.atlanticcouncil.org/blogs/econographics/as-the-us-targets-brazils-payment-system-europe-should-pay-close-attention/"
+        }
+      ]
     },
     {
       "id": "ctx-japon",
@@ -1008,7 +1518,38 @@
       ],
       "role_es": "Dobla el presupuesto de defensa al 2% del PIB e incorpora misiles de ataque preventivo. Ishiba refuerza las alianzas con Corea del Sur, Australia y Filipinas frente a China. Los Senkaku y el estrecho de Tsushima, focos de tensión permanente.",
       "role_en": "Doubles defense budget to 2% of GDP and adopts preemptive strike missiles. Ishiba strengthens alliances with South Korea, Australia, and the Philippines against China. The Senkaku islands and Tsushima Strait remain permanent tension flashpoints.",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-12",
+          "what": "An ideological tug-of-war: the pressures facing Iran’s World Cup squad in US",
+          "source": "World news | The Guardian",
+          "url": "https://www.theguardian.com/world/2026/jun/12/iran-first-play-war-world-cup-fifa"
+        },
+        {
+          "when": "2026-06-10",
+          "what": "Cascading Failure: The Spanish Navy’s Reserve Squadron and the Tragedy of Unpreparedness",
+          "source": "War on the Rocks",
+          "url": "https://warontherocks.com/cascading-failure-the-spanish-navys-reserve-squadron-and-the-tragedy-of-unpreparedness/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Japan pharma companies turn to China for drug discovery, growth",
+          "source": "Nikkei Asia",
+          "url": "https://asia.nikkei.com/business/pharmaceuticals/japan-pharma-companies-turn-to-china-for-drug-discovery-growth"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Warburg Pincus to launch $1.2bn tender offer for Japan dorm operator J.S.B.",
+          "source": "Nikkei Asia",
+          "url": "https://asia.nikkei.com/business/business-deals/warburg-pincus-to-launch-1.2bn-tender-offer-for-japan-dorm-operator-j.s.b"
+        },
+        {
+          "when": "2026-05-29",
+          "what": "Quad’s Fiji port plan will challenge China’s Pacific supply-chain dominance",
+          "source": "Radio Free Asia",
+          "url": "https://rfa.org/english/pacific/2026/05/29/quad-port-fiji-supply-chain-us-japan-india/"
+        }
+      ]
     },
     {
       "id": "ctx-espana",
@@ -1036,7 +1577,38 @@
       ],
       "role_es": "Gestiona la relación más compleja de Europa con Marruecos: energía, Ceuta y Melilla, migración y el Sáhara Occidental como palancas de presión mutua. Puerta de entrada de la UE hacia Iberoamérica y punto de tránsito atlántico crítico. Contribuye con armamento y financiación a Ucrania.",
       "role_en": "Manages Europe's most complex relationship with Morocco: energy, Ceuta and Melilla, migration, and Western Sahara as mutual pressure levers. The EU's gateway to Latin America and a critical Atlantic transit hub. Contributes arms and funding to Ukraine.",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-12",
+          "what": "Discovery of €1.2m jewellery prompts fresh probe into former Spanish PM",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/cjeg9p1xqdwo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Spain’s Church Hopes Pope Trip Will Stem Secular Tide",
+          "source": "NYT > World News",
+          "url": "https://www.nytimes.com/2026/06/12/world/europe/pope-leo-spain-secular-catholic.html"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Spain’s former PM faces tax fraud inquiry as police find €1.3m of jewellery",
+          "source": "Europe | The Guardian",
+          "url": "https://www.theguardian.com/world/2026/jun/12/former-spain-pm-zapatero-faces-tax-fraud-inquiry"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Pope Leo borrows King of Spain’s jet for flight home to Vatican after plane suffers technical issue",
+          "source": "The Independent World",
+          "url": "https://www.independent.co.uk/news/world/europe/pope-leo-vatican-plane-spain-tour-b2994849.html"
+        },
+        {
+          "when": "2026-06-10",
+          "what": "Cascading Failure: The Spanish Navy’s Reserve Squadron and the Tragedy of Unpreparedness",
+          "source": "War on the Rocks",
+          "url": "https://warontherocks.com/cascading-failure-the-spanish-navys-reserve-squadron-and-the-tragedy-of-unpreparedness/"
+        }
+      ]
     },
     {
       "id": "ctx-sudafrica",
@@ -1059,7 +1631,38 @@
       ],
       "role_es": "Presentó en 2023 la demanda de genocidio contra Israel ante el Tribunal Internacional de Justicia. Miembro de los BRICS y sede de la cumbre que amplió el bloque. Sufre cortes de electricidad de hasta 12 horas diarias que frenan su economía.",
       "role_en": "Filed the 2023 genocide case against Israel at the International Court of Justice. BRICS member and host of the summit that expanded the bloc. Suffers electricity blackouts of up to 12 hours daily that constrain its economy.",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-11",
+          "what": "Vance says Israeli PM Netanyahu 'has got some things wrong'",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/c9q2lq3vv7zo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "South Africa trolled by African fans in wake of World Cup loss",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/cm2jewrxvmjo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "'Nightmare from start to finish' for South Africa in opener",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/sport/football/articles/cn4dx3v9wjgo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "France accuses Israeli firm of interfering in Scottish elections and targeting SNP",
+          "source": "Europe | The Guardian",
+          "url": "https://www.theguardian.com/uk-news/2026/jun/12/france-accuses-israeli-firm-interfering-scottish-elections-john-swinney-snp"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Nancy Mace reveals how she will get ‘revenge’ on Trump after her primary election defeat",
+          "source": "The Independent World",
+          "url": "https://www.independent.co.uk/news/world/americas/us-politics/nancy-mace-donald-trump-primary-defeat-b2994834.html"
+        }
+      ]
     },
     {
       "id": "ctx-corea-sur",
@@ -1082,7 +1685,38 @@
       ],
       "role_es": "El expresidente Yoon decretó la ley marcial en diciembre 2024, desencadenando la mayor crisis constitucional desde la democratización. Principal proveedor de munición de artillería a Europa para el frente ucraniano. El KF-21 consolida su posición como potencia exportadora de defensa.",
       "role_en": "Former president Yoon declared martial law in December 2024, triggering the worst constitutional crisis since democratization. Primary supplier of artillery ammunition to Europe for the Ukrainian front. The KF-21 fighter jet consolidates its role as a rising defense exporter.",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-12",
+          "what": "Thai Princess Bajrakitiyabha dies after more than three years in coma",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/cvgzzndx780o?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "US and Iran exchange strikes across Middle East for second day in a row",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/c4gyp9v0e93o?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Jailed South Korea ex-president gets 30 more years for sending drones into North",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/c17ydny8zyro?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Partey denied entry to Canada for Ghana's World Cup opener",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/sport/football/articles/cn8qgny4186o?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-02",
+          "what": "The War Room newsletter: How the character of war has changed",
+          "source": "International",
+          "url": "https://www.economist.com/international/2026/06/02/the-war-room-newsletter-how-the-character-of-war-has-changed"
+        }
+      ]
     },
     {
       "id": "ctx-indonesia",
@@ -1103,7 +1737,288 @@
       ],
       "role_es": "Prabowo Subianto asume la presidencia en octubre 2024 con agenda de defensa reforzada y mayor protagonismo en la ASEAN. Cuarto país más poblado del mundo (277M) y mayor nación de mayoría musulmana. Disputa activa con China en las aguas de Natuna (Mar del Sur de China).",
       "role_en": "Prabowo Subianto took office in October 2024 with a strengthened defense agenda and a push for greater ASEAN leadership. The world's fourth most populous country (277M) and largest Muslim-majority nation. Active maritime dispute with China over the Natuna waters (South China Sea).",
-      "news": []
+      "news": [
+        {
+          "when": "2026-06-12",
+          "what": "Indonesian students protest against state spending, fuel price hike",
+          "source": "BBC News",
+          "url": "https://www.bbc.com/news/articles/cqx18d47pzjo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Charting the Future of the Indonesian Military’s Involvement in Counterterrorism",
+          "source": "The Diplomat",
+          "url": "https://thediplomat.com/2026/06/charting-the-future-of-the-indonesian-militarys-involvement-in-counterterrorism/"
+        },
+        {
+          "when": "2026-06-12",
+          "what": "Cambodia-Thailand Relations, Not Myanmar, Will Define ASEAN’s Immediate Future",
+          "source": "The Diplomat",
+          "url": "https://thediplomat.com/2026/06/cambodia-thailand-relations-not-myanmar-will-define-aseans-immediate-future/"
+        },
+        {
+          "when": "2026-06-11",
+          "what": "Indonesia’s social cohesion lesson for Australia",
+          "source": "The Interpreter",
+          "url": "https://www.lowyinstitute.org/the-interpreter/indonesia-s-social-cohesion-lesson-for-australia"
+        },
+        {
+          "when": "2026-06-10",
+          "what": "Prabowo in Paris: liberté, égalité, and the autonomy that isn’t",
+          "source": "The Interpreter",
+          "url": "https://www.lowyinstitute.org/the-interpreter/prabowo-in-paris-liberte-egalite-and-the-autonomy-that-isn-t"
+        }
+      ]
     }
-  ]
+  ],
+  "crisis_archivadas": [
+    {
+      "id": "conflicto-mar-rojo-huties",
+      "type": "armed",
+      "severity": 1,
+      "title": "Crisis Naval en el Mar Rojo: Hutíes",
+      "location": "Mar Rojo · Bab el-Mandeb · Yemen",
+      "lat": 15.3,
+      "lng": 41.8,
+      "actors": [
+        "Hutíes (Yemen)",
+        "EE.UU.",
+        "RU",
+        "Coalición naval"
+      ],
+      "summary": "Ataques de misiles hutíes obligan a desviar rutas comerciales globales. Los seguros marítimos han subido un 340%. Vinculado directamente al conflicto de Gaza como 'frente de presión'.",
+      "timeline": [
+        {
+          "when": "2025-01-27",
+          "what": "Shippers Wary of Red Sea Routes Despite Houthi Pledge to End Targeting",
+          "source": "WSJ.com: World News",
+          "url": "https://www.wsj.com/articles/shippers-wary-of-red-sea-routes-despite-houthi-pledge-to-end-targeting-4dde35c2"
+        },
+        {
+          "when": "2026-03-18",
+          "what": "Misiles hutíes obligan a desviar nuevas rutas comerciales; seguros marítimos suben un 340%",
+          "source": "El País",
+          "url": "#"
+        }
+      ],
+      "severity_base": 4,
+      "estado": "archivada",
+      "actividad": {
+        "score": 0.0,
+        "fuentes_7d": 0,
+        "dias_sin_noticias": 86,
+        "noticias_24h": 0
+      },
+      "archivada_en": "2026-06-12"
+    },
+    {
+      "id": "violencia-haiti",
+      "type": "armed",
+      "severity": 1,
+      "title": "Colapso Institucional en Haití",
+      "location": "Puerto Príncipe · Haití",
+      "lat": 18.5392,
+      "lng": -72.3364,
+      "actors": [
+        "Bandas criminales (G9)",
+        "Misión MSS",
+        "OEA",
+        "EE.UU."
+      ],
+      "summary": "Las bandas criminales controlan más del 80% de Puerto Príncipe. La misión multinacional de seguridad (MSS) desplegada con apoyo de Kenia opera con recursos limitados. Consejo de transición con dificultades para instalarse.",
+      "timeline": [
+        {
+          "when": "2026-04-05",
+          "what": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición",
+          "source": "France 24",
+          "url": "#"
+        }
+      ],
+      "severity_base": 4,
+      "estado": "archivada",
+      "actividad": {
+        "score": 0.0,
+        "fuentes_7d": 0,
+        "dias_sin_noticias": 68,
+        "noticias_24h": 0
+      },
+      "archivada_en": "2026-06-12"
+    },
+    {
+      "id": "cambio-politico-hungria",
+      "type": "diplo",
+      "severity": 1,
+      "title": "Caída Histórica de Orbán en Hungría",
+      "location": "Budapest · Europa Central",
+      "lat": 47.4979,
+      "lng": 19.0402,
+      "actors": [
+        "Magyar (oposición)",
+        "Orbán (Fidesz)",
+        "UE"
+      ],
+      "summary": "Magyar entierra 16 años del ultraderechismo de Orbán con una victoria electoral incontestable. La UE recupera un aliado clave en el este europeo en plena guerra de Ucrania.",
+      "timeline": [
+        {
+          "when": "2026-04-14",
+          "what": "Magyar entierra 16 años del ultraderechista Orbán en Hungría con una incontestable victoria electoral",
+          "source": "Público",
+          "url": "#"
+        }
+      ],
+      "severity_base": 2,
+      "estado": "archivada",
+      "actividad": {
+        "score": 0.0,
+        "fuentes_7d": 0,
+        "dias_sin_noticias": 59,
+        "noticias_24h": 0
+      },
+      "archivada_en": "2026-06-12"
+    },
+    {
+      "id": "crisis-energetica-europa",
+      "type": "econ",
+      "severity": 1,
+      "title": "Crisis de Dependencia Energética Europea",
+      "location": "Europa · mercados de gas",
+      "lat": 50.0,
+      "lng": 10.0,
+      "actors": [
+        "UE",
+        "EE.UU.",
+        "Irán",
+        "Rusia"
+      ],
+      "summary": "Europa huyó del gas ruso para comprar gas estadounidense; el conflicto de Ormuz demuestra que fue una trampa de dependencia. España tiene la energía más barata de Europa gracias a las renovables.",
+      "timeline": [
+        {
+          "when": "2026-04-01",
+          "what": "Europa huyó del gas ruso para echarse en brazos de EEUU. La guerra de Irán demuestra que fue una trampa",
+          "source": "Xataka",
+          "url": "https://www.xataka.com/energia/europa-huyo-gas-rusia-para-echarse-brazos-eeuu-tercera-guerra-golfo-demuestra-que-fue-trampa"
+        },
+        {
+          "when": "2026-03-18",
+          "what": "España tiene la energía mayorista más barata de Europa en plena crisis de Ormuz gracias a las renovables",
+          "source": "Xataka",
+          "url": "https://www.xataka.com/energia/espana-ha-encontrado-salvavidas-inesperado-crisis-ormuz-como-nuestra-luz-hoy-envidia-europa"
+        }
+      ],
+      "severity_base": 3,
+      "estado": "archivada",
+      "actividad": {
+        "score": 0.0,
+        "fuentes_7d": 0,
+        "dias_sin_noticias": 72,
+        "noticias_24h": 0
+      },
+      "archivada_en": "2026-06-12"
+    },
+    {
+      "id": "eeuu-groenlandia-bases-2026",
+      "type": "diplo",
+      "severity": 1,
+      "title": "EE.UU. Negocia Bases Militares en Groenlandia",
+      "location": "Groenlandia · Ártico",
+      "lat": 72.0,
+      "lng": -40.0,
+      "actors": [
+        "EE.UU.",
+        "Dinamarca",
+        "OTAN"
+      ],
+      "summary": "EE.UU. negocia en secreto la apertura de tres bases militares en Groenlandia, territorio autónomo de Dinamarca. La iniciativa refuerza la postura ártica de la OTAN frente a Rusia y reabre la tensión diplomática con Copenhague sobre la soberanía del territorio.",
+      "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "EE.UU. en negociaciones reservadas para abrir tres nuevas bases militares en Groenlandia; implicaciones para la seguridad ártica y la relación con Dinamarca",
+          "source": "BBC World",
+          "url": "#"
+        }
+      ],
+      "severity_base": 3,
+      "estado": "archivada",
+      "actividad": {
+        "score": 0.0,
+        "fuentes_7d": 0,
+        "dias_sin_noticias": 31,
+        "noticias_24h": 0
+      },
+      "archivada_en": "2026-06-12"
+    },
+    {
+      "id": "lago-chad-boko-haram-2026",
+      "type": "armed",
+      "severity": 1,
+      "title": "Lago Chad: Conflicto Transfronterizo y Boko Haram",
+      "location": "Lago Chad · Cuenca del Lago",
+      "lat": 13.3,
+      "lng": 14.0,
+      "actors": [
+        "Chad",
+        "Nigeria",
+        "Boko Haram",
+        "MNJTF"
+      ],
+      "summary": "Chad lanza ataques aéreos contra posiciones de Boko Haram en la cuenca del lago, matando a unas 40 personas entre las que se cuentan pescadores nigerianos. El conflicto transfronterizo sigue sin resolución en una de las zonas más pobres del mundo, con cuatro países afectados: Nigeria, Chad, Níger y Camerún.",
+      "timeline": [
+        {
+          "when": "2026-05-12",
+          "what": "Ataques aéreos de Chad contra Boko Haram matan a decenas de pescadores nigerianos en el lago; unas 40 personas muertas o desaparecidas",
+          "source": "BBC Africa",
+          "url": "#"
+        }
+      ],
+      "severity_base": 3,
+      "estado": "archivada",
+      "actividad": {
+        "score": 0.0,
+        "fuentes_7d": 0,
+        "dias_sin_noticias": 31,
+        "noticias_24h": 0
+      },
+      "archivada_en": "2026-06-12"
+    },
+    {
+      "id": "china-estrategia-energetica",
+      "type": "econ",
+      "severity": 1,
+      "title": "China Aprovecha la Crisis Energética Global",
+      "location": "Pekín · Asia-Pacífico",
+      "lat": 39.9042,
+      "lng": 116.4074,
+      "actors": [
+        "China",
+        "EE.UU.",
+        "Rusia",
+        "Arabia Saudí"
+      ],
+      "summary": "China lleva años preparándose para una crisis energética global y ahora recoge sus frutos: compra energía rusa a precios de saldo mientras Occidente paga tarifas récord. Cumbre Trump-Xi (14-15 mayo) con Taiwán, aranceles e Irán en la agenda.",
+      "timeline": [
+        {
+          "when": "2026-05-08",
+          "what": "Cumbre Trump-Xi (14-15 mayo): Irán, aranceles, Taiwán y tierras raras centran la agenda",
+          "source": "CNBC / CSIS",
+          "url": "https://www.cnbc.com/2026/05/08/iran-focus-at-trump-xi-summit-may-delay-progress-on-tariffs-rare-earths.html"
+        },
+        {
+          "when": "2026-03-24",
+          "what": "China lleva años preparándose para una gran crisis energética global y ahora recoge sus frutos",
+          "source": "Xataka",
+          "url": "https://www.xataka.com/energia/china-lleva-anos-preparandose-pacientemente-para-gran-crisis-energetica-global-ahora-recoge-sus-frutos"
+        }
+      ],
+      "severity_base": 2,
+      "estado": "archivada",
+      "actividad": {
+        "score": 0.0,
+        "fuentes_7d": 0,
+        "dias_sin_noticias": 35,
+        "noticias_24h": 0
+      },
+      "archivada_en": "2026-06-12"
+    }
+  ],
+  "actualizado": "2026-06-12T21:19:12"
 }

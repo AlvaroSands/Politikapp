@@ -1,25 +1,36 @@
 """
 Actualizador geopolítico — RSS + scraping HTML + auto-creación de crisis.
-Clasificación por keywords, scraping de fuentes sin RSS, y detección de
-nuevos eventos a partir de menciones repetidas en fuentes independientes.
+
+Pipeline por ciclo (cada 3 h desde main.py, o manual):
+  1. Lee los feeds RSS y las fuentes con scraping, registrando la SALUD de
+     cada fuente (salud_fuentes.json) para detectar feeds muertos.
+  2. Clasifica cada titular (clasificacion.py): relación bilateral, noticia
+     de una crisis conocida, o candidato a crisis nueva (umbral multi-fuente).
+  3. VITALIDAD (vitalidad.py): recalcula la severidad de cada crisis según
+     su actividad reciente (decay), marca latentes, archiva muertas y
+     fusiona las relaciones bilaterales por par de países con caducidad.
+  4. Persiste de forma atómica y notifica (Telegram) solo cambios reales.
 """
-import feedparser
 import json
 import os
-import re
+import socket
 import time
-import unicodedata
 from datetime import date, datetime, timedelta
-from difflib import SequenceMatcher
 
+import feedparser
 import requests
-from notificaciones import alerta_nueva_crisis, alerta_escalada, alerta_relacion_bilateral
-from twitter import tweet_nueva_crisis, tweet_escalada, tweet_tension_bilateral
 from bs4 import BeautifulSoup
 
-ARCHIVO_DATOS     = "datos.json"
-ARCHIVO_PENDIENTES   = "pendientes.json"
-ARCHIVO_HISTORIAL    = "historial_severidad.json"
+from clasificacion import (
+    clasificar_crisis, detectar_paises_en_texto, es_bilateral,
+    inferir_nivel, inferir_severidad, inferir_tipo, similitud, slugify,
+)
+from vitalidad import aplicar_vitalidad, fusionar_relaciones
+from notificaciones import alerta_nueva_crisis, alerta_escalada, alerta_relacion_bilateral
+from twitter import tweet_nueva_crisis, tweet_escalada, tweet_tension_bilateral
+import rutas
+
+socket.setdefaulttimeout(15)  # feedparser hereda este timeout
 
 HEADERS_HTTP = {
     "User-Agent": (
@@ -30,6 +41,9 @@ HEADERS_HTTP = {
 }
 
 # ── FUENTES RSS ─────────────────────────────────────────────────────────────
+# Lista depurada el 2026-06-12 contra la realidad (34 de 81 feeds estaban
+# muertos). salud_fuentes.json registra cada ciclo quién responde; antes de
+# añadir o quitar fuentes, mirar ahí.
 
 FUENTES_RSS = [
     # Anglófonas — generalistas
@@ -40,53 +54,34 @@ FUENTES_RSS = [
     "https://feeds.bbci.co.uk/news/world/africa/rss.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
     "https://rss.nytimes.com/services/xml/rss/nyt/MiddleEast.xml",
-    "https://feeds.reuters.com/reuters/worldNews",
-    "https://feeds.reuters.com/reuters/topNews",
     "https://www.theguardian.com/world/rss",
     "https://www.theguardian.com/world/europe-news/rss",
     "https://www.theguardian.com/world/middleeast/rss",
-    "https://apnews.com/rss",
     "https://www.independent.co.uk/news/world/rss",
     "https://www.ft.com/world?format=rss",
-    "https://www.wsj.com/xml/rss/3_7085.xml",
+    "https://feeds.a.dj.com/rss/RSSWorldNews.xml",          # WSJ (corregido)
+    "https://www.economist.com/international/rss.xml",      # corregido (typo)
     # Geopolítica / defensa / estrategia
     "https://foreignpolicy.com/feed/",
-    "https://theeconomist.com/sections/world-politics/rss.xml",
     "https://warontherocks.com/feed/",
-    "https://www.chathamhouse.org/rss.xml",
-    "https://www.brookings.edu/feed/",
-    "https://www.cfr.org/rss.xml",
     "https://www.defensenews.com/arc/outboundfeeds/rss/?outputType=xml",
-    "https://www.janes.com/feeds/news",
     "https://thediplomat.com/feed/",
-    "https://eastasiaforum.org/feed/",
     "https://www.lowyinstitute.org/the-interpreter/rss.xml",
-    "https://www.iiss.org/rss",
     "https://www.atlanticcouncil.org/feed/",
-    "https://www.crisisgroup.org/rss-feed",
     "https://www.rand.org/blog.xml",
     "https://www.justsecurity.org/feed/",
-    "https://www.stimson.org/feed/",
-    "https://carnegieendowment.org/rss/solr/articles",
-    "https://www.wilsoncenter.org/rss.xml",
     "https://geopoliticalfutures.com/feed/",
     "https://timothyash.substack.com/feed",
     # OSINT / inteligencia verificada
     "https://www.bellingcat.com/feed/",
-    "https://www.understandingwar.org/rss.xml",
-    "https://occrp.org/en/rss/",
     # Oriente Medio / África / Asia
     "https://www.aljazeera.com/xml/rss/all.xml",
     "https://www.middleeasteye.net/rss",
-    "https://english.alarabiya.net/rss.xml",
-    "https://www.africaintelligence.com/rss",
-    "https://www.africanews.com/rss",
     "https://www.scmp.com/rss/91/feed",
     "https://www.scmp.com/rss/2/feed",
     "https://asia.nikkei.com/rss/feed/nar",
     "https://www.rfa.org/english/rss2.xml",
-    "https://www.voanews.com/api/zy$tqepmve",
-    # Derechos humanos
+    # Derechos humanos / multilaterales
     "https://www.hrw.org/rss.xml",
     "https://www.amnesty.org/en/latest/feed/",
     "https://news.un.org/feed/subscribe/en/news/all/rss.xml",
@@ -95,32 +90,30 @@ FUENTES_RSS = [
     "https://www.france24.com/fr/monde/rss",
     "https://www.lemonde.fr/international/rss_full.xml",
     "https://www.liberation.fr/arc/outboundfeeds/rss/?outputType=xml",
-    # Hispanófonas
-    "https://elpais.com/rss/internacional/el-pais.xml",
+    # Hispanófonas (corregidas 2026-06-12: las anteriores estaban todas caídas)
+    "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/internacional/portada",
     "https://www.elmundo.es/rss/internacional.xml",
-    "https://www.lavanguardia.com/mvc/feed/rss/internacional",
-    "https://www.elconfidencial.com/rss/mundo/",
-    "https://www.infobae.com/feeds/rss/america/",
-    "https://www.bbc.com/mundo/rss.xml",
-    "https://www.dw.com/es/rss/rss.xml",
+    "https://e00-elmundo.uecdn.es/elmundo/rss/internacional.xml",
+    "https://rss.elconfidencial.com/mundo/",
+    "https://www.lavanguardia.com/rss/internacional.xml",
+    "https://feeds.bbci.co.uk/mundo/rss.xml",
+    "https://rss.dw.com/rdf/rss-es-all",
     # Europeas / alemanas
-    "https://www.dw.com/en/rss/rss.xml",
-    "https://www.dw.com/de/rss/rss.xml",
+    "https://rss.dw.com/rdf/rss-en-all",
+    "https://rss.dw.com/rdf/rss-de-all",
     "https://www.politico.eu/feed/",
-    "https://euobserver.com/rss.xml",
-    "https://www.euractiv.com/sections/global-europe/feed/",
+    "https://www.euractiv.com/feed/",
     # Europa del Este / Rusia
-    "https://www.kyivpost.com/rss",
-    "https://www.ukrinform.net/rss/block-ato",
+    "https://www.kyivpost.com/feed",
+    "https://www.ukrinform.net/rss",
     "https://meduza.io/rss/all",
-    # Ciberseguridad — feeds RSS
+    # Ciberseguridad
     "https://www.securityweek.com/feed",
     "https://krebsonsecurity.com/feed/",
     "https://feeds.feedburner.com/TheHackersNews",
     "https://www.bleepingcomputer.com/feed/",
     "https://isc.sans.edu/rssfeed.xml",
     "https://www.darkreading.com/rss.xml",
-    "https://feeds.feedburner.com/Threatpost",
     "https://blog.malwarebytes.com/feed/",
     # Radio pública / NPR
     "https://feeds.npr.org/1004/rss.xml",
@@ -152,249 +145,35 @@ FUENTES_SCRAPING = {
     },
 }
 
-# ── PAÍSES Y COORDENADAS ────────────────────────────────────────────────────
+# ── PERSISTENCIA ────────────────────────────────────────────────────────────
 
-PAISES = {
-    "ukraine":      {"nombre": "Ucrania",        "lat": 48.38, "lng": 31.17},
-    "ucrania":      {"nombre": "Ucrania",        "lat": 48.38, "lng": 31.17},
-    "russia":       {"nombre": "Rusia",          "lat": 55.76, "lng": 37.62},
-    "rusia":        {"nombre": "Rusia",          "lat": 55.76, "lng": 37.62},
-    "iran":         {"nombre": "Irán",           "lat": 35.69, "lng": 51.39},
-    "irán":         {"nombre": "Irán",           "lat": 35.69, "lng": 51.39},
-    "israel":       {"nombre": "Israel",         "lat": 31.77, "lng": 35.21},
-    "gaza":         {"nombre": "Gaza",           "lat": 31.50, "lng": 34.47},
-    "china":        {"nombre": "China",          "lat": 39.90, "lng": 116.41},
-    "taiwan":       {"nombre": "Taiwán",         "lat": 23.70, "lng": 120.96},
-    "taiwán":       {"nombre": "Taiwán",         "lat": 23.70, "lng": 120.96},
-    "usa":          {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
-    "us ":          {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
-    "trump":        {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
-    "america":      {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
-    "eeuu":         {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
-    "north korea":  {"nombre": "Corea del Norte","lat": 39.04, "lng": 125.76},
-    "corea":        {"nombre": "Corea del Norte","lat": 39.04, "lng": 125.76},
-    "sudan":        {"nombre": "Sudán",          "lat": 15.55, "lng": 32.53},
-    "sudán":        {"nombre": "Sudán",          "lat": 15.55, "lng": 32.53},
-    "mali":         {"nombre": "Mali",           "lat": 17.57, "lng": -3.99},
-    "niger":        {"nombre": "Níger",          "lat": 17.61, "lng": 8.08},
-    "india":        {"nombre": "India",          "lat": 20.59, "lng": 78.96},
-    "pakistan":     {"nombre": "Pakistán",       "lat": 30.38, "lng": 69.35},
-    "venezuela":    {"nombre": "Venezuela",      "lat": 10.48, "lng": -66.90},
-    "haiti":        {"nombre": "Haití",          "lat": 18.54, "lng": -72.34},
-    "ecuador":      {"nombre": "Ecuador",        "lat": -2.20, "lng": -79.89},
-    "hungary":      {"nombre": "Hungría",        "lat": 47.50, "lng": 19.04},
-    "hungría":      {"nombre": "Hungría",        "lat": 47.50, "lng": 19.04},
-    "ethiopia":     {"nombre": "Etiopía",        "lat": 9.02,  "lng": 38.75},
-    "etiopía":      {"nombre": "Etiopía",        "lat": 9.02,  "lng": 38.75},
-    "somalia":      {"nombre": "Somalia",        "lat": 2.05,  "lng": 45.34},
-    "myanmar":      {"nombre": "Myanmar",        "lat": 19.74, "lng": 96.08},
-    "birmania":     {"nombre": "Myanmar",        "lat": 19.74, "lng": 96.08},
-    "afghanistan":  {"nombre": "Afganistán",     "lat": 33.93, "lng": 67.71},
-    "afganistán":   {"nombre": "Afganistán",     "lat": 33.93, "lng": 67.71},
-    "syria":        {"nombre": "Siria",          "lat": 34.80, "lng": 38.99},
-    "siria":        {"nombre": "Siria",          "lat": 34.80, "lng": 38.99},
-    "lebanon":      {"nombre": "Líbano",         "lat": 33.85, "lng": 35.86},
-    "líbano":       {"nombre": "Líbano",         "lat": 33.85, "lng": 35.86},
-    "houthi":       {"nombre": "Yemen",          "lat": 15.55, "lng": 48.52},
-    "yemen":        {"nombre": "Yemen",          "lat": 15.55, "lng": 48.52},
-    "saudi":        {"nombre": "Arabia Saudí",   "lat": 23.89, "lng": 45.08},
-    "arabia":       {"nombre": "Arabia Saudí",   "lat": 23.89, "lng": 45.08},
-    "turkey":       {"nombre": "Turquía",        "lat": 38.96, "lng": 35.24},
-    "turquía":      {"nombre": "Turquía",        "lat": 38.96, "lng": 35.24},
-    "erdogan":      {"nombre": "Turquía",        "lat": 38.96, "lng": 35.24},
-    "poland":       {"nombre": "Polonia",        "lat": 51.92, "lng": 19.15},
-    "polonia":      {"nombre": "Polonia",        "lat": 51.92, "lng": 19.15},
-    "finland":      {"nombre": "Finlandia",      "lat": 64.96, "lng": 25.75},
-    "sweden":       {"nombre": "Suecia",         "lat": 60.13, "lng": 18.64},
-    "baltic":       {"nombre": "Bálticos",       "lat": 56.88, "lng": 24.60},
-    "congo":        {"nombre": "Congo",          "lat": -4.03, "lng": 21.76},
-    "drc":          {"nombre": "Congo",          "lat": -4.03, "lng": 21.76},
-    "colombia":     {"nombre": "Colombia",       "lat": 4.57,  "lng": -74.30},
-    "mexico":       {"nombre": "México",         "lat": 23.63, "lng": -102.55},
-    "méxico":       {"nombre": "México",         "lat": 23.63, "lng": -102.55},
-    "brazil":       {"nombre": "Brasil",         "lat": -14.24,"lng": -51.93},
-    "brasil":       {"nombre": "Brasil",         "lat": -14.24,"lng": -51.93},
-    "argentina":    {"nombre": "Argentina",      "lat": -38.42,"lng": -63.62},
-    "japan":        {"nombre": "Japón",          "lat": 36.20, "lng": 138.25},
-    "japón":        {"nombre": "Japón",          "lat": 36.20, "lng": 138.25},
-    "south korea":  {"nombre": "Corea del Sur",  "lat": 35.91, "lng": 127.77},
-    "philippines":  {"nombre": "Filipinas",      "lat": 12.88, "lng": 121.77},
-    "filipinas":    {"nombre": "Filipinas",      "lat": 12.88, "lng": 121.77},
-    "indonesia":    {"nombre": "Indonesia",      "lat": -0.79, "lng": 113.92},
-    "vietnam":      {"nombre": "Vietnam",        "lat": 14.06, "lng": 108.28},
-    "nigeria":      {"nombre": "Nigeria",        "lat": 9.08,  "lng": 8.68},
-    "egypt":        {"nombre": "Egipto",         "lat": 26.82, "lng": 30.80},
-    "egipto":       {"nombre": "Egipto",         "lat": 26.82, "lng": 30.80},
-    "libya":        {"nombre": "Libia",          "lat": 26.34, "lng": 17.23},
-    "libia":        {"nombre": "Libia",          "lat": 26.34, "lng": 17.23},
-    "morocco":      {"nombre": "Marruecos",      "lat": 31.79, "lng": -7.09},
-    "marruecos":    {"nombre": "Marruecos",      "lat": 31.79, "lng": -7.09},
-    "serbia":       {"nombre": "Serbia",         "lat": 44.02, "lng": 21.01},
-    "kosovo":       {"nombre": "Kosovo",         "lat": 42.60, "lng": 20.90},
-    "georgia":      {"nombre": "Georgia",        "lat": 42.31, "lng": 43.36},
-    "armenia":      {"nombre": "Armenia",        "lat": 40.07, "lng": 45.04},
-    "azerbaijan":   {"nombre": "Azerbaiyán",     "lat": 40.14, "lng": 47.58},
-    "tunisia":      {"nombre": "Túnez",          "lat": 33.89, "lng": 9.54},
-    "algeria":      {"nombre": "Argelia",        "lat": 28.03, "lng": 1.66},
-    "argelia":      {"nombre": "Argelia",        "lat": 28.03, "lng": 1.66},
-    "chad":         {"nombre": "Chad",           "lat": 15.45, "lng": 18.73},
-    "mozambique":   {"nombre": "Mozambique",     "lat": -18.67,"lng": 35.53},
-    "burkina":      {"nombre": "Burkina Faso",   "lat": 12.36, "lng": -1.53},
-    "senegal":      {"nombre": "Senegal",        "lat": 14.50, "lng": -14.43},
-    "cameroon":     {"nombre": "Camerún",        "lat": 7.37,  "lng": 12.35},
-    "kenya":        {"nombre": "Kenia",          "lat": -0.02, "lng": 37.91},
-    "tanzania":     {"nombre": "Tanzania",       "lat": -6.37, "lng": 34.89},
-    "thailand":     {"nombre": "Tailandia",      "lat": 15.87, "lng": 100.99},
-    "bangladesh":   {"nombre": "Bangladés",      "lat": 23.68, "lng": 90.35},
-    "nepal":        {"nombre": "Nepal",          "lat": 28.39, "lng": 84.12},
-    "iraq":         {"nombre": "Iraq",           "lat": 33.22, "lng": 43.68},
-    "irak":         {"nombre": "Iraq",           "lat": 33.22, "lng": 43.68},
-    "jordan":       {"nombre": "Jordania",       "lat": 30.59, "lng": 36.24},
-    "jordania":     {"nombre": "Jordania",       "lat": 30.59, "lng": 36.24},
-    "qatar":        {"nombre": "Catar",          "lat": 25.35, "lng": 51.18},
-    "kuwait":       {"nombre": "Kuwait",         "lat": 29.31, "lng": 47.49},
-    "oman":         {"nombre": "Omán",           "lat": 21.51, "lng": 55.92},
-    "uae":          {"nombre": "Emiratos Árabes","lat": 23.42, "lng": 53.85},
-    "emirates":     {"nombre": "Emiratos Árabes","lat": 23.42, "lng": 53.85},
-    "spain":        {"nombre": "España",         "lat": 40.46, "lng": -3.75},
-    "españa":       {"nombre": "España",         "lat": 40.46, "lng": -3.75},
-    "france":       {"nombre": "Francia",        "lat": 46.23, "lng": 2.21},
-    "francia":      {"nombre": "Francia",        "lat": 46.23, "lng": 2.21},
-    "germany":      {"nombre": "Alemania",       "lat": 51.17, "lng": 10.45},
-    "alemania":     {"nombre": "Alemania",       "lat": 51.17, "lng": 10.45},
-    "uk":           {"nombre": "Reino Unido",    "lat": 55.38, "lng": -3.44},
-    "britain":      {"nombre": "Reino Unido",    "lat": 55.38, "lng": -3.44},
-    "nato":         {"nombre": "OTAN",           "lat": 50.88, "lng": 4.49},
-}
+def _cargar_json(path, por_defecto):
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            try:
+                return json.load(f)
+            except (json.JSONDecodeError, ValueError):
+                pass
+    return por_defecto
 
-# ── KEYWORDS DE CRISIS EXISTENTES ──────────────────────────────────────────
 
-CRISIS_KEYWORDS = {
-    "ucrania-este-2026":          ["ukraine", "ucrania", "russia", "rusia", "zelenski", "zelenskyy", "kiev", "kyiv", "kharkiv", "bakhmut", "donbas", "zaporizhzhia", "kursk"],
-    "iran-ormuz-2026":            ["iran", "irán", "ormuz", "hormuz", "strait", "persian gulf", "golfo pérsico"],
-    "oriente-medio-gaza":         ["gaza", "hamas", "west bank", "rafah", "cisjordania", "netanyahu", "idf", "jenin", "hezbollah"],
-    "sudan-guerra-civil-2026":    ["sudan", "sudán", "rsf", "jartum", "khartoum", "darfur", "port sudan"],
-    "sahel-mali-yihadistas-2026": ["mali", "sahel", "jnim", "burkina", "niger", "niamey", "bamako", "aes", "gsim"],
-    "india-pakistan-sindoor-2026":["india", "pakistan", "sindoor", "kashmir", "cachemira", "indus", "loc"],
-    "corea-norte-misiles-2026":   ["north korea", "corea del norte", "pyongyang", "kim jong", "missile", "misil", "icbm", "dprk"],
-    "tension-estrecho-taiwan":    ["taiwan", "taiwán", "strait", "estrecho", "pla", "tsmc", "taipei"],
-    "violencia-haiti":            ["haiti", "haití", "gang", "banda", "port-au-prince"],
-    "conflicto-ecuador":          ["ecuador", "noboa", "crimen organizado", "eln", "narcotráfico"],
-    "conflicto-mar-rojo-huties":  ["houthi", "huti", "hutí", "red sea", "mar rojo", "yemen", "bab el-mandeb", "bab-el-mandeb"],
-    "crisis-energetica-europa":   ["energy", "energía", "gas", "oil", "petróleo", "europa", "europe", "lng", "pipeline", "gasoducto"],
-    "china-estrategia-energetica":["china", "xi jinping", "bri", "belt and road", "nueva ruta", "south china sea"],
-    # Entradas de cyber/intel
-    "ciber-ataques-estado":       ["cyberattack", "ciberataque", "ransomware", "hack", "espionage", "espionaje", "apt", "malware", "exploit", "phishing", "ddos", "critical infrastructure"],
-    "operaciones-inteligencia":   ["intelligence", "inteligencia", "spy", "espía", "leak", "filtración", "covert", "clandestine", "surveillance", "cia", "mi6", "fsb", "svr", "mossad"],
-    # Nuevas crisis añadidas 12 mayo 2026
-    "conflicto-israel-libano-2026":   ["lebanon", "líbano", "libano", "hezbollah", "hizbulá", "south lebanon", "sur del líbano", "beirut", "dahiyeh", "nasrallah"],
-    "pakistan-afghanistan-ataques-2026": ["pakistan", "afghanistan", "afganistán", "afghan", "afgano", "taliban", "talibán", "khyber", "nangarhar", "kabul", "islamabad", "pakistan strike"],
-    "eeuu-groenlandia-bases-2026":    ["greenland", "groenlandia", "nuuk", "arctic base", "base ártica", "arctic military", "denmark greenland", "groenlandia base"],
-    "crisis-politica-filipinas-2026": ["philippines", "filipinas", "duterte", "sara duterte", "marcos", "manila", "philippine president", "icc philippines"],
-    "bosnia-crisis-dayton-2026":      ["bosnia", "sarajevo", "dayton", "republika srpska", "dodik", "high representative", "alto representante", "balkans peace", "schmidt bosnia"],
-    "lago-chad-boko-haram-2026":      ["boko haram", "lake chad", "lago chad", "chad nigeria", "nigeria chad", "mnjtf", "borno", "diffa", "lake chad basin"],
-}
+def _guardar_json_atomico(path, datos):
+    """Escribe a tmp + rename: nadie lee nunca un JSON a medio escribir."""
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(datos, f, ensure_ascii=False, indent=2)
+    os.replace(tmp, path)
 
-# ── KEYWORDS BILATERALES ────────────────────────────────────────────────────
-
-KEYWORDS_BILATERAL = [
-    "sanctions", "sanciones", "tariffs", "aranceles", "expel", "expulsa",
-    "ambassador", "embajador", "threatens", "amenaza", "deploys", "despliega",
-    "ceasefire", "alto el fuego", "agreement", "acuerdo", "tensions", "tensiones",
-    "clash", "choque", "confrontation", "confrontación", "negotiations", "negociaciones",
-    "summit", "cumbre", "ally", "aliado", "bloc", "bloqueo",
-]
-
-KEYWORDS_ROJO    = ["war", "guerra", "attack", "ataque", "killed", "muertos", "strike", "ceasefire violation", "bombing", "bombardeo", "offensive", "invasion"]
-KEYWORDS_NARANJA = ["tension", "tensión", "deploy", "threat", "amenaza", "sanctions", "sanciones", "military", "naval", "troops", "alert"]
-KEYWORDS_AMARILLO= ["talks", "negotiations", "agreement", "diplomat", "summit", "cumbre", "trade", "comercio", "envoy"]
-
-# Keywords para inferir el tipo de nueva crisis
-KEYWORDS_TIPO = {
-    "cyber": [
-        "cyberattack", "ciberataque", "ransomware", "malware", "hack", "apt", "exploit",
-        "vulnerability", "cve", "data breach", "phishing", "ddos", "critical infrastructure",
-        "zero-day", "zero day", "spyware", "botnet", "cyber attack", "cyber incident",
-        "critical system", "power grid", "infrastructure attack",
-    ],
-    "intel": [
-        # Redes de espionaje y agentes
-        "spy ring", "red de espías", "espionage network", "red de espionaje",
-        "spy arrested", "spy caught", "spy charged", "espía detenido", "espía arrestado",
-        "charged with espionage", "acusado de espionaje",
-        # Filtraciones de documentos clasificados
-        "classified documents", "documentos clasificados",
-        "intelligence leak", "leaked intelligence", "leaked classified",
-        "state secrets", "secretos de estado", "classified information disclosed",
-        # Desertores y agentes dobles
-        "defector", "double agent", "agente doble", "mole inside", "informant exposed",
-        # Operaciones encubiertas reveladas
-        "covert operation revealed", "intelligence operation exposed",
-        "secret program exposed", "cia operation", "programa secreto revelado",
-        # Vigilancia y escuchas
-        "surveillance program", "mass surveillance", "wiretapping scandal",
-        # Desinformación como operación de inteligencia
-        "disinformation campaign", "campaña de desinformación",
-        "influence operation", "operación de influencia", "psyop",
-        # Ciber-espionaje (prioridad sobre cyber por su componente de inteligencia)
-        "cyber espionage", "ciberespionaje", "state-sponsored hacking", "nation-state hackers",
-    ],
-    "armed": [
-        "war", "guerra", "attack", "ataque", "bombing", "bombardeo", "offensive",
-        "invasion", "airstrike", "artillery", "missile", "conflict", "batalla",
-        "soldiers", "killed", "muertos", "ceasefire", "frontline", "troops deployed",
-        "military strike", "air strike", "ground offensive", "naval blockade",
-        "ataque militar", "bombardeo", "ofensiva",
-    ],
-    "econ": [
-        "sanctions", "sanciones", "tariff", "arancel", "trade war", "guerra comercial",
-        "export ban", "import ban", "embargo", "gdp", "recession", "currency crisis",
-        "debt default", "deuda", "imf bailout", "world bank", "economic crisis",
-        "crisis económica", "financial crisis", "crisis financiera", "oil price",
-        "energy crisis", "crisis energética",
-    ],
-    "diplo": [
-        # Expulsiones y retiros de personal diplomático
-        "expels diplomat", "expels ambassador", "expulsa diplomático", "expulsa embajador",
-        "persona non grata",
-        "recalls ambassador", "ambassador recalled", "retira embajador",
-        "withdraws ambassador", "llamado a consultas",
-        # Convocatorias formales
-        "summons ambassador", "summon ambassador", "convoca embajador", "summons envoy",
-        # Protestas y notas diplomáticas formales
-        "diplomatic protest", "protesta diplomática", "nota de protesta",
-        "formal complaint", "queja formal", "diplomatic note", "lodges protest",
-        # Ruptura o suspensión de relaciones
-        "breaks diplomatic", "severs diplomatic", "suspend diplomatic relations",
-        "ruptura diplomática", "rompe relaciones", "suspende relaciones",
-        "corta relaciones", "freeze diplomatic",
-        # Cierre de embajadas y consulados
-        "closes embassy", "shuts embassy", "cierra embajada",
-        "embassy closed", "embajada cerrada", "consulate closed",
-        # Incidente diplomático explícito
-        "diplomatic incident", "incidente diplomático", "diplomatic crisis",
-        "crisis diplomática",
-    ],
-}
-
-# ── FUNCIONES AUXILIARES ────────────────────────────────────────────────────
 
 def cargar_db():
-    if os.path.exists(ARCHIVO_DATOS):
-        with open(ARCHIVO_DATOS, "r", encoding="utf-8") as f:
-            try:
-                datos = json.load(f)
-                if isinstance(datos, list):
-                    return {"crisis": datos, "relaciones": []}
-                return datos
-            except json.JSONDecodeError:
-                pass
-    return {"crisis": [], "relaciones": []}
+    datos = _cargar_json(rutas.ARCHIVO_DATOS, {"crisis": [], "relaciones": []})
+    if isinstance(datos, list):  # formato antiguo
+        return {"crisis": datos, "relaciones": []}
+    return datos
 
 
 def guardar_db(datos):
-    with open(ARCHIVO_DATOS, "w", encoding="utf-8") as f:
-        json.dump(datos, f, ensure_ascii=False, indent=2)
+    _guardar_json_atomico(rutas.ARCHIVO_DATOS, datos)
 
 
 def id_crisis(c):
@@ -402,124 +181,59 @@ def id_crisis(c):
 
 
 def cargar_pendientes():
-    if os.path.exists(ARCHIVO_PENDIENTES):
-        with open(ARCHIVO_PENDIENTES, "r", encoding="utf-8") as f:
-            try:
-                return json.load(f)
-            except (json.JSONDecodeError, ValueError):
-                pass
-    return []
+    return _cargar_json(rutas.ARCHIVO_PENDIENTES, [])
 
 
-def guardar_pendientes(pendientes):
-    with open(ARCHIVO_PENDIENTES, "w", encoding="utf-8") as f:
-        json.dump(pendientes, f, ensure_ascii=False, indent=2)
+def guardar_pendientes(p):
+    _guardar_json_atomico(rutas.ARCHIVO_PENDIENTES, p)
 
 
 def cargar_historial():
-    if os.path.exists(ARCHIVO_HISTORIAL):
-        with open(ARCHIVO_HISTORIAL, "r", encoding="utf-8") as f:
-            try:
-                return json.load(f)
-            except (json.JSONDecodeError, ValueError):
-                pass
-    return {}
+    return _cargar_json(rutas.ARCHIVO_HISTORIAL, {})
 
 
-def guardar_historial(historial):
-    with open(ARCHIVO_HISTORIAL, "w", encoding="utf-8") as f:
-        json.dump(historial, f, ensure_ascii=False, indent=2)
+def guardar_historial(h):
+    _guardar_json_atomico(rutas.ARCHIVO_HISTORIAL, h)
 
 
 def registrar_severidad(historial, crisis_id, severity):
-    """Añade un punto al historial solo si han pasado ≥24h desde el último."""
+    """Un punto por día y crisis (actualiza el del día si ya existe)."""
     hoy = date.today().isoformat()
     entradas = historial.setdefault(crisis_id, [])
     if entradas and entradas[-1]["fecha"] == hoy:
         entradas[-1]["severity"] = severity
     else:
         entradas.append({"fecha": hoy, "severity": severity})
-    # Mantener últimos 90 días
     historial[crisis_id] = entradas[-90:]
 
 
-def normalizar(texto):
-    t = unicodedata.normalize("NFD", texto.lower())
-    t = "".join(c for c in t if unicodedata.category(c) != "Mn")
-    t = re.sub(r"[^\w\s]", " ", t)
-    return re.sub(r"\s+", " ", t).strip()
+# ── SALUD DE FUENTES ────────────────────────────────────────────────────────
 
-
-def similitud(a, b):
-    return SequenceMatcher(None, normalizar(a), normalizar(b)).ratio()
-
-
-def slugify(texto):
-    t = unicodedata.normalize("NFD", texto.lower())
-    t = "".join(c for c in t if unicodedata.category(c) != "Mn")
-    t = re.sub(r"[^\w\s-]", "", t)
-    t = re.sub(r"\s+", "-", t.strip())
-    return t[:48] + f"-{date.today().year}"
-
-
-def inferir_nivel(texto):
-    t = texto.lower()
-    if any(k in t for k in KEYWORDS_ROJO):
-        return "rojo"
-    if any(k in t for k in KEYWORDS_NARANJA):
-        return "naranja"
-    return "amarillo"
-
-
-def inferir_tipo(texto):
-    t = texto.lower()
-    for tipo, kws in KEYWORDS_TIPO.items():
-        if any(k in t for k in kws):
-            return tipo
-    return None  # sin clasificación reconocida → no es una crisis geopolítica
-
-
-def inferir_severidad(texto, menciones):
-    t = texto.lower()
-    if any(k in t for k in KEYWORDS_ROJO):
-        base = 4
-    elif any(k in t for k in KEYWORDS_NARANJA):
-        base = 3
+def _registrar_salud(salud, fuente_id, nombre, ok, items, error=""):
+    s = salud.setdefault(fuente_id, {
+        "nombre": nombre, "fallos_consecutivos": 0,
+        "last_ok": None, "last_error": None, "items_ultimo": 0,
+    })
+    s["nombre"] = nombre or s["nombre"]
+    ahora = datetime.now().isoformat(timespec="seconds")
+    if ok:
+        s["last_ok"] = ahora
+        s["items_ultimo"] = items
+        s["fallos_consecutivos"] = 0
+        s.pop("error", None)
     else:
-        base = 2
-    return min(5, base + (1 if menciones >= 6 else 0))
+        s["last_error"] = ahora
+        s["items_ultimo"] = 0
+        s["fallos_consecutivos"] = s.get("fallos_consecutivos", 0) + 1
+        s["error"] = error[:120]
 
 
-def detectar_paises_en_texto(texto):
-    t = texto.lower()
-    encontrados, vistos = [], set()
-    for clave, datos in PAISES.items():
-        if clave in t and datos["nombre"] not in vistos:
-            encontrados.append(datos)
-            vistos.add(datos["nombre"])
-    return encontrados
+# ── AUTO-CREACIÓN DE CRISIS ─────────────────────────────────────────────────
 
-
-def es_bilateral(titulo):
-    paises = detectar_paises_en_texto(titulo)
-    tiene_kw = any(k in titulo.lower() for k in KEYWORDS_BILATERAL)
-    return len(paises) >= 2 and tiene_kw, paises
-
-
-def clasificar_crisis(titulo):
-    t = titulo.lower()
-    for cid, kws in CRISIS_KEYWORDS.items():
-        if any(k in t for k in kws):
-            return cid
-    return None
-
-
-# ── LÓGICA DE AUTO-CREACIÓN ─────────────────────────────────────────────────
-
-UMBRAL_MENCIONES     = 6   # cuántas veces debe aparecer el evento
-UMBRAL_FUENTES       = 3   # en cuántas fuentes distintas (mínimo)
-CADUCIDAD_DIAS       = 14  # descartar candidatos más viejos
-MAX_CRISIS_POR_CICLO = 3   # límite de nuevas crisis auto-creadas por ejecución
+UMBRAL_MENCIONES     = 6
+UMBRAL_FUENTES       = 3
+CADUCIDAD_DIAS       = 14
+MAX_CRISIS_POR_CICLO = 3
 
 
 def limpiar_pendientes_caducados(pendientes):
@@ -528,10 +242,6 @@ def limpiar_pendientes_caducados(pendientes):
 
 
 def registrar_candidato(titulo, fuente, url, pendientes, ids_existentes):
-    """
-    Registra o incrementa un candidato de nueva crisis.
-    Retorna el candidato si alcanza el umbral, o None.
-    """
     for p in pendientes:
         if similitud(titulo, p["titulo_base"]) > 0.60:
             if fuente not in p["fuentes"]:
@@ -546,15 +256,11 @@ def registrar_candidato(titulo, fuente, url, pendientes, ids_existentes):
 
     paises = detectar_paises_en_texto(titulo)
     if not paises:
-        return None  # sin país reconocido no puede ser crisis geopolítica
-
+        return None
     tipo = inferir_tipo(titulo)
     if tipo is None:
-        return None  # titular no clasificable → no se registra como candidato
-
+        return None
     id_tent = slugify(titulo)
-
-    # Evitar duplicados con crisis ya existentes
     if id_tent in ids_existentes:
         return None
 
@@ -573,32 +279,25 @@ def registrar_candidato(titulo, fuente, url, pendientes, ids_existentes):
 
 
 def promover_candidato(cand, db):
-    """Convierte un candidato en una nueva crisis y la añade a datos.json."""
     titulo  = max(cand["titulos"], key=len)
-    tipo    = cand["tipo"]
     paises  = cand["paises"]
-
     if not paises:
-        print(f"  ⏭️  Candidato sin país reconocido, omitido: {titulo[:60]}")
         return None
-
-    lat      = paises[0]["lat"]
-    lng      = paises[0]["lng"]
-    location = paises[0]["nombre"]
-    actors   = list({p["nombre"] for p in paises[:3]})
 
     severidad = inferir_severidad(titulo, cand["menciones"])
     n_fuentes = len(cand["fuentes"])
 
     nueva_crisis = {
         "id":       cand["id_tentativo"],
-        "type":     tipo,
+        "type":     cand["tipo"],
         "severity": severidad,
+        "severity_base": severidad,
+        "creada":   date.today().isoformat(),
         "title":    titulo,
-        "location": location,
-        "lat":      lat,
-        "lng":      lng,
-        "actors":   actors,
+        "location": paises[0]["nombre"],
+        "lat":      paises[0]["lat"],
+        "lng":      paises[0]["lng"],
+        "actors":   list({p["nombre"] for p in paises[:3]}),
         "summary":  (
             f"Crisis detectada automáticamente: {cand['menciones']} menciones "
             f"en {n_fuentes} fuentes independientes. "
@@ -616,19 +315,15 @@ def promover_candidato(cand, db):
     }
 
     db["crisis"].append(nueva_crisis)
-    print(f"  🆕 NUEVA CRISIS CREADA [{tipo.upper()} SEV{severidad}]: {titulo[:70]}...")
+    print(f"  🆕 NUEVA CRISIS [{cand['tipo'].upper()} SEV{severidad}]: {titulo[:70]}…")
     alerta_nueva_crisis(nueva_crisis)
     tweet_nueva_crisis(nueva_crisis)
     return nueva_crisis
 
 
-# ── SCRAPING HTML ────────────────────────────────────────────────────────────
+# ── SCRAPING HTML ───────────────────────────────────────────────────────────
 
 def scraping_fuente(nombre, cfg):
-    """
-    Descarga una página HTML y extrae titulares + enlaces.
-    Retorna lista de {'titulo': str, 'url': str}.
-    """
     resultados = []
     try:
         resp = requests.get(cfg["url"], headers=HEADERS_HTTP, timeout=15)
@@ -636,21 +331,18 @@ def scraping_fuente(nombre, cfg):
         soup = BeautifulSoup(resp.text, "html.parser")
     except Exception as e:
         print(f"  ⚠️  Scraping {nombre} falló: {e}")
-        return resultados
+        return None  # None = fuente caída (para salud); [] = sin items
 
     items = []
     for sel in cfg["selectores_item"]:
         items = soup.select(sel)
         if items:
             break
-
     if not items:
-        # Fallback: intentar extraer todos los <h3> y <h2> con enlaces
         items = soup.select("h3, h2")
 
     base = cfg.get("base_url", "")
     vistos = set()
-
     for item in items[:15]:
         enlace_tag = None
         for sel in cfg["selectores_titulo"]:
@@ -661,242 +353,219 @@ def scraping_fuente(nombre, cfg):
             enlace_tag = item.find("a")
         if not enlace_tag:
             continue
-
         titulo = enlace_tag.get_text(strip=True)
-        href   = enlace_tag.get("href", "")
+        href = enlace_tag.get("href", "")
         if not titulo or not href or titulo in vistos:
             continue
         vistos.add(titulo)
-
         if href.startswith("/"):
             href = base + href
         elif not href.startswith("http"):
             continue
-
         resultados.append({"titulo": titulo, "url": href})
 
-    print(f"  🌐 Scraping {nombre}: {len(resultados)} titulares extraídos")
+    print(f"  🌐 Scraping {nombre}: {len(resultados)} titulares")
     return resultados
 
 
-# ── MAIN ─────────────────────────────────────────────────────────────────────
+# ── PROCESADO DE UN TITULAR ─────────────────────────────────────────────────
+
+def _procesar_titular(titulo, enlace, nombre_fuente, fecha_noticia, ctx,
+                      relaciones_nuevas):
+    """Clasifica un titular y lo enruta. Devuelve nº de eventos añadidos."""
+    db, pendientes, ids_existentes, ids_promovidos, ctx_news = ctx
+    tl_item = {"when": fecha_noticia, "what": titulo,
+               "source": nombre_fuente, "url": enlace}
+
+    nuevos = 0
+    bilateral, paises = es_bilateral(titulo)
+    if bilateral:
+        origen, destino = paises[0], paises[1]
+        relaciones_nuevas.append({
+            "id_relacion": f"rel-nueva-{len(relaciones_nuevas)}",
+            "origen":  {"nombre": origen["nombre"],  "lat": origen["lat"],  "lng": origen["lng"]},
+            "destino": {"nombre": destino["nombre"], "lat": destino["lat"], "lng": destino["lng"]},
+            "tipo":    "diplomática",
+            "nivel":   inferir_nivel(titulo),
+            "fecha":   fecha_noticia,
+            "titular": titulo,
+            "fuente":  nombre_fuente,
+            "url":     enlace,
+        })
+        print(f"     ⚡ Relación: {origen['nombre']} ↔ {destino['nombre']}")
+        nuevos += 1
+    else:
+        crisis_id = clasificar_crisis(titulo)
+        if crisis_id:
+            destino_crisis = None
+            for c in db["crisis"]:
+                if id_crisis(c) == crisis_id:
+                    destino_crisis = c
+                    break
+            if destino_crisis is None:
+                # Reactivación: una crisis archivada que vuelve a sonar revive.
+                for c in db.get("crisis_archivadas", []):
+                    if id_crisis(c) == crisis_id:
+                        db["crisis_archivadas"].remove(c)
+                        c.pop("archivada_en", None)
+                        db["crisis"].append(c)
+                        destino_crisis = c
+                        print(f"     ♻️  Crisis reactivada: {crisis_id}")
+                        break
+            if destino_crisis is not None:
+                tl = destino_crisis.setdefault(
+                    "timeline", destino_crisis.pop("actualizaciones", []),
+                )
+                tl.insert(0, tl_item)
+                destino_crisis["timeline"] = tl[:30]
+                nuevos += 1
+        else:
+            promovido = registrar_candidato(
+                titulo, nombre_fuente, enlace, pendientes,
+                ids_existentes | ids_promovidos,
+            )
+            if (promovido
+                    and promovido["id_tentativo"] not in ids_promovidos
+                    and len(ids_promovidos) < MAX_CRISIS_POR_CICLO):
+                promover_candidato(promovido, db)
+                ids_promovidos.add(promovido["id_tentativo"])
+                pendientes.remove(promovido)
+                nuevos += 1
+
+    # Context nodes (fichas de actor) — independiente de la clasificación.
+    t_low = titulo.lower()
+    for node in db.get("context_nodes", []):
+        if any(k.lower() in t_low for k in node.get("keywords", [])):
+            ctx_news[node["id"]].append(tl_item)
+    return nuevos
+
+
+# ── MAIN ────────────────────────────────────────────────────────────────────
 
 def ejecutar_actualizacion():
-    print("🚀 Iniciando Actualizador Geopolítico (RSS + scraping + auto-crisis)...")
+    print("🚀 Actualizador geopolítico (RSS + scraping + vitalidad)…")
+    rutas.asegurar_semillas()
     db          = cargar_db()
-    pendientes  = cargar_pendientes()
-    pendientes  = limpiar_pendientes_caducados(pendientes)
+    pendientes  = limpiar_pendientes_caducados(cargar_pendientes())
     historial   = cargar_historial()
+    salud       = _cargar_json(rutas.ARCHIVO_SALUD, {})
 
-    # Snapshot de severidades antes de procesar (para detectar escaladas)
-    sev_antes = {id_crisis(c): c.get("severity", 1) for c in db["crisis"]}
-
-    # Acumulador de noticias para context nodes
     ctx_news = {n["id"]: [] for n in db.get("context_nodes", [])}
-
-    # URLs ya vistas (para no duplicar)
     urls_vistas = set()
-    for c in db["crisis"]:
+    for c in db["crisis"] + db.get("crisis_archivadas", []):
         for act in c.get("timeline", c.get("actualizaciones", [])):
             urls_vistas.add(act.get("url", ""))
-    urls_vistas.update(r.get("url", "") for r in db["relaciones"])
+    for r in db["relaciones"]:
+        urls_vistas.add(r.get("url", ""))
+        for e in r.get("eventos", []):
+            urls_vistas.add(e.get("url", ""))
 
     ids_existentes = {id_crisis(c) for c in db["crisis"]}
-    ids_promovidos = set()
+    ids_promovidos: set[str] = set()
+    relaciones_nuevas: list[dict] = []
+    ctx = (db, pendientes, ids_existentes, ids_promovidos, ctx_news)
 
-    nuevas = 0
-    hoy    = date.today().isoformat()
+    nuevos = 0
+    hoy = date.today()
 
-    # ── 1. RSS ───────────────────────────────────────────────────────────────
+    # 1. RSS
     for rss_url in FUENTES_RSS:
-        print(f"\n📡 Escaneando: {rss_url}")
+        print(f"📡 {rss_url}")
         try:
             feed = feedparser.parse(rss_url)
         except Exception as e:
-            print(f"  ⚠️  Error RSS: {e}")
+            _registrar_salud(salud, rss_url, rss_url, False, 0, str(e))
             continue
+        nombre_fuente = getattr(feed.feed, "title", "") or "Internacional"
+        entradas = feed.entries[:8]
+        _registrar_salud(salud, rss_url, nombre_fuente, len(feed.entries) > 0,
+                         len(feed.entries),
+                         "" if feed.entries else f"bozo={getattr(feed, 'bozo', '?')}")
 
-        nombre_fuente = getattr(feed.feed, "title", "Internacional")
-
-        for entrada in feed.entries[:8]:
+        for entrada in entradas:
             enlace = getattr(entrada, "link", "")
             titulo = getattr(entrada, "title", "")
-            if not titulo or enlace in urls_vistas:
+            if not titulo or not enlace or enlace in urls_vistas:
                 continue
-
-            print(f"  ✎ {titulo[:58]}...")
-            nivel   = inferir_nivel(titulo)
-            pub = getattr(entrada, 'published_parsed', None) or getattr(entrada, 'updated_parsed', None)
+            pub = (getattr(entrada, "published_parsed", None)
+                   or getattr(entrada, "updated_parsed", None))
             try:
-                fecha_noticia = date(*pub[:3]).isoformat() if pub else hoy
+                fecha_noticia = date(*pub[:3]).isoformat() if pub else hoy.isoformat()
             except Exception:
-                fecha_noticia = hoy
-            tl_item = {"when": fecha_noticia, "what": titulo, "source": nombre_fuente, "url": enlace}
-
-            bilateral, paises = es_bilateral(titulo)
-            if bilateral and len(paises) >= 2:
-                origen, destino = paises[0], paises[1]
-                db["relaciones"].append({
-                    "id_relacion": f"rel-auto-{int(time.time())}",
-                    "origen":  {"nombre": origen["nombre"],  "lat": origen["lat"],  "lng": origen["lng"]},
-                    "destino": {"nombre": destino["nombre"], "lat": destino["lat"], "lng": destino["lng"]},
-                    "tipo":    "diplomática",
-                    "nivel":   nivel,
-                    "fecha":   fecha_noticia,
-                    "titular": titulo,
-                    "fuente":  nombre_fuente,
-                    "url":     enlace,
-                })
-                print(f"     ⚡ Relación: {origen['nombre']} ↔ {destino['nombre']} [{nivel}]")
-                nuevas += 1
-            else:
-                crisis_id = clasificar_crisis(titulo)
-                if crisis_id:
-                    for c in db["crisis"]:
-                        if id_crisis(c) == crisis_id:
-                            tl = c.setdefault("timeline", c.pop("actualizaciones", []))
-                            tl.insert(0, tl_item)
-                            c["timeline"] = tl[:20]
-                            print(f"     📎 → crisis existente: {crisis_id}")
-                            nuevas += 1
-                            break
-                else:
-                    # Candidato a nueva crisis
-                    promovido = registrar_candidato(
-                        titulo, nombre_fuente, enlace, pendientes, ids_existentes | ids_promovidos
-                    )
-                    if (promovido
-                            and promovido["id_tentativo"] not in ids_promovidos
-                            and len(ids_promovidos) < MAX_CRISIS_POR_CICLO):
-                        promover_candidato(promovido, db)
-                        ids_promovidos.add(promovido["id_tentativo"])
-                        pendientes.remove(promovido)
-                        nuevas += 1
-                    elif promovido and len(ids_promovidos) >= MAX_CRISIS_POR_CICLO:
-                        print(f"  🛑 Cap de {MAX_CRISIS_POR_CICLO} crisis/ciclo alcanzado, candidato queda en pendientes")
-
-            # Recolectar para context nodes (independiente de la clasificación de crisis)
-            t_low = titulo.lower()
-            for node in db.get("context_nodes", []):
-                if any(k.lower() in t_low for k in node.get("keywords", [])):
-                    ctx_news[node["id"]].append({
-                        "when": fecha_noticia, "what": titulo,
-                        "source": nombre_fuente, "url": enlace
-                    })
-
+                fecha_noticia = hoy.isoformat()
+            nuevos += _procesar_titular(
+                titulo, enlace, nombre_fuente, fecha_noticia, ctx, relaciones_nuevas,
+            )
             urls_vistas.add(enlace)
-            time.sleep(0.3)
+        time.sleep(0.2)  # cortesía entre FUENTES (no entre titulares)
 
-    # ── 2. SCRAPING HTML ─────────────────────────────────────────────────────
-    print("\n\n🔍 Iniciando scraping HTML de fuentes especializadas...")
+    # 2. Scraping
     for nombre_src, cfg in FUENTES_SCRAPING.items():
-        items_scraping = scraping_fuente(nombre_src, cfg)
-        tipo_hint = cfg.get("tipo_hint", "diplo")
-
-        for item in items_scraping:
-            titulo = item["titulo"]
-            enlace = item["url"]
-            if not titulo or enlace in urls_vistas:
+        items = scraping_fuente(nombre_src, cfg)
+        _registrar_salud(salud, cfg["url"], nombre_src, bool(items),
+                         len(items or []), "" if items else "sin items")
+        for item in items or []:
+            if item["url"] in urls_vistas:
                 continue
+            nuevos += _procesar_titular(
+                item["titulo"], item["url"], nombre_src, hoy.isoformat(),
+                ctx, relaciones_nuevas,
+            )
+            urls_vistas.add(item["url"])
+        time.sleep(0.2)
 
-            print(f"  ✎ [{nombre_src}] {titulo[:58]}...")
-            tl_item = {"when": hoy, "what": titulo, "source": nombre_src, "url": enlace}
-
-            crisis_id = clasificar_crisis(titulo)
-            if crisis_id:
-                for c in db["crisis"]:
-                    if id_crisis(c) == crisis_id:
-                        tl = c.setdefault("timeline", c.pop("actualizaciones", []))
-                        tl.insert(0, tl_item)
-                        c["timeline"] = tl[:20]
-                        print(f"     📎 → crisis existente: {crisis_id}")
-                        nuevas += 1
-                        break
-            else:
-                promovido = registrar_candidato(
-                    titulo, nombre_src, enlace, pendientes, ids_existentes | ids_promovidos
-                )
-                if (promovido
-                        and promovido["id_tentativo"] not in ids_promovidos
-                        and len(ids_promovidos) < MAX_CRISIS_POR_CICLO):
-                    promover_candidato(promovido, db)
-                    ids_promovidos.add(promovido["id_tentativo"])
-                    pendientes.remove(promovido)
-                    nuevas += 1
-                elif promovido and len(ids_promovidos) >= MAX_CRISIS_POR_CICLO:
-                    print(f"  🛑 Cap de {MAX_CRISIS_POR_CICLO} crisis/ciclo alcanzado, candidato queda en pendientes")
-
-            # Recolectar para context nodes
-            t_low = titulo.lower()
-            for node in db.get("context_nodes", []):
-                if any(k.lower() in t_low for k in node.get("keywords", [])):
-                    ctx_news[node["id"]].append({
-                        "when": hoy, "what": titulo,
-                        "source": nombre_src, "url": enlace
-                    })
-
-            urls_vistas.add(enlace)
-            time.sleep(0.4)
-
-    # ── 3. HISTORIAL DE SEVERIDAD + ALERTAS DE ESCALADA ─────────────────────
+    # 3. Vitalidad: severidad viva, estados, archivo y fusión de relaciones.
+    cambios = aplicar_vitalidad(db, hoy, inferir_nivel)
+    for cb in cambios:
+        registrar_severidad(historial, id_crisis(cb["crisis"]), cb["despues"])
+        flecha = "⬆️" if cb["despues"] > cb["antes"] else "⬇️"
+        print(f"  {flecha} {id_crisis(cb['crisis'])}: {cb['antes']} → {cb['despues']}")
+        if cb["despues"] > cb["antes"]:
+            alerta_escalada(cb["crisis"], cb["antes"], cb["despues"])
+            tweet_escalada(cb["crisis"], cb["antes"], cb["despues"])
     for c in db["crisis"]:
-        cid     = id_crisis(c)
-        sev_act = c.get("severity", 1)
-        sev_ant = sev_antes.get(cid, sev_act)
-        registrar_severidad(historial, cid, sev_act)
-        if sev_act > sev_ant:
-            print(f"  ⬆️  Escalada [{cid}]: {sev_ant} → {sev_act}")
-            alerta_escalada(c, sev_ant, sev_act)
-            tweet_escalada(c, sev_ant, sev_act)
+        registrar_severidad(historial, id_crisis(c), c.get("severity", 1))
 
-    # Alerta para relaciones bilaterales rojas nuevas
+    db["relaciones"] = fusionar_relaciones(db["relaciones"] + relaciones_nuevas, hoy)
+
+    # Alertas de relaciones rojas estrenadas en este ciclo
+    urls_nuevas = {r["url"] for r in relaciones_nuevas}
     for r in db["relaciones"]:
-        if r.get("nivel") == "rojo" and r.get("url", "") not in urls_vistas:
+        if r.get("nivel") == "rojo" and r.get("url") in urls_nuevas:
             alerta_relacion_bilateral(
-                r.get("origen", {}).get("nombre", "?"),
-                r.get("destino", {}).get("nombre", "?"),
-                "rojo",
-                r.get("titular", ""),
+                r["origen"].get("nombre", "?"), r["destino"].get("nombre", "?"),
+                "rojo", r.get("titular", ""),
             )
             tweet_tension_bilateral(
-                r.get("origen", {}).get("nombre", "?"),
-                r.get("destino", {}).get("nombre", "?"),
+                r["origen"].get("nombre", "?"), r["destino"].get("nombre", "?"),
                 r.get("titular", ""),
             )
 
-    guardar_historial(historial)
-
-    # ── 3b. ACTUALIZAR NOTICIAS DE CONTEXT NODES ─────────────────────────────
-    ctx_actualizado = False
+    # 3b. Context nodes
     for node in db.get("context_nodes", []):
-        nid = node["id"]
-        collected = ctx_news.get(nid, [])
+        collected = ctx_news.get(node["id"], [])
         if not collected:
             continue
-        seen_urls = {x["url"] for x in collected}
-        existing = [n for n in node.get("news", []) if n.get("url") not in seen_urls]
-        node["news"] = (collected + existing)[:5]
-        ctx_actualizado = True
-        print(f"  📍 Context node [{nid}]: {len(collected)} noticias nuevas")
+        seen = {x["url"] for x in collected}
+        node["news"] = (collected + [n for n in node.get("news", [])
+                                     if n.get("url") not in seen])[:5]
 
-    # ── 4. PERSISTIR ─────────────────────────────────────────────────────────
+    # 4. Persistencia atómica
+    db["actualizado"] = datetime.now().isoformat(timespec="seconds")
+    guardar_historial(historial)
     guardar_pendientes(pendientes)
+    _guardar_json_atomico(rutas.ARCHIVO_SALUD, salud)
+    guardar_db(db)
 
-    if nuevas > 0 or ctx_actualizado:
-        guardar_db(db)
-        print(f"\n🎉 {nuevas} eventos añadidos/actualizados en datos.json")
-        if ids_promovidos:
-            print(f"   🆕 Nuevas crisis auto-creadas: {len(ids_promovidos)}")
-            for cid in ids_promovidos:
-                print(f"      · {cid}")
-    else:
-        print("\n🤷  Sin novedades.")
-
-    pendientes_count = len(pendientes)
-    if pendientes_count:
-        print(f"\n📋 {pendientes_count} candidatos en seguimiento (pendientes.json):")
-        for p in sorted(pendientes, key=lambda x: -x["menciones"])[:5]:
-            print(f"   [{p['menciones']}× / {len(p['fuentes'])} fuentes] {p['titulo_base'][:60]}")
+    activas = sum(1 for c in db["crisis"] if c.get("estado") == "activa")
+    latentes = sum(1 for c in db["crisis"] if c.get("estado") == "latente")
+    fuentes_ok = sum(1 for s in salud.values() if s.get("fallos_consecutivos", 0) == 0)
+    print(f"\n🎉 {nuevos} eventos · crisis {activas} activas / {latentes} latentes / "
+          f"{len(db.get('crisis_archivadas', []))} archivadas · "
+          f"{len(db['relaciones'])} relaciones vigentes · "
+          f"fuentes OK {fuentes_ok}/{len(salud)}")
+    if cambios:
+        print(f"   ↕ {len(cambios)} cambios de severidad")
 
 
 if __name__ == "__main__":

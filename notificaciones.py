@@ -11,6 +11,9 @@ SETUP (una sola vez):
   5. Añade al .env (local) y a Railway (producción):
        TELEGRAM_BOT_TOKEN=xxxxxxxxxx:xxxxxxxxxxxxxxxxxxxxxxx
        TELEGRAM_CHAT_ID=xxxxxxxxx
+
+El briefing diario es un DIFF de las últimas 24 h (qué cambió), no un
+listado de las crisis de siempre. Si no hubo cambios, lo dice en dos líneas.
 """
 import json
 import os
@@ -18,12 +21,12 @@ import requests
 from datetime import date, datetime, timedelta
 from dotenv import load_dotenv
 
+import rutas
+
 load_dotenv()
 
 _TOKEN   = os.getenv("TELEGRAM_BOT_TOKEN", "")
 _CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
-
-ARCHIVO_SUSCRIPTORES = "suscriptores.json"
 
 TYPE_EMOJI = {
     "armed": "🔴",
@@ -35,6 +38,11 @@ TYPE_EMOJI = {
 
 SEV_BAR = {1: "▪︎░░░░", 2: "▪︎▪︎░░░", 3: "▪︎▪︎▪︎░░", 4: "▪︎▪︎▪︎▪︎░", 5: "▪︎▪︎▪︎▪︎▪︎"}
 
+MESES_ES = [
+    "", "enero", "febrero", "marzo", "abril", "mayo", "junio",
+    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+]
+
 
 def _configurado():
     return bool(_TOKEN)
@@ -43,11 +51,10 @@ def _configurado():
 def _cargar_suscriptores() -> list:
     ids = []
     try:
-        with open(ARCHIVO_SUSCRIPTORES, "r", encoding="utf-8") as f:
+        with open(rutas.ARCHIVO_SUSCRIPTORES, "r", encoding="utf-8") as f:
             ids = json.load(f)
     except Exception:
         pass
-    # El propietario siempre recibe aunque el archivo esté vacío
     if _CHAT_ID:
         try:
             owner = int(_CHAT_ID)
@@ -60,7 +67,7 @@ def _cargar_suscriptores() -> list:
 
 def _guardar_suscriptores(ids: list):
     try:
-        with open(ARCHIVO_SUSCRIPTORES, "w", encoding="utf-8") as f:
+        with open(rutas.ARCHIVO_SUSCRIPTORES, "w", encoding="utf-8") as f:
             json.dump(ids, f)
     except Exception:
         pass
@@ -101,9 +108,8 @@ def enviar_a(mensaje: str, chat_id: int) -> bool:
 def enviar_a_todos(mensaje: str) -> bool:
     if not _configurado():
         return False
-    ids = _cargar_suscriptores()
     exito = False
-    for chat_id in ids:
+    for chat_id in _cargar_suscriptores():
         if enviar_a(mensaje, chat_id):
             exito = True
     return exito
@@ -119,40 +125,32 @@ def enviar_telegram(mensaje: str) -> bool:
         return False
 
 
+# ── ALERTAS PUNTUALES ───────────────────────────────────────────────────────
+
 def alerta_nueva_crisis(crisis: dict) -> bool:
     tipo   = crisis.get("type", "diplo")
     emoji  = TYPE_EMOJI.get(tipo, "⚪")
     sev    = crisis.get("severity", 1)
-    barra  = SEV_BAR.get(sev, "?")
-    titulo = crisis.get("title", "—")
-    loc    = crisis.get("location", "—")
-    resumen = crisis.get("summary", "")[:200]
-
     msg = (
         f"{emoji} <b>NUEVA CRISIS DETECTADA</b>\n\n"
-        f"<b>{titulo}</b>\n"
-        f"📍 {loc}\n"
-        f"⚠️ Severidad: {barra} ({sev}/5)\n"
+        f"<b>{crisis.get('title', '—')}</b>\n"
+        f"📍 {crisis.get('location', '—')}\n"
+        f"⚠️ Severidad: {SEV_BAR.get(sev, '?')} ({sev}/5)\n"
         f"🏷 Tipo: {tipo.upper()}\n\n"
-        f"{resumen}\n\n"
+        f"{crisis.get('summary', '')[:200]}\n\n"
         f"🌐 geopolitikapp.com"
     )
     return enviar_a_todos(msg)
 
 
 def alerta_escalada(crisis: dict, sev_anterior: int, sev_nueva: int) -> bool:
-    tipo   = crisis.get("type", "diplo")
-    emoji  = TYPE_EMOJI.get(tipo, "⚪")
-    titulo = crisis.get("title", "—")
-    loc    = crisis.get("location", "—")
-    antes  = SEV_BAR.get(sev_anterior, "?")
-    ahora  = SEV_BAR.get(sev_nueva, "?")
-
+    emoji = TYPE_EMOJI.get(crisis.get("type", "diplo"), "⚪")
     msg = (
         f"⬆️ <b>ESCALADA DE CRISIS</b>\n\n"
-        f"{emoji} <b>{titulo}</b>\n"
-        f"📍 {loc}\n\n"
-        f"Severidad: {antes} ({sev_anterior}) → {ahora} ({sev_nueva})\n\n"
+        f"{emoji} <b>{crisis.get('title', '—')}</b>\n"
+        f"📍 {crisis.get('location', '—')}\n\n"
+        f"Severidad: {SEV_BAR.get(sev_anterior, '?')} ({sev_anterior}) → "
+        f"{SEV_BAR.get(sev_nueva, '?')} ({sev_nueva})\n\n"
         f"🌐 geopolitikapp.com"
     )
     return enviar_a_todos(msg)
@@ -170,77 +168,113 @@ def alerta_relacion_bilateral(origen: str, destino: str, nivel: str, titular: st
     return enviar_a_todos(msg)
 
 
-def briefing_diario() -> bool:
-    try:
-        with open("datos.json", "r", encoding="utf-8") as f:
-            db = json.load(f)
-        crisis = db.get("crisis", [])
-        relaciones = db.get("relaciones", [])
-    except Exception:
-        crisis, relaciones = [], []
+# ── BRIEFING DIARIO (diff de 24 h) ──────────────────────────────────────────
+
+def _fecha_es(d: datetime) -> str:
+    return f"{d.day} de {MESES_ES[d.month]} de {d.year}"
+
+
+def briefing_texto(ahora: datetime | None = None) -> str:
+    """Compone el briefing como diff de las últimas 24 h. Puro: no envía."""
+    ahora = ahora or datetime.now()
+    hoy = ahora.date()
+    ayer = hoy - timedelta(days=1)
+    corte = {hoy.isoformat(), ayer.isoformat()}
 
     try:
-        with open("historial_severidad.json", "r", encoding="utf-8") as f:
+        with open(rutas.ARCHIVO_DATOS, "r", encoding="utf-8") as f:
+            db = json.load(f)
+    except Exception:
+        db = {}
+    crisis = db.get("crisis", [])
+    relaciones = db.get("relaciones", [])
+
+    try:
+        with open(rutas.ARCHIVO_HISTORIAL, "r", encoding="utf-8") as f:
             historial = json.load(f)
     except Exception:
         historial = {}
 
-    hoy = date.today().isoformat()
+    lineas = [f"🌍 <b>BRIEFING GEOPOLÍTICO — {_fecha_es(ahora)}</b>"]
+    hay_algo = False
 
-    crisis_ord = sorted(crisis, key=lambda c: -c.get("severity", 0))
+    # 1. Crisis nuevas (creadas en las últimas 24 h)
+    nuevas = [c for c in crisis if c.get("creada") in corte]
+    if nuevas:
+        hay_algo = True
+        lineas.append("\n🆕 <b>CRISIS NUEVAS</b>")
+        for c in nuevas[:3]:
+            emoji = TYPE_EMOJI.get(c.get("type", "diplo"), "⚪")
+            lineas.append(f"{emoji} <b>{c.get('title', '—')}</b> · 📍 {c.get('location', '—')}")
 
-    escaladas = []
+    # 2. Escaladas y desescaladas reales (diff del historial diario)
+    escaladas, desescaladas = [], []
     for c in crisis:
-        cid = c.get("id", "")
-        puntos = historial.get(cid, [])
-        if len(puntos) >= 2:
-            ultimo = puntos[-1]
-            penultimo = puntos[-2]
-            if ultimo.get("fecha") == hoy and ultimo["severity"] > penultimo["severity"]:
-                escaladas.append((c, penultimo["severity"], ultimo["severity"]))
+        puntos = historial.get(c.get("id", ""), [])
+        if len(puntos) >= 2 and puntos[-1].get("fecha") in corte:
+            ant, act = puntos[-2]["severity"], puntos[-1]["severity"]
+            if act > ant:
+                escaladas.append((c, ant, act))
+            elif act < ant:
+                desescaladas.append((c, ant, act))
+    if escaladas:
+        hay_algo = True
+        lineas.append("\n⬆️ <b>ESCALADAS</b>")
+        for c, ant, act in escaladas[:4]:
+            lineas.append(f"• {c.get('title', '—')}: {ant} → <b>{act}</b>/5")
+    if desescaladas:
+        hay_algo = True
+        lineas.append("\n⬇️ <b>DESESCALADAS</b>")
+        for c, ant, act in desescaladas[:4]:
+            lineas.append(f"• {c.get('title', '—')}: {ant} → {act}/5")
 
-    rojas = [r for r in relaciones if r.get("nivel") == "rojo"]
-
-    fecha_fmt = datetime.now().strftime("%-d de %B de %Y")
-    lineas = [f"🌍 <b>BRIEFING GEOPOLÍTICO — {fecha_fmt}</b>\n"]
-
-    criticas = [c for c in crisis_ord if c.get("severity", 0) >= 4]
-    if criticas:
-        lineas.append("🔥 <b>SITUACIONES CRÍTICAS</b>")
-        for c in criticas[:5]:
+    # 3. Crisis con actividad real en 24 h (noticias nuevas)
+    con_actividad = []
+    for c in crisis:
+        if c.get("creada") in corte:
+            continue  # ya salió en "nuevas"
+        recientes = [t for t in c.get("timeline", []) if t.get("when") in corte]
+        if recientes:
+            con_actividad.append((c, recientes))
+    con_actividad.sort(key=lambda x: (-len(x[1]), -x[0].get("severity", 0)))
+    if con_actividad:
+        hay_algo = True
+        lineas.append("\n🔥 <b>CON ACTIVIDAD (24 H)</b>")
+        for c, recientes in con_actividad[:5]:
             emoji = TYPE_EMOJI.get(c.get("type", "diplo"), "⚪")
             sev = c.get("severity", 1)
-            barra = SEV_BAR.get(sev, "?")
-            lineas.append(f"{emoji} <b>{c['title']}</b>\n   📍 {c.get('location','—')} · {barra} ({sev}/5)")
-        lineas.append("")
-
-    if escaladas:
-        lineas.append("⬆️ <b>ESCALADAS EN LAS ÚLTIMAS 24H</b>")
-        for c, ant, nva in escaladas[:3]:
             lineas.append(
-                f"• {c.get('title','—')} "
-                f"({SEV_BAR.get(ant,'?')} {ant} → {SEV_BAR.get(nva,'?')} {nva})"
+                f"{emoji} <b>{c.get('title', '—')}</b> "
+                f"({SEV_BAR.get(sev, '?')} {sev}/5 · {len(recientes)} noticias)"
             )
-        lineas.append("")
+            lineas.append(f"   <i>{recientes[0].get('what', '')[:110]}</i>")
 
+    # 4. Relaciones rojas con eventos en 24 h
+    rojas = [
+        r for r in relaciones
+        if r.get("nivel") == "rojo" and r.get("fecha") in corte
+    ]
     if rojas:
-        lineas.append("🔴 <b>TENSIONES BILATERALES CRÍTICAS</b>")
+        hay_algo = True
+        lineas.append("\n🔴 <b>TENSIONES BILATERALES CRÍTICAS</b>")
         for r in rojas[:3]:
-            origen = r.get("origen", {}).get("nombre", "?") if isinstance(r.get("origen"), dict) else r.get("origen", "?")
-            destino = r.get("destino", {}).get("nombre", "?") if isinstance(r.get("destino"), dict) else r.get("destino", "?")
-            lineas.append(f"• {origen} ↔ {destino}: <i>{r.get('titular','')[:100]}</i>")
-        lineas.append("")
+            o = r.get("origen", {}).get("nombre", "?")
+            d = r.get("destino", {}).get("nombre", "?")
+            lineas.append(f"• {o} ↔ {d}: <i>{r.get('titular', '')[:100]}</i>")
 
-    n_armed = sum(1 for c in crisis if c.get("type") == "armed")
-    n_diplo = sum(1 for c in crisis if c.get("type") == "diplo")
-    n_econ  = sum(1 for c in crisis if c.get("type") == "econ")
-    sev_media = round(sum(c.get("severity", 1) for c in crisis) / len(crisis), 1) if crisis else 0
+    if not hay_algo:
+        lineas.append("\nSin cambios significativos en las últimas 24 horas.")
 
-    lineas.append("📊 <b>RESUMEN GLOBAL</b>")
-    lineas.append(f"Crisis monitorizadas: <b>{len(crisis)}</b>")
-    lineas.append(f"Severidad media: <b>{sev_media}/5</b>")
-    lineas.append(f"🔴 Armadas: {n_armed}  🔵 Diplomáticas: {n_diplo}  🟡 Económicas: {n_econ}")
-    lineas.append("")
+    # 5. Pie con totales
+    activas = sum(1 for c in crisis if c.get("estado", "activa") == "activa")
+    latentes = sum(1 for c in crisis if c.get("estado") == "latente")
+    lineas.append(
+        f"\n📊 {activas} crisis activas · {latentes} latentes · "
+        f"{len(relaciones)} relaciones vigentes"
+    )
     lineas.append("🌐 geopolitikapp.com")
+    return "\n".join(lineas)
 
-    return enviar_a_todos("\n".join(lineas))
+
+def briefing_diario() -> bool:
+    return enviar_a_todos(briefing_texto())

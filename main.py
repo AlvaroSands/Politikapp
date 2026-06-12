@@ -6,6 +6,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from actualizador import ejecutar_actualizacion
 from notificaciones import briefing_diario, agregar_suscriptor, eliminar_suscriptor, enviar_a
+import rutas
 import uvicorn
 import json
 import os
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 scheduler = BackgroundScheduler(timezone="UTC")
 
 BRIEFING_HORA_UTC = 6
-BRIEFING_MARCA = "briefing_ultima_fecha.txt"
+BRIEFING_MARCA = rutas.ARCHIVO_BRIEFING
 
 
 def _briefing_ya_enviado_hoy() -> bool:
@@ -55,6 +56,8 @@ TYPE_ES = {
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Con DATA_DIR (volumen en Railway): sembrar datos la primera vez.
+    rutas.asegurar_semillas()
     scheduler.add_job(
         ejecutar_actualizacion, "interval", hours=3, id="actualizador",
         next_run_time=datetime.now()
@@ -110,7 +113,7 @@ async def security_headers(request: Request, call_next):
 
 def _leer_datos():
     try:
-        with open("datos.json", "r", encoding="utf-8") as f:
+        with open(rutas.ARCHIVO_DATOS, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception:
         return {"crisis": [], "relaciones": []}
@@ -174,7 +177,7 @@ async def health():
 @app.get("/datos.json")
 async def api_datos():
     try:
-        with open("datos.json", "r", encoding="utf-8") as f:
+        with open(rutas.ARCHIVO_DATOS, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
         logger.error(f"Error leyendo datos.json: {e}")
@@ -184,7 +187,17 @@ async def api_datos():
 @app.get("/historial.json")
 async def api_historial():
     try:
-        with open("historial_severidad.json", "r", encoding="utf-8") as f:
+        with open(rutas.ARCHIVO_HISTORIAL, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+@app.get("/salud.json")
+async def api_salud():
+    """Telemetría de fuentes: qué feeds responden y cuáles están caídos."""
+    try:
+        with open(rutas.ARCHIVO_SALUD, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception:
         return {}
