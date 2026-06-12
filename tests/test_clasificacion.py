@@ -1,7 +1,17 @@
 """Tests del matching de países y clasificación de titulares."""
 from clasificacion import (
-    clasificar_crisis, detectar_paises_en_texto, es_bilateral, inferir_nivel,
+    clasificar_crisis, detectar_paises_en_texto, es_bilateral, es_ruido,
+    inferir_nivel,
 )
+
+
+def test_es_ruido_deporte_y_cultura():
+    # caso real: pieza del Mundial cuyo summary menciona Haití
+    assert es_ruido("She waited decades for Scotland to make the World Cup")
+    assert es_ruido("Eurovision winner announces concert tour of Israel")
+    # pero una señal roja explícita no se descarta nunca
+    assert not es_ruido("Bombing at World Cup stadium kills three")
+    assert not es_ruido("Russia launches offensive in Donbas")
 
 
 def nombres(texto):

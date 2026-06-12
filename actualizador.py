@@ -23,8 +23,8 @@ from bs4 import BeautifulSoup
 
 from clasificacion import (
     clasificar_crisis, clasificar_crisis_dinamica, detectar_paises_en_texto,
-    es_bilateral, inferir_nivel, inferir_severidad, inferir_tipo, normalizar,
-    slugify,
+    es_bilateral, es_ruido, inferir_nivel, inferir_severidad, inferir_tipo,
+    normalizar, slugify,
 )
 from vitalidad import aplicar_vitalidad, fusionar_relaciones
 from notificaciones import alerta_nueva_crisis, alerta_escalada, alerta_relacion_bilateral
@@ -384,6 +384,8 @@ def _procesar_titular(titulo, texto_clasif, enlace, nombre_fuente,
     tipo (más contexto); la geografía de relaciones/candidatos sale solo del
     titular para no arrastrar países tangenciales."""
     db, pendientes, ids_existentes, ids_promovidos, ctx_news = ctx
+    if es_ruido(texto_clasif):
+        return 0
     tl_item = {"when": fecha_noticia, "what": titulo,
                "source": nombre_fuente, "url": enlace}
 

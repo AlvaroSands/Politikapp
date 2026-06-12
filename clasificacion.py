@@ -309,6 +309,30 @@ def detectar_paises_en_texto(texto: str) -> list[dict]:
     return [d for _, d in sorted(encontrados.values(), key=lambda x: x[0])]
 
 
+# Deporte, cultura y entretenimiento: los feeds generalistas (BBC World…)
+# mezclan estas piezas y sus summaries mencionan países constantemente
+# (mundiales, giras, festivales). Se descartan salvo señal roja explícita.
+KEYWORDS_RUIDO = [
+    "world cup", "copa mundial", "copa del mundo", "fifa", "olympic", "olímpico",
+    "olimpico", "football", "soccer", "fútbol", "futbol", "basketball", "tennis",
+    "cricket", "rugby", "premier league", "champions league", "grand slam",
+    "formula 1", "formula one", "grand prix", "eurovision", "eurovisión",
+    "box office", "film festival", "movie", "película", "grammy", "oscars",
+    "premios oscar", "album", "concert tour", "celebrity", "royal family",
+    "wimbledon", "super bowl", "playoffs",
+]
+_PAT_RUIDO = None  # se compila perezosamente (tras definir _patron)
+
+
+def es_ruido(texto: str) -> bool:
+    """Pieza de deporte/cultura sin señal de crisis: no entra al pipeline."""
+    global _PAT_RUIDO
+    if _PAT_RUIDO is None:
+        _PAT_RUIDO = [_patron(k) for k in KEYWORDS_RUIDO]
+    t = normalizar(texto)
+    return _alguno(_PAT_RUIDO, t) and not _alguno(_PAT_ROJO, t)
+
+
 def inferir_nivel(texto: str) -> str:
     t = normalizar(texto)
     if _alguno(_PAT_ROJO, t):

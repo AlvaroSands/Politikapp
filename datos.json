@@ -368,12 +368,6 @@
         },
         {
           "when": "2026-06-12",
-          "what": "Trump cancels further Iran strikes. And, U.S. men's soccer takes on Paraguay",
-          "source": "NPR Topics: World",
-          "url": "https://www.npr.org/2026/06/12/g-s1-127711/up-first-newsletter-iran-peace-national-intelligence-director-world-cup"
-        },
-        {
-          "when": "2026-06-12",
           "what": "Trump grouses about ‘weak and pathetic’ Iran, dismisses ‘leaked’ deal",
           "source": "POLITICO",
           "url": "https://www.politico.com/news/2026/06/12/trump-iran-peace-deal-leak-00960515?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication"
@@ -406,10 +400,10 @@
       "severity_base": 5,
       "estado": "activa",
       "actividad": {
-        "score": 44.8,
+        "score": 43.8,
         "fuentes_7d": 15,
         "dias_sin_noticias": 0,
-        "noticias_24h": 28
+        "noticias_24h": 27
       }
     },
     {
@@ -638,12 +632,6 @@
           "url": "https://www.theguardian.com/world/2026/jun/08/bandits-in-north-west-nigeria-abduct-villagers-they-invited-to-discuss-peace-talks"
         },
         {
-          "when": "2026-06-09",
-          "what": "Who is the Somali referee barred from entering the US for the World Cup?",
-          "source": "BBC News",
-          "url": "https://www.bbc.com/news/articles/c8j27zkp94zo?at_medium=RSS&at_campaign=rss"
-        },
-        {
           "when": "2026-05-01",
           "what": "AES confirma ataques aéreos conjuntos en Mali (Gao, Menaka, Kidal) tras ofensivas yihadistas",
           "source": "Africanews",
@@ -665,8 +653,8 @@
       "severity_base": 4,
       "estado": "activa",
       "actividad": {
-        "score": 2.84,
-        "fuentes_7d": 4,
+        "score": 2.37,
+        "fuentes_7d": 3,
         "dias_sin_noticias": 0,
         "noticias_24h": 2
       }
@@ -1071,44 +1059,6 @@
         }
       ],
       "severity_base": 2,
-      "estado": "activa",
-      "actividad": {
-        "score": 1.0,
-        "fuentes_7d": 1,
-        "dias_sin_noticias": 0,
-        "noticias_24h": 1
-      }
-    },
-    {
-      "id": "violencia-haiti",
-      "type": "armed",
-      "severity": 4,
-      "title": "Colapso Institucional en Haití",
-      "location": "Puerto Príncipe · Haití",
-      "lat": 18.5392,
-      "lng": -72.3364,
-      "actors": [
-        "Bandas criminales (G9)",
-        "Misión MSS",
-        "OEA",
-        "EE.UU."
-      ],
-      "summary": "Las bandas criminales controlan más del 80% de Puerto Príncipe. La misión multinacional de seguridad (MSS) desplegada con apoyo de Kenia opera con recursos limitados. Consejo de transición con dificultades para instalarse.",
-      "timeline": [
-        {
-          "when": "2026-06-12",
-          "what": "She waited decades for Scotland to make the World Cup. At 93, she'll cheer in person",
-          "source": "NPR Topics: World",
-          "url": "https://www.npr.org/2026/06/12/nx-s1-5842854/scotland-world-cup-tartan-army-fans"
-        },
-        {
-          "when": "2026-04-05",
-          "what": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición",
-          "source": "France 24",
-          "url": "#"
-        }
-      ],
-      "severity_base": 4,
       "estado": "activa",
       "actividad": {
         "score": 1.0,
@@ -2158,6 +2108,39 @@
         "score": 0.0,
         "fuentes_7d": 0,
         "dias_sin_noticias": 35,
+        "noticias_24h": 0
+      },
+      "archivada_en": "2026-06-12"
+    },
+    {
+      "id": "violencia-haiti",
+      "type": "armed",
+      "severity": 1,
+      "title": "Colapso Institucional en Haití",
+      "location": "Puerto Príncipe · Haití",
+      "lat": 18.5392,
+      "lng": -72.3364,
+      "actors": [
+        "Bandas criminales (G9)",
+        "Misión MSS",
+        "OEA",
+        "EE.UU."
+      ],
+      "summary": "Las bandas criminales controlan más del 80% de Puerto Príncipe. La misión multinacional de seguridad (MSS) desplegada con apoyo de Kenia opera con recursos limitados. Consejo de transición con dificultades para instalarse.",
+      "timeline": [
+        {
+          "when": "2026-04-05",
+          "what": "Tiroteos cerca del palacio nacional retrasan la instalación del consejo de transición",
+          "source": "France 24",
+          "url": "#"
+        }
+      ],
+      "severity_base": 4,
+      "estado": "archivada",
+      "actividad": {
+        "score": 0.0,
+        "fuentes_7d": 0,
+        "dias_sin_noticias": 68,
         "noticias_24h": 0
       },
       "archivada_en": "2026-06-12"
