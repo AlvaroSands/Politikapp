@@ -36,8 +36,11 @@ PAISES = {
     "taipei":       {"nombre": "Taiwán",         "lat": 23.70, "lng": 120.96},
     "usa":          {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
     "washington":   {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
+    "pentagon":     {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
+    "white house":  {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
     "trump":        {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
     "eeuu":         {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},
+    "ee uu":        {"nombre": "EE.UU.",         "lat": 38.90, "lng": -77.04},  # "EE.UU." normalizado
     "estados unidos": {"nombre": "EE.UU.",       "lat": 38.90, "lng": -77.04},
     "north korea":  {"nombre": "Corea del Norte","lat": 39.04, "lng": 125.76},
     "corea del norte": {"nombre": "Corea del Norte","lat": 39.04, "lng": 125.76},
@@ -214,6 +217,9 @@ KEYWORDS_TIPO = {
         "soldiers", "killed", "muertos", "ceasefire", "frontline", "troops deployed",
         "military strike", "air strike", "ground offensive", "naval blockade",
         "ataque militar", "ofensiva",
+        "army", "warship", "warships", "aircraft carrier", "strike group",
+        "mobilises", "mobilizes", "moviliza", "ejercito", "portaaviones",
+        "buque de guerra", "troops",
     ],
     "econ": [
         "sanctions", "sanciones", "tariff", "arancel", "trade war", "guerra comercial",
@@ -342,4 +348,25 @@ def clasificar_crisis(titulo: str) -> str | None:
     for cid, patrones in _PATRONES_CRISIS.items():
         if _alguno(patrones, t):
             return cid
+    return None
+
+
+def clasificar_crisis_dinamica(texto: str, crisis_list: list[dict]) -> str | None:
+    """
+    Asigna seguimiento a crisis auto-creadas (las que tienen `paises_clave`):
+    el texto debe mencionar TODOS sus países clave (máx 2); si la crisis
+    tiene un solo país, se exige además que el tipo inferido coincida, para
+    que una crisis de Venezuela no absorba toda noticia sobre Venezuela.
+    """
+    nombres = {p["nombre"] for p in detectar_paises_en_texto(texto)}
+    if not nombres:
+        return None
+    tipo_texto = inferir_tipo(texto)
+    for c in crisis_list:
+        clave = c.get("paises_clave")
+        if not clave:
+            continue
+        if all(n in nombres for n in clave[:2]):
+            if len(clave) >= 2 or (tipo_texto is not None and tipo_texto == c.get("type")):
+                return c.get("id")
     return None

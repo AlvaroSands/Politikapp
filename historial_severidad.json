@@ -106,7 +106,7 @@
     },
     {
       "fecha": "2026-06-12",
-      "severity": 5
+      "severity": 4
     }
   ],
   "conflicto-mar-rojo-huties": [
@@ -150,7 +150,7 @@
     },
     {
       "fecha": "2026-06-12",
-      "severity": 1
+      "severity": 4
     }
   ],
   "conflicto-ecuador": [
@@ -194,7 +194,7 @@
     },
     {
       "fecha": "2026-06-12",
-      "severity": 4
+      "severity": 3
     }
   ],
   "corea-norte-misiles-2026": [

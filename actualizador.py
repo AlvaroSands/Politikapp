@@ -22,8 +22,9 @@ import requests
 from bs4 import BeautifulSoup
 
 from clasificacion import (
-    clasificar_crisis, detectar_paises_en_texto, es_bilateral,
-    inferir_nivel, inferir_severidad, inferir_tipo, similitud, slugify,
+    clasificar_crisis, clasificar_crisis_dinamica, detectar_paises_en_texto,
+    es_bilateral, inferir_nivel, inferir_severidad, inferir_tipo, normalizar,
+    slugify,
 )
 from vitalidad import aplicar_vitalidad, fusionar_relaciones
 from notificaciones import alerta_nueva_crisis, alerta_escalada, alerta_relacion_bilateral
@@ -108,6 +109,8 @@ FUENTES_RSS = [
     "https://www.ukrinform.net/rss",
     "https://meduza.io/rss/all",
     # Ciberseguridad
+    "https://www.cisa.gov/cybersecurity-advisories/all.xml",        # oficial (antes scraping)
+    "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml",   # oficial (antes scraping)
     "https://www.securityweek.com/feed",
     "https://krebsonsecurity.com/feed/",
     "https://feeds.feedburner.com/TheHackersNews",
@@ -120,30 +123,11 @@ FUENTES_RSS = [
 ]
 
 # ── FUENTES CON SCRAPING HTML ───────────────────────────────────────────────
+# Vacío desde 2026-06-12: CISA y NCSC publican RSS oficial (arriba) y la web
+# de ISW devuelve 403 a cualquier bot. El mecanismo queda por si alguna
+# fuente futura no ofrece RSS.
 
-FUENTES_SCRAPING = {
-    "CISA Advisories": {
-        "url": "https://www.cisa.gov/news-events/cybersecurity-advisories",
-        "tipo_hint": "cyber",
-        "selectores_item": ["article.c-news-article", "div.views-row", "li.c-view__row"],
-        "selectores_titulo": ["h3 a", "h2 a", ".c-news-article__title a"],
-        "base_url": "https://www.cisa.gov",
-    },
-    "NCSC UK": {
-        "url": "https://www.ncsc.gov.uk/news/all-news",
-        "tipo_hint": "cyber",
-        "selectores_item": ["article.article-preview", "li.search-result", "div.search-result"],
-        "selectores_titulo": ["h3 a", "h2 a", ".article-preview__title a"],
-        "base_url": "https://www.ncsc.gov.uk",
-    },
-    "ISW Ukraine": {
-        "url": "https://www.understandingwar.org/ukraine-conflict-updates",
-        "tipo_hint": "armed",
-        "selectores_item": ["div.views-row", "article", "div.field-content"],
-        "selectores_titulo": ["h3 a", "h2 a", "span.field-content a"],
-        "base_url": "https://www.understandingwar.org",
-    },
-}
+FUENTES_SCRAPING: dict[str, dict] = {}
 
 # ── PERSISTENCIA ────────────────────────────────────────────────────────────
 
@@ -229,88 +213,111 @@ def _registrar_salud(salud, fuente_id, nombre, ok, items, error=""):
 
 
 # ── AUTO-CREACIÓN DE CRISIS ─────────────────────────────────────────────────
+# v2 (2026-06-12): los candidatos se agrupan por (países, tipo) en vez de
+# por similitud de titulares (>0.60 entre medios distintos no disparaba
+# nunca: cada medio titula a su manera). Madura un candidato con ≥5
+# menciones de ≥3 fuentes en una ventana de 72 h.
 
-UMBRAL_MENCIONES     = 6
+UMBRAL_MENCIONES     = 5
 UMBRAL_FUENTES       = 3
-CADUCIDAD_DIAS       = 14
+VENTANA_MADUREZ_DIAS = 3
+MENCION_CADUCIDAD    = 7   # las menciones más viejas se purgan
 MAX_CRISIS_POR_CICLO = 3
 
 
-def limpiar_pendientes_caducados(pendientes):
-    limite = (datetime.now() - timedelta(days=CADUCIDAD_DIAS)).isoformat()
-    return [p for p in pendientes if p.get("fecha", "9999") >= limite[:10]]
+def clave_candidato(paises, tipo):
+    nucleo = "|".join(sorted(normalizar(p["nombre"]) for p in paises[:2]))
+    return f"{nucleo}|{tipo}"
 
 
-def registrar_candidato(titulo, fuente, url, pendientes, ids_existentes):
+def limpiar_pendientes_caducados(pendientes, hoy=None):
+    """Purga menciones viejas y descarta candidatos vacíos o de formato v1."""
+    hoy = hoy or date.today()
+    limite = (hoy - timedelta(days=MENCION_CADUCIDAD)).isoformat()
+    vivos = []
     for p in pendientes:
-        if similitud(titulo, p["titulo_base"]) > 0.60:
-            if fuente not in p["fuentes"]:
-                p["fuentes"].append(fuente)
-            p["menciones"] += 1
-            if url not in p["urls"]:
-                p["urls"].append(url)
-                p["titulos"].append(titulo)
-            if p["menciones"] >= UMBRAL_MENCIONES and len(p["fuentes"]) >= UMBRAL_FUENTES:
-                return p
-            return None
+        if "clave" not in p:  # formato v1 (similitud de titulares): descartar
+            continue
+        p["menciones"] = [m for m in p["menciones"] if m.get("fecha", "") >= limite]
+        if p["menciones"]:
+            vivos.append(p)
+    return vivos
 
+
+def registrar_candidato(titulo, texto_clasif, fuente, url, fecha, pendientes,
+                        ids_existentes, hoy=None):
+    """
+    Acumula la mención en el candidato (países del TITULAR + tipo del texto
+    completo) y lo devuelve si alcanza la madurez. La geografía se decide
+    solo por el titular para no arrastrar países tangenciales del summary.
+    """
+    hoy = hoy or date.today()
     paises = detectar_paises_en_texto(titulo)
     if not paises:
         return None
-    tipo = inferir_tipo(titulo)
+    tipo = inferir_tipo(texto_clasif)
     if tipo is None:
         return None
-    id_tent = slugify(titulo)
-    if id_tent in ids_existentes:
-        return None
 
-    pendientes.append({
-        "id_tentativo": id_tent,
-        "titulo_base":  titulo,
-        "tipo":         tipo,
-        "titulos":      [titulo],
-        "fuentes":      [fuente],
-        "urls":         [url],
-        "paises":       [{"nombre": p["nombre"], "lat": p["lat"], "lng": p["lng"]} for p in paises],
-        "fecha":        date.today().isoformat(),
-        "menciones":    1,
-    })
+    clave = clave_candidato(paises, tipo)
+    cand = next((p for p in pendientes if p.get("clave") == clave), None)
+    if cand is None:
+        cand = {
+            "clave": clave,
+            "tipo": tipo,
+            "paises": [
+                {"nombre": p["nombre"], "lat": p["lat"], "lng": p["lng"]}
+                for p in paises[:2]
+            ],
+            "menciones": [],
+        }
+        pendientes.append(cand)
+    if any(m["url"] == url for m in cand["menciones"]):
+        return None
+    cand["menciones"].append(
+        {"fecha": fecha, "titulo": titulo, "fuente": fuente, "url": url},
+    )
+
+    limite = (hoy - timedelta(days=VENTANA_MADUREZ_DIAS)).isoformat()
+    recientes = [m for m in cand["menciones"] if m["fecha"] >= limite]
+    fuentes = {m["fuente"] for m in recientes}
+    if len(recientes) >= UMBRAL_MENCIONES and len(fuentes) >= UMBRAL_FUENTES:
+        reciente = max(recientes, key=lambda m: m["fecha"])
+        if slugify(reciente["titulo"]) in ids_existentes:
+            return None
+        return cand
     return None
 
 
 def promover_candidato(cand, db):
-    titulo  = max(cand["titulos"], key=len)
-    paises  = cand["paises"]
-    if not paises:
-        return None
-
-    severidad = inferir_severidad(titulo, cand["menciones"])
-    n_fuentes = len(cand["fuentes"])
+    menciones = sorted(cand["menciones"], key=lambda m: m["fecha"], reverse=True)
+    titulo = menciones[0]["titulo"]
+    paises = cand["paises"]
+    fuentes = sorted({m["fuente"] for m in menciones})
+    severidad = inferir_severidad(titulo, len(menciones))
+    hoy = date.today().isoformat()
 
     nueva_crisis = {
-        "id":       cand["id_tentativo"],
+        "id":       slugify(titulo),
         "type":     cand["tipo"],
         "severity": severidad,
         "severity_base": severidad,
-        "creada":   date.today().isoformat(),
+        "creada":   hoy,
         "title":    titulo,
         "location": paises[0]["nombre"],
         "lat":      paises[0]["lat"],
         "lng":      paises[0]["lng"],
-        "actors":   list({p["nombre"] for p in paises[:3]}),
+        "actors":   [p["nombre"] for p in paises],
+        "paises_clave": [p["nombre"] for p in paises],
         "summary":  (
-            f"Crisis detectada automáticamente: {cand['menciones']} menciones "
-            f"en {n_fuentes} fuentes independientes. "
-            f"Primera detección: {cand['fecha']}."
+            f"Crisis detectada automáticamente: {len(menciones)} menciones "
+            f"en {len(fuentes)} fuentes independientes "
+            f"({', '.join(fuentes[:4])}{'…' if len(fuentes) > 4 else ''})."
         ),
         "timeline": [
-            {
-                "when":   cand["fecha"],
-                "what":   t,
-                "source": cand["fuentes"][min(i, n_fuentes - 1)],
-                "url":    cand["urls"][min(i, len(cand["urls"]) - 1)],
-            }
-            for i, t in enumerate(cand["titulos"][:12])
+            {"when": m["fecha"], "what": m["titulo"],
+             "source": m["fuente"], "url": m["url"]}
+            for m in menciones[:12]
         ],
     }
 
@@ -370,9 +377,12 @@ def scraping_fuente(nombre, cfg):
 
 # ── PROCESADO DE UN TITULAR ─────────────────────────────────────────────────
 
-def _procesar_titular(titulo, enlace, nombre_fuente, fecha_noticia, ctx,
-                      relaciones_nuevas):
-    """Clasifica un titular y lo enruta. Devuelve nº de eventos añadidos."""
+def _procesar_titular(titulo, texto_clasif, enlace, nombre_fuente,
+                      fecha_noticia, ctx, relaciones_nuevas):
+    """Clasifica un titular y lo enruta. Devuelve nº de eventos añadidos.
+    `texto_clasif` = titular + summary del RSS: se usa para asignar crisis y
+    tipo (más contexto); la geografía de relaciones/candidatos sale solo del
+    titular para no arrastrar países tangenciales."""
     db, pendientes, ids_existentes, ids_promovidos, ctx_news = ctx
     tl_item = {"when": fecha_noticia, "what": titulo,
                "source": nombre_fuente, "url": enlace}
@@ -385,7 +395,7 @@ def _procesar_titular(titulo, enlace, nombre_fuente, fecha_noticia, ctx,
             "id_relacion": f"rel-nueva-{len(relaciones_nuevas)}",
             "origen":  {"nombre": origen["nombre"],  "lat": origen["lat"],  "lng": origen["lng"]},
             "destino": {"nombre": destino["nombre"], "lat": destino["lat"], "lng": destino["lng"]},
-            "tipo":    "diplomática",
+            "tipo":    "militar" if inferir_tipo(titulo) == "armed" else "diplomática",
             "nivel":   inferir_nivel(titulo),
             "fecha":   fecha_noticia,
             "titular": titulo,
@@ -395,7 +405,8 @@ def _procesar_titular(titulo, enlace, nombre_fuente, fecha_noticia, ctx,
         print(f"     ⚡ Relación: {origen['nombre']} ↔ {destino['nombre']}")
         nuevos += 1
     else:
-        crisis_id = clasificar_crisis(titulo)
+        crisis_id = (clasificar_crisis(texto_clasif)
+                     or clasificar_crisis_dinamica(texto_clasif, db["crisis"]))
         if crisis_id:
             destino_crisis = None
             for c in db["crisis"]:
@@ -421,14 +432,14 @@ def _procesar_titular(titulo, enlace, nombre_fuente, fecha_noticia, ctx,
                 nuevos += 1
         else:
             promovido = registrar_candidato(
-                titulo, nombre_fuente, enlace, pendientes,
-                ids_existentes | ids_promovidos,
+                titulo, texto_clasif, nombre_fuente, enlace, fecha_noticia,
+                pendientes, ids_existentes | ids_promovidos,
             )
             if (promovido
-                    and promovido["id_tentativo"] not in ids_promovidos
+                    and promovido["clave"] not in ids_promovidos
                     and len(ids_promovidos) < MAX_CRISIS_POR_CICLO):
                 promover_candidato(promovido, db)
-                ids_promovidos.add(promovido["id_tentativo"])
+                ids_promovidos.add(promovido["clave"])
                 pendientes.remove(promovido)
                 nuevos += 1
 
@@ -493,13 +504,18 @@ def ejecutar_actualizacion():
                 fecha_noticia = date(*pub[:3]).isoformat() if pub else hoy.isoformat()
             except Exception:
                 fecha_noticia = hoy.isoformat()
+            resumen = getattr(entrada, "summary", "") or ""
+            if "<" in resumen:
+                resumen = BeautifulSoup(resumen, "html.parser").get_text(" ", strip=True)
+            texto_clasif = f"{titulo}. {resumen[:300]}"
             nuevos += _procesar_titular(
-                titulo, enlace, nombre_fuente, fecha_noticia, ctx, relaciones_nuevas,
+                titulo, texto_clasif, enlace, nombre_fuente, fecha_noticia,
+                ctx, relaciones_nuevas,
             )
             urls_vistas.add(enlace)
         time.sleep(0.2)  # cortesía entre FUENTES (no entre titulares)
 
-    # 2. Scraping
+    # 2. Scraping (vacío desde que CISA/NCSC tienen RSS; mecanismo en reserva)
     for nombre_src, cfg in FUENTES_SCRAPING.items():
         items = scraping_fuente(nombre_src, cfg)
         _registrar_salud(salud, cfg["url"], nombre_src, bool(items),
@@ -508,8 +524,8 @@ def ejecutar_actualizacion():
             if item["url"] in urls_vistas:
                 continue
             nuevos += _procesar_titular(
-                item["titulo"], item["url"], nombre_src, hoy.isoformat(),
-                ctx, relaciones_nuevas,
+                item["titulo"], item["titulo"], item["url"], nombre_src,
+                hoy.isoformat(), ctx, relaciones_nuevas,
             )
             urls_vistas.add(item["url"])
         time.sleep(0.2)

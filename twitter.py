@@ -40,9 +40,15 @@ def _auth():
     return OAuth1(_API_KEY, _API_SECRET, _ACC_TOKEN, _ACC_SECRET)
 
 
+_AVISO_DADO = False
+
+
 def _publicar(texto: str) -> bool:
+    global _AVISO_DADO
     if not _configurado():
-        print("  ⚠️  Twitter: credenciales no configuradas, omitiendo.")
+        if not _AVISO_DADO:
+            print("  ⚠️  Twitter: credenciales no configuradas (aviso único).")
+            _AVISO_DADO = True
         return False
     # X API v2 limita a 280 caracteres en cuentas sin Premium o 4000 con Premium
     texto = texto[:4000]
