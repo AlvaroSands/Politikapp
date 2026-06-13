@@ -1,7 +1,8 @@
 from contextlib import asynccontextmanager
 from datetime import datetime, date, timezone
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Response
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Response, FileResponse
+from fastapi.staticfiles import StaticFiles
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from actualizador import ejecutar_actualizacion
@@ -100,6 +101,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Intel-Geo Command Center", lifespan=lifespan)
 
+# Front nuevo (SPA de Vite) servido desde web/. Se genera con deploy_web.sh
+# (build de la calculadora) y se versiona en el repo para que Railway lo sirva.
+# Los tiles del mapa NO van aquí: viven en Cloudflare R2.
+WEB_DIR = os.path.join(rutas.REPO_DIR, "web")
+if os.path.isdir(os.path.join(WEB_DIR, "assets")):
+    app.mount("/assets", StaticFiles(directory=os.path.join(WEB_DIR, "assets")), name="assets")
+
 
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
@@ -175,6 +183,7 @@ async def health():
 
 
 @app.get("/datos.json")
+@app.get("/geo/datos.json")
 async def api_datos():
     try:
         with open(rutas.ARCHIVO_DATOS, "r", encoding="utf-8") as f:
@@ -194,6 +203,7 @@ async def api_historial():
 
 
 @app.get("/salud.json")
+@app.get("/geo/salud.json")
 async def api_salud():
     """Telemetría de fuentes: qué feeds responden y cuáles están caídos."""
     try:
@@ -214,9 +224,24 @@ async def api_actores():
 
 @app.get("/", response_class=HTMLResponse)
 async def pagina_principal():
-    with open("index.html", "r", encoding="utf-8") as f:
+    # SPA nueva (Vite) + inyección SEO (JSON-LD + noscript para crawlers).
+    ruta_index = os.path.join(WEB_DIR, "index.html")
+    if not os.path.exists(ruta_index):
+        return HTMLResponse(
+            "<h1>Front no generado</h1><p>Falta web/index.html (deploy_web.sh).</p>",
+            status_code=503,
+        )
+    with open(ruta_index, "r", encoding="utf-8") as f:
         html = f.read()
     return _inyectar_seo(html)
+
+
+@app.get("/favicon.svg")
+async def favicon():
+    ruta = os.path.join(WEB_DIR, "favicon.svg")
+    if os.path.exists(ruta):
+        return FileResponse(ruta, media_type="image/svg+xml")
+    return Response(status_code=404)
 
 
 @app.get("/analisis", response_class=HTMLResponse)
