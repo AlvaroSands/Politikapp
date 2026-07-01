@@ -125,6 +125,13 @@ async def security_headers(request: Request, call_next):
         # Assets de Vite con hash en el nombre: cachear un año. Sin esto,
         # Cloudflare aplica su TTL por defecto (4 h) y revalida siempre.
         response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    elif request.url.path in (
+        "/datos.json", "/geo/datos.json", "/salud.json", "/geo/salud.json",
+        "/historial.json",
+    ):
+        # Los datos cambian cada 3 h: 2 min de caché en navegador aceleran
+        # revisitas y el poll del front sin comprometer frescura.
+        response.headers["Cache-Control"] = "public, max-age=120, stale-while-revalidate=600"
     return response
 
 
@@ -515,7 +522,7 @@ h1{{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:
   {f'<div class="summary"><h2 class="section-title">Resumen</h2>{e_summary}</div>' if summary else ''}
   {f'<div class="actors"><div class="section-title">Actores</div>{actors_html}</div>' if actors else ''}
   {f'<div class="timeline"><h2 class="section-title">Cronología</h2>{tl_items}</div>' if tl_items else ''}
-  <a href="/" class="back-map">← Ver en el mapa en tiempo real</a>
+  <a href="/?crisis={e_cid}" class="back-map">← Ver en el mapa en tiempo real</a>
 </main>
 </body>
 </html>"""
