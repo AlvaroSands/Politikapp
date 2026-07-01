@@ -84,6 +84,70 @@ def test_dedupe_por_url():
     assert len(pendientes[0]["menciones"]) == 1
 
 
+def test_pais_contexto_no_acumula_mono_pais():
+    # Caso real (jul 2026): 5 noticias variadas sobre Alemania maduraban como
+    # "crisis" y la más banal le daba nombre (la orquesta de Berlín).
+    pendientes = []
+    r = registrar(pendientes, 1, "Germany extends border controls attack fears", "DW")
+    assert r is None
+    assert pendientes == []  # ni siquiera acumula mención
+
+
+def test_pais_contexto_si_acumula_bilateral():
+    pendientes = []
+    registrar(pendientes, 1, "Germany deploys troops to Poland border war game", "DW")
+    assert len(pendientes) == 1  # 2 países: sí es candidato legítimo
+
+
+def test_menciones_heterogeneas_no_maduran():
+    # Mismo país (no-contexto) y tipo, pero asuntos inconexos: sin ningún
+    # token significativo compartido, el candidato no madura.
+    pendientes = []
+    heterogeneos = [
+        ("Venezuela slides into recession as controls tighten", "BBC"),
+        ("Venezuela debt default looms, bondholders brace", "Reuters"),
+        ("Venezuela embargo chokes medicine imports", "Guardian"),
+        ("Venezuela oil price slump hits budget", "El País"),
+        ("Venezuela sanctions bite as shops shutter", "DW"),
+    ]
+    for i, (t, f) in enumerate(heterogeneos):
+        r = registrar(pendientes, i, t, f)
+    assert r is None
+    assert len(pendientes[0]["menciones"]) == 5  # acumuló pero no maduró
+
+
+def test_menciones_cohesionadas_maduran():
+    pendientes = []
+    titulares = [
+        ("Boko Haram attack kills dozens in Nigeria", "BBC"),
+        ("Militants storm Nigeria village, Boko Haram blamed war", "Reuters"),
+        ("Boko Haram resurgence alarms Nigeria army", "Guardian"),
+        ("Nigeria vows offensive against Boko Haram strongholds", "Al Jazeera"),
+    ]
+    for i, (t, f) in enumerate(titulares):
+        r = registrar(pendientes, i, t, f)
+        assert r is None
+    maduro = registrar(pendientes, 9, "Nigeria deploys troops after Boko Haram raid war", "DW")
+    assert maduro is not None
+
+
+def test_titulo_por_senal_no_por_recencia(monkeypatch):
+    # La mención ROJA da nombre aunque haya otra amarilla más reciente.
+    monkeypatch.setattr(actualizador, "alerta_nueva_crisis", lambda c, **k: True)
+    monkeypatch.setattr(actualizador, "tweet_nueva_crisis", lambda c: True)
+    cand = {
+        "clave": "nigeria|armed", "tipo": "armed",
+        "paises": [{"nombre": "Nigeria", "lat": 9.08, "lng": 8.68}],
+        "menciones": [
+            mencion(1, "Boko Haram attack kills dozens in Borno", "BBC", hace_dias=1),
+            mencion(2, "Nigeria diplomacy talks continue on summit", "DW", hace_dias=0),
+        ],
+    }
+    db = {"crisis": [], "relaciones": []}
+    nueva = actualizador.promover_candidato(cand, db)
+    assert "kills" in nueva["title"]  # ganó la señal roja, no la más reciente
+
+
 def test_clasificacion_dinamica_dos_paises():
     crisis = [{
         "id": "us-venezuela-2026", "type": "armed",

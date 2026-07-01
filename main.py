@@ -5,13 +5,18 @@ from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Res
 from fastapi.staticfiles import StaticFiles
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
-from actualizador import ejecutar_actualizacion
+from actualizador import (
+    ejecutar_actualizacion, cargar_db, guardar_db,
+    cargar_historial, guardar_historial,
+)
 from notificaciones import briefing_diario, agregar_suscriptor, eliminar_suscriptor, enviar_a
 import rutas
 import uvicorn
+import hmac
 import json
 import os
 import logging
+import re
 import requests
 from html import escape as _e
 
@@ -116,7 +121,98 @@ async def security_headers(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    if request.url.path.startswith("/assets/"):
+        # Assets de Vite con hash en el nombre: cachear un año. Sin esto,
+        # Cloudflare aplica su TTL por defecto (4 h) y revalida siempre.
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
     return response
+
+
+# ── ADMIN (curación del volumen de producción) ──────────────────────────────
+# Con DATA_DIR en Railway, el datos.json del repo ya NO gobierna producción
+# (la semilla solo se copia si el volumen está vacío). Estos endpoints son el
+# único mecanismo para curar el estado vivo: inspeccionar, borrar una crisis
+# o subir un datos.json curado completo. Cerrados por defecto: sin
+# ADMIN_TOKEN en el entorno responden 403 a todo.
+
+ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
+
+
+def _admin_ok(request: Request) -> bool:
+    token = request.headers.get("X-Admin-Token", "")
+    return bool(ADMIN_TOKEN) and hmac.compare_digest(token, ADMIN_TOKEN)
+
+
+def _admin_403():
+    return JSONResponse(status_code=403, content={"error": "no autorizado"})
+
+
+@app.get("/admin/crisis")
+async def admin_listar_crisis(request: Request):
+    if not _admin_ok(request):
+        return _admin_403()
+    db = cargar_db()
+    resumen = [
+        {
+            "id": c.get("id"), "title": c.get("title"), "type": c.get("type"),
+            "severity": c.get("severity"), "estado": c.get("estado"),
+            "creada": c.get("creada"),  # solo las auto-creadas la llevan
+            "timeline": len(c.get("timeline", [])),
+            "score": c.get("actividad", {}).get("score"),
+        }
+        for c in db.get("crisis", [])
+    ]
+    return {
+        "crisis": resumen,
+        "archivadas": [c.get("id") for c in db.get("crisis_archivadas", [])],
+        "relaciones": len(db.get("relaciones", [])),
+    }
+
+
+@app.delete("/admin/crisis/{crisis_id}")
+async def admin_borrar_crisis(crisis_id: str, request: Request):
+    if not _admin_ok(request):
+        return _admin_403()
+    db = cargar_db()
+    antes = len(db.get("crisis", [])) + len(db.get("crisis_archivadas", []))
+    db["crisis"] = [c for c in db.get("crisis", []) if c.get("id") != crisis_id]
+    if "crisis_archivadas" in db:
+        db["crisis_archivadas"] = [
+            c for c in db["crisis_archivadas"] if c.get("id") != crisis_id
+        ]
+    despues = len(db["crisis"]) + len(db.get("crisis_archivadas", []))
+    if despues == antes:
+        return JSONResponse(status_code=404, content={"error": f"no existe: {crisis_id}"})
+    guardar_db(db)
+    historial = cargar_historial()
+    if crisis_id in historial:
+        del historial[crisis_id]
+        guardar_historial(historial)
+    # Nota: si un ciclo del actualizador está en curso, su guardado final
+    # puede pisar este borrado (ventana de ~minutos cada 3 h). El borrado es
+    # idempotente: repetir si reaparece.
+    logger.info(f"[admin] crisis borrada: {crisis_id}")
+    return {"borrada": crisis_id, "quedan": len(db["crisis"])}
+
+
+@app.put("/admin/datos")
+async def admin_subir_datos(request: Request):
+    """Sube un datos.json curado completo (flujo de curación periódica)."""
+    if not _admin_ok(request):
+        return _admin_403()
+    try:
+        datos = await request.json()
+    except Exception:
+        return JSONResponse(status_code=400, content={"error": "JSON inválido"})
+    if (not isinstance(datos, dict)
+            or not isinstance(datos.get("crisis"), list) or not datos["crisis"]
+            or not isinstance(datos.get("relaciones"), list)):
+        return JSONResponse(status_code=400, content={
+            "error": "estructura inválida: se espera {crisis: [≥1], relaciones: []}"
+        })
+    guardar_db(datos)
+    logger.info(f"[admin] datos.json reemplazado: {len(datos['crisis'])} crisis")
+    return {"crisis": len(datos["crisis"]), "relaciones": len(datos["relaciones"])}
 
 
 def _leer_datos():
@@ -127,10 +223,36 @@ def _leer_datos():
         return {"crisis": [], "relaciones": []}
 
 
+TITLE_SEO = "Mapa Geopolítico en Tiempo Real — Crisis Mundiales Activas 2026 | Geopolitikapp"
+
+
 def _inyectar_seo(html: str) -> str:
-    """Inyecta JSON-LD dinámico con los datos actuales antes de </head>."""
+    """Inyecta title optimizado, metas y JSON-LD dinámico antes de </head>."""
     datos = _leer_datos()
     crisis = datos.get("crisis", [])
+
+    # El index de Vite trae un <title> genérico; aquí manda el optimizado.
+    html = re.sub(r"<title>.*?</title>", f"<title>{TITLE_SEO}</title>", html,
+                  count=1, flags=re.S)
+    desc = (
+        f"Monitor geopolítico en tiempo real: {len(crisis)} crisis activas — "
+        "conflictos armados, tensiones diplomáticas, guerra económica y "
+        "ciberataques en un mapa interactivo actualizado cada 3 horas."
+    )
+    metas = ""
+    if 'name="description"' not in html:
+        metas += f'<meta name="description" content="{desc}">\n'
+    if 'rel="canonical"' not in html:
+        metas += '<link rel="canonical" href="https://geopolitikapp.com/">\n'
+    if 'property="og:title"' not in html:
+        metas += (
+            '<meta property="og:type" content="website">\n'
+            f'<meta property="og:title" content="{TITLE_SEO}">\n'
+            f'<meta property="og:description" content="{desc}">\n'
+            '<meta property="og:url" content="https://geopolitikapp.com/">\n'
+            '<meta property="og:site_name" content="Geopolitikapp">\n'
+            '<meta name="twitter:card" content="summary_large_image">\n'
+        )
 
     # ItemList de crisis activas para Google
     item_list = {
@@ -172,7 +294,7 @@ def _inyectar_seo(html: str) -> str:
         f'</div></noscript>\n'
     )
 
-    return html.replace("</head>", ld_tag + "</head>", 1).replace(
+    return html.replace("</head>", metas + ld_tag + "</head>", 1).replace(
         "<body>", "<body>\n" + noscript, 1
     )
 
@@ -216,7 +338,7 @@ async def api_salud():
 @app.get("/actores.json")
 async def api_actores():
     try:
-        with open("actores.json", "r", encoding="utf-8") as f:
+        with open(os.path.join(rutas.REPO_DIR, "actores.json"), "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception:
         return {"categorias": []}
@@ -246,7 +368,7 @@ async def favicon():
 
 @app.get("/analisis", response_class=HTMLResponse)
 async def pagina_analisis():
-    with open("analisis.html", "r", encoding="utf-8") as f:
+    with open(os.path.join(rutas.REPO_DIR, "analisis.html"), "r", encoding="utf-8") as f:
         return f.read()
 
 

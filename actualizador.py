@@ -22,9 +22,9 @@ import requests
 from bs4 import BeautifulSoup
 
 from clasificacion import (
-    clasificar_crisis, clasificar_crisis_dinamica, detectar_paises_en_texto,
-    es_bilateral, es_ruido, inferir_nivel, inferir_severidad, inferir_tipo,
-    normalizar, slugify,
+    PAISES_CONTEXTO, clasificar_crisis, clasificar_crisis_dinamica,
+    detectar_paises_en_texto, es_bilateral, es_ruido, hay_cohesion_tematica,
+    inferir_nivel, inferir_severidad, inferir_tipo, normalizar, slugify,
 )
 from vitalidad import aplicar_vitalidad, fusionar_relaciones
 from notificaciones import alerta_nueva_crisis, alerta_escalada, alerta_relacion_bilateral
@@ -223,6 +223,7 @@ UMBRAL_FUENTES       = 3
 VENTANA_MADUREZ_DIAS = 3
 MENCION_CADUCIDAD    = 7   # las menciones más viejas se purgan
 MAX_CRISIS_POR_CICLO = 3
+MAX_EDAD_NOTICIA     = 7   # días; los feeds re-sirven artículos antiguos
 
 
 def clave_candidato(paises, tipo):
@@ -255,6 +256,9 @@ def registrar_candidato(titulo, texto_clasif, fuente, url, fecha, pendientes,
     paises = detectar_paises_en_texto(titulo)
     if not paises:
         return None
+    if len(paises) == 1 and paises[0]["nombre"] in PAISES_CONTEXTO:
+        # Potencias con prensa constante: mono-país no acumula candidato.
+        return None
     tipo = inferir_tipo(texto_clasif)
     if tipo is None:
         return None
@@ -281,7 +285,8 @@ def registrar_candidato(titulo, texto_clasif, fuente, url, fecha, pendientes,
     limite = (hoy - timedelta(days=VENTANA_MADUREZ_DIAS)).isoformat()
     recientes = [m for m in cand["menciones"] if m["fecha"] >= limite]
     fuentes = {m["fuente"] for m in recientes}
-    if len(recientes) >= UMBRAL_MENCIONES and len(fuentes) >= UMBRAL_FUENTES:
+    if (len(recientes) >= UMBRAL_MENCIONES and len(fuentes) >= UMBRAL_FUENTES
+            and hay_cohesion_tematica([m["titulo"] for m in recientes])):
         reciente = max(recientes, key=lambda m: m["fecha"])
         if slugify(reciente["titulo"]) in ids_existentes:
             return None
@@ -291,7 +296,12 @@ def registrar_candidato(titulo, texto_clasif, fuente, url, fecha, pendientes,
 
 def promover_candidato(cand, db):
     menciones = sorted(cand["menciones"], key=lambda m: m["fecha"], reverse=True)
-    titulo = menciones[0]["titulo"]
+    # Da nombre la mención con la señal más fuerte (rojo > naranja > amarillo);
+    # a igualdad, la más reciente. Antes lo hacía la más reciente a secas y
+    # cualquier pieza banal bautizaba la crisis.
+    peso_nivel = {"rojo": 3, "naranja": 2, "amarillo": 1}
+    titulo = max(menciones,
+                 key=lambda m: peso_nivel.get(inferir_nivel(m["titulo"]), 1))["titulo"]
     paises = cand["paises"]
     fuentes = sorted({m["fuente"] for m in menciones})
     severidad = inferir_severidad(titulo, len(menciones))
@@ -323,7 +333,9 @@ def promover_candidato(cand, db):
 
     db["crisis"].append(nueva_crisis)
     print(f"  🆕 NUEVA CRISIS [{cand['tipo'].upper()} SEV{severidad}]: {titulo[:70]}…")
-    alerta_nueva_crisis(nueva_crisis)
+    # Solo al propietario mientras no exista el flujo de aprobación humana:
+    # los suscriptores no deben recibir detecciones sin curar.
+    alerta_nueva_crisis(nueva_crisis, solo_owner=True)
     tweet_nueva_crisis(nueva_crisis)
     return nueva_crisis
 
@@ -407,8 +419,19 @@ def _procesar_titular(titulo, texto_clasif, enlace, nombre_fuente,
         print(f"     ⚡ Relación: {origen['nombre']} ↔ {destino['nombre']}")
         nuevos += 1
     else:
-        crisis_id = (clasificar_crisis(texto_clasif)
+        # Crisis estáticas: el TITULAR manda. El summary solo asigna si además
+        # el tipo coincide (un artículo cyber cuyo summary menciona "russia"
+        # ya no entra en la guerra de Ucrania).
+        crisis_id = (clasificar_crisis(titulo)
                      or clasificar_crisis_dinamica(texto_clasif, db["crisis"]))
+        if crisis_id is None and texto_clasif != titulo:
+            cid_summary = clasificar_crisis(texto_clasif)
+            if cid_summary:
+                candidata = next(
+                    (c for c in db["crisis"] + db.get("crisis_archivadas", [])
+                     if id_crisis(c) == cid_summary), None)
+                if candidata is not None and inferir_tipo(texto_clasif) == candidata.get("type"):
+                    crisis_id = cid_summary
         if crisis_id:
             destino_crisis = None
             for c in db["crisis"]:
@@ -430,6 +453,10 @@ def _procesar_titular(titulo, texto_clasif, enlace, nombre_fuente,
                     "timeline", destino_crisis.pop("actualizaciones", []),
                 )
                 tl.insert(0, tl_item)
+                # Orden por fecha SIEMPRE: un artículo con fecha RSS antigua
+                # no puede quedar arriba (timeline[0] alimenta el lastmod del
+                # sitemap y el dateModified de las páginas de crisis).
+                tl.sort(key=lambda t: t.get("when", ""), reverse=True)
                 destino_crisis["timeline"] = tl[:30]
                 nuevos += 1
         else:
@@ -466,6 +493,11 @@ def ejecutar_actualizacion():
     ctx_news = {n["id"]: [] for n in db.get("context_nodes", [])}
     urls_vistas = set()
     for c in db["crisis"] + db.get("crisis_archivadas", []):
+        # Normaliza el orden al cargar: repara timelines del volumen donde un
+        # item con fecha antigua quedó insertado en cabeza.
+        tl = c.get("timeline")
+        if tl:
+            tl.sort(key=lambda t: t.get("when", ""), reverse=True)
         for act in c.get("timeline", c.get("actualizaciones", [])):
             urls_vistas.add(act.get("url", ""))
     for r in db["relaciones"]:
@@ -480,6 +512,7 @@ def ejecutar_actualizacion():
 
     nuevos = 0
     hoy = date.today()
+    limite_frescura = (hoy - timedelta(days=MAX_EDAD_NOTICIA)).isoformat()
 
     # 1. RSS
     for rss_url in FUENTES_RSS:
@@ -506,6 +539,11 @@ def ejecutar_actualizacion():
                 fecha_noticia = date(*pub[:3]).isoformat() if pub else hoy.isoformat()
             except Exception:
                 fecha_noticia = hoy.isoformat()
+            if fecha_noticia < limite_frescura:
+                # Los feeds re-sirven artículos antiguos (p. ej. Krebs mantiene
+                # semanas sus posts): no re-inyectarlos como actualidad.
+                urls_vistas.add(enlace)
+                continue
             resumen = getattr(entrada, "summary", "") or ""
             if "<" in resumen:
                 resumen = BeautifulSoup(resumen, "html.parser").get_text(" ", strip=True)

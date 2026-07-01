@@ -127,7 +127,9 @@ def enviar_telegram(mensaje: str) -> bool:
 
 # ── ALERTAS PUNTUALES ───────────────────────────────────────────────────────
 
-def alerta_nueva_crisis(crisis: dict) -> bool:
+def alerta_nueva_crisis(crisis: dict, solo_owner: bool = False) -> bool:
+    """solo_owner=True para detecciones automáticas sin curar: la alerta va
+    únicamente al propietario hasta que exista el flujo de aprobación."""
     tipo   = crisis.get("type", "diplo")
     emoji  = TYPE_EMOJI.get(tipo, "⚪")
     sev    = crisis.get("severity", 1)
@@ -138,9 +140,10 @@ def alerta_nueva_crisis(crisis: dict) -> bool:
         f"⚠️ Severidad: {SEV_BAR.get(sev, '?')} ({sev}/5)\n"
         f"🏷 Tipo: {tipo.upper()}\n\n"
         f"{crisis.get('summary', '')[:200]}\n\n"
-        f"🌐 geopolitikapp.com"
+        + ("⚙️ Detección automática — pendiente de curar\n" if solo_owner else "")
+        + "🌐 geopolitikapp.com"
     )
-    return enviar_a_todos(msg)
+    return enviar_telegram(msg) if solo_owner else enviar_a_todos(msg)
 
 
 def alerta_escalada(crisis: dict, sev_anterior: int, sev_nueva: int) -> bool:

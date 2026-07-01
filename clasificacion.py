@@ -10,8 +10,10 @@ Extraído de actualizador.py; arregla las trampas del matching por substring:
 """
 import re
 import unicodedata
+from collections import Counter
 from datetime import date
 from difflib import SequenceMatcher
+from math import ceil
 
 # ── PAÍSES Y COORDENADAS ────────────────────────────────────────────────────
 # clave (se normaliza) → nombre canónico y coordenadas
@@ -373,6 +375,70 @@ def clasificar_crisis(titulo: str) -> str | None:
         if _alguno(patrones, t):
             return cid
     return None
+
+
+# ── COHESIÓN TEMÁTICA DE CANDIDATOS ─────────────────────────────────────────
+# La clave (país, tipo) agrupa noticias heterogéneas: 5 piezas variadas sobre
+# Alemania en 72 h maduraban como "crisis" con el titular más reciente de
+# nombre (caso real: la orquesta de Berlín). La madurez exige además que las
+# menciones compartan vocabulario significativo (mismo asunto, no mismo país).
+
+PAISES_CONTEXTO = {
+    # Potencias con volumen de prensa constante: su mera mención frecuente no
+    # es una crisis. Solo pueden auto-crear crisis BILATERALES (2 países).
+    # Los conflictos internos reales (Haití, Sudán, Mali…) no están aquí.
+    "EE.UU.", "Reino Unido", "Alemania", "Francia", "España", "Japón",
+    "Brasil", "China", "Rusia", "India", "Corea del Sur", "Indonesia",
+    "Turquía", "Arabia Saudí", "Polonia", "OTAN",
+}
+
+STOPWORDS_TITULARES = {
+    # inglés
+    "the", "and", "for", "with", "that", "this", "from", "will", "after",
+    "over", "into", "amid", "says", "said", "new", "more", "than", "been",
+    "have", "has", "had", "are", "was", "were", "its", "his", "her", "their",
+    "them", "they", "who", "what", "when", "where", "why", "how", "not",
+    "but", "all", "out", "off", "against", "about", "near", "calls", "call",
+    "urges", "urge", "warns", "warn", "could", "would", "should", "may",
+    "might", "must", "just", "still", "also", "amid", "news", "live",
+    "watch", "breaking", "exclusive", "report", "opinion", "analysis",
+    # español
+    "los", "las", "del", "una", "uno", "unos", "unas", "por", "para", "con",
+    "sin", "sobre", "entre", "tras", "ante", "hasta", "desde", "segun",
+    "que", "esta", "este", "estos", "estas", "muy", "mas", "pero", "dice",
+    "dicen", "ser", "son", "fue", "han", "hay", "asegura", "aseguran",
+    "anuncia", "directo", "video", "noticias", "analisis",
+}
+
+_TOKENS_PAIS: set[str] = set()
+for _clave, _datos in PAISES.items():
+    _TOKENS_PAIS.update(normalizar(_clave).split())
+    _TOKENS_PAIS.update(normalizar(_datos["nombre"]).split())
+
+
+def tokens_significativos(texto: str) -> set[str]:
+    """Tokens que definen el ASUNTO: fuera stopwords, países y palabras cortas."""
+    return {
+        t for t in normalizar(texto).split()
+        if len(t) >= 4 and t not in STOPWORDS_TITULARES and t not in _TOKENS_PAIS
+    }
+
+
+def hay_cohesion_tematica(titulos: list[str]) -> bool:
+    """
+    True si algún token significativo se repite en ≥2 titulares (⅓ en grupos
+    grandes). Umbral deliberadamente laxo: el mismo evento titulado en varios
+    idiomas comparte poco léxico; lo que se bloquea es la heterogeneidad
+    total (5 noticias inconexas de un país sin una sola palabra en común).
+    """
+    if len(titulos) < 2:
+        return False
+    conjuntos = [tokens_significativos(t) for t in titulos]
+    contador = Counter(tok for c in conjuntos for tok in c)
+    if not contador:
+        return False
+    _, freq = contador.most_common(1)[0]
+    return freq >= max(2, ceil(len(titulos) / 3))
 
 
 def clasificar_crisis_dinamica(texto: str, crisis_list: list[dict]) -> str | None:

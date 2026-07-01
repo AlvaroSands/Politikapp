@@ -19,8 +19,8 @@ importador_masivo.py
 pendientes.json
 suscriptores.json
 briefing_ultima_fecha.txt
-.env
-
-# Runtime del actualizador (no subir)
 salud_fuentes.json
 datos.json.bak-*
+
+# Backups y archivos sueltos
+*.zip
